@@ -1,9 +1,9 @@
-use std::env;
 use std::path::PathBuf;
 
 const OBJECT_FILES_DIR: &str = "parser";
 const LIB_NAME: &str = "parser";
 const WRAPPER_HEADER_FILE: &str = "parser/wrapper.h";
+const BINDINGS_FILE: &str = "src/bindings.rs";
 
 fn main() {
     println!(
@@ -14,9 +14,6 @@ fn main() {
             .display()
     );
     println!("cargo:rustc-link-lib={}", LIB_NAME);
-
-    // Write the bindings to the $OUT_DIR/bindings.rs file and library LIB_NAME.
-    let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for
@@ -32,6 +29,6 @@ fn main() {
         .generate()
         // Unwrap the Result and panic on failure.
         .expect("Unable to generate bindings")
-        .write_to_file(out_path.join("bindings.rs"))
+        .write_to_file(BINDINGS_FILE)
         .expect("Couldn't write bindings!");
 }

@@ -25,4 +25,4 @@ build: gen_parser build_obj archive
 	@echo "Done"
 
 test:
-	cargo test -- --no-capture
+	cargo test -- --no-capture --test-threads=1
