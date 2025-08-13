@@ -1,1 +1,10 @@
-{ "image": "mcr.microsoft.com/devcontainers/rust" }
+{
+    "build": {
+        "context": ".",
+        "dockerfile": "Dockerfile"
+    },
+    "features": {
+        "./bnfc": {},
+        "./clang": {}
+    }
+}

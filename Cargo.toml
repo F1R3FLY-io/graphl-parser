@@ -1,6 +1,11 @@
 [package]
 name = "graph-to-rholang-parser"
+authors = ['Denys Bushuliak <denys.b@devbrother.com>']
+build = "build.rs"
 version = "0.0.1"
 edition = "2024"
 
 [dependencies]
+
+[build-dependencies]
+bindgen = "*"

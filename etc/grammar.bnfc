@@ -1,0 +1,44 @@
+-- Coercions
+_.                      Graph ::= Graph1                                   ;
+_.                     Graph1 ::= Graph2                                   ;
+_.                     Graph2 ::= Graph3                                   ;
+_.                     Graph3 ::= "{" Graph "}"                            ;
+
+-- Basic Graph Term Constructors
+
+GNil .                 Graph3 ::= "0"                                      ;
+GVertex .              Graph2 ::= Vertex "|" Graph1                        ;
+GVar .                 Graph2 ::= LVar "|" Graph1                          ;
+GNominate .            Graph1 ::= Binding                                  ;
+GEdgeAnon .            Graph1 ::= "(" Binding "," Binding ")"              ;
+GEdgeNamed .           Graph1 ::= Name "(" Binding "," Binding ")"         ;
+GRuleAnon .            Graph1 ::= "[" "=" Graph Graph "]"                  ;
+GRuleNamed .           Graph1 ::= Name "[" "=" Graph Graph "]"             ;
+GSubgraph .            Graph1 ::= GraphBinding                             ;
+GTensor .               Graph ::= Graph "*" Graph1                         ;
+
+-- Bindings
+VBind .               Binding ::= "let" LVar "=" Vertex "in" Graph2        ;
+
+-- Subgraphs
+GBind .          GraphBinding ::= "let" UVar "=" Graph "in" Graph2         ;
+
+-- Vertices
+VName .                Vertex ::= "<" Name ">"                             ;
+
+-- Names
+NameWildcard .           Name ::= "_"                                      ;
+NameVVar .               Name ::= LVar                                     ;
+NameGVar .               Name ::= UVar                                     ;
+NameQuoteGraph .         Name ::= "@" Graph                                ;
+NameQuoteVertex .        Name ::= "@" Vertex                               ;
+separator Name ","                                                         ;
+
+-- token Var (((letter | '\'') (letter | digit | '_' | '\'')*)|(('_') (letter | digit | '_' | '\'')+)) ;
+
+token UVar ((upper (letter | digit | '_' | '\'')*)|(('_') (upper | digit | '_' | '\'')+)) ;
+token LVar (((lower | '\'') (letter | digit | '_' | '\'')*)|(('_') (lower | digit | '_' | '\'')+)) ;
+
+-- Comments:
+comment "//" ;
+comment "/*" "*/" ;

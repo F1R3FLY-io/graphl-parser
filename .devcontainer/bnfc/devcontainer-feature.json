@@ -1,0 +1,6 @@
+{
+    "name": "bnfc",
+    "id": "bnfc",
+    "version": "2.9.6",
+    "description": "The BNF Converter is a compiler construction tool generating a compiler front-end from a Labelled BNF grammar"
+}
