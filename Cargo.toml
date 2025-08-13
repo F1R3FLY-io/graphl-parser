@@ -1,0 +1,6 @@
+[package]
+name = "graph-to-rholang-parser"
+version = "0.0.1"
+edition = "2024"
+
+[dependencies]
