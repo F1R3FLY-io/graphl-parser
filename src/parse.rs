@@ -1,15 +1,16 @@
-use std::ffi::{CStr, CString};
+use std::ffi::CString;
 
-use crate::{free_Graph, psGraph, visitGraph};
+use crate::{Visitor, free_Graph, psGraph, visitGraph};
 
 pub fn parse(
     document: impl Into<CString>,
 ) -> Result<std::string::String, std::ffi::IntoStringError> {
+    let mut visitor = Visitor::default();
     unsafe {
-        psGraph(document.into().as_ptr());
-        visitGraph(graph);
+        let graph = psGraph(document.into().as_ptr());
+        visitGraph(graph, &mut visitor);
         free_Graph(graph);
-    }
-    .to_owned()
-    .into_string()
+    };
+
+    Ok("Ok".to_string())
 }

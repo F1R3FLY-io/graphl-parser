@@ -100,7 +100,7 @@ pub const _R_PAREN: u8 = 41u8;
 pub type wchar_t = ::std::os::raw::c_int;
 #[repr(C)]
 #[repr(align(16))]
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct max_align_t {
     pub __clang_max_align_nonce1: ::std::os::raw::c_longlong,
     pub __bindgen_padding_0: u64,
@@ -233,6 +233,15 @@ const _: () = {
     ["Offset of field: __locale_struct::__names"]
         [::std::mem::offset_of!(__locale_struct, __names) - 128usize];
 };
+impl Default for __locale_struct {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 pub type __locale_t = *mut __locale_struct;
 pub type locale_t = __locale_t;
 unsafe extern "C" {
@@ -429,6 +438,15 @@ const _: () = {
     ["Offset of field: Graph___bindgen_ty_2__bindgen_ty_1::vertex_"]
         [::std::mem::offset_of!(Graph___bindgen_ty_2__bindgen_ty_1, vertex_) - 8usize];
 };
+impl Default for Graph___bindgen_ty_2__bindgen_ty_1 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Graph___bindgen_ty_2__bindgen_ty_2 {
@@ -446,6 +464,15 @@ const _: () = {
     ["Offset of field: Graph___bindgen_ty_2__bindgen_ty_2::lvar_"]
         [::std::mem::offset_of!(Graph___bindgen_ty_2__bindgen_ty_2, lvar_) - 8usize];
 };
+impl Default for Graph___bindgen_ty_2__bindgen_ty_2 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Graph___bindgen_ty_2__bindgen_ty_3 {
@@ -460,6 +487,15 @@ const _: () = {
     ["Offset of field: Graph___bindgen_ty_2__bindgen_ty_3::binding_"]
         [::std::mem::offset_of!(Graph___bindgen_ty_2__bindgen_ty_3, binding_) - 0usize];
 };
+impl Default for Graph___bindgen_ty_2__bindgen_ty_3 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Graph___bindgen_ty_2__bindgen_ty_4 {
@@ -477,6 +513,15 @@ const _: () = {
     ["Offset of field: Graph___bindgen_ty_2__bindgen_ty_4::binding_2"]
         [::std::mem::offset_of!(Graph___bindgen_ty_2__bindgen_ty_4, binding_2) - 8usize];
 };
+impl Default for Graph___bindgen_ty_2__bindgen_ty_4 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Graph___bindgen_ty_2__bindgen_ty_5 {
@@ -497,6 +542,15 @@ const _: () = {
     ["Offset of field: Graph___bindgen_ty_2__bindgen_ty_5::name_"]
         [::std::mem::offset_of!(Graph___bindgen_ty_2__bindgen_ty_5, name_) - 16usize];
 };
+impl Default for Graph___bindgen_ty_2__bindgen_ty_5 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Graph___bindgen_ty_2__bindgen_ty_6 {
@@ -514,6 +568,15 @@ const _: () = {
     ["Offset of field: Graph___bindgen_ty_2__bindgen_ty_6::graph_2"]
         [::std::mem::offset_of!(Graph___bindgen_ty_2__bindgen_ty_6, graph_2) - 8usize];
 };
+impl Default for Graph___bindgen_ty_2__bindgen_ty_6 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Graph___bindgen_ty_2__bindgen_ty_7 {
@@ -534,6 +597,15 @@ const _: () = {
     ["Offset of field: Graph___bindgen_ty_2__bindgen_ty_7::name_"]
         [::std::mem::offset_of!(Graph___bindgen_ty_2__bindgen_ty_7, name_) - 16usize];
 };
+impl Default for Graph___bindgen_ty_2__bindgen_ty_7 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Graph___bindgen_ty_2__bindgen_ty_8 {
@@ -548,6 +620,15 @@ const _: () = {
     ["Offset of field: Graph___bindgen_ty_2__bindgen_ty_8::graphbinding_"]
         [::std::mem::offset_of!(Graph___bindgen_ty_2__bindgen_ty_8, graphbinding_) - 0usize];
 };
+impl Default for Graph___bindgen_ty_2__bindgen_ty_8 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Graph___bindgen_ty_2__bindgen_ty_9 {
@@ -565,6 +646,15 @@ const _: () = {
     ["Offset of field: Graph___bindgen_ty_2__bindgen_ty_9::graph_2"]
         [::std::mem::offset_of!(Graph___bindgen_ty_2__bindgen_ty_9, graph_2) - 8usize];
 };
+impl Default for Graph___bindgen_ty_2__bindgen_ty_9 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of Graph___bindgen_ty_2"][::std::mem::size_of::<Graph___bindgen_ty_2>() - 24usize];
@@ -588,6 +678,15 @@ const _: () = {
     ["Offset of field: Graph___bindgen_ty_2::gTensor_"]
         [::std::mem::offset_of!(Graph___bindgen_ty_2, gTensor_) - 0usize];
 };
+impl Default for Graph___bindgen_ty_2 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of Graph_"][::std::mem::size_of::<Graph_>() - 32usize];
@@ -595,6 +694,15 @@ const _: () = {
     ["Offset of field: Graph_::kind"][::std::mem::offset_of!(Graph_, kind) - 0usize];
     ["Offset of field: Graph_::u"][::std::mem::offset_of!(Graph_, u) - 8usize];
 };
+impl Default for Graph_ {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 unsafe extern "C" {
     pub fn make_GNil() -> Graph;
 }
@@ -658,6 +766,15 @@ const _: () = {
     ["Offset of field: Binding___bindgen_ty_2__bindgen_ty_1::vertex_"]
         [::std::mem::offset_of!(Binding___bindgen_ty_2__bindgen_ty_1, vertex_) - 16usize];
 };
+impl Default for Binding___bindgen_ty_2__bindgen_ty_1 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of Binding___bindgen_ty_2"][::std::mem::size_of::<Binding___bindgen_ty_2>() - 24usize];
@@ -666,6 +783,15 @@ const _: () = {
     ["Offset of field: Binding___bindgen_ty_2::vBind_"]
         [::std::mem::offset_of!(Binding___bindgen_ty_2, vBind_) - 0usize];
 };
+impl Default for Binding___bindgen_ty_2 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of Binding_"][::std::mem::size_of::<Binding_>() - 32usize];
@@ -673,6 +799,15 @@ const _: () = {
     ["Offset of field: Binding_::kind"][::std::mem::offset_of!(Binding_, kind) - 0usize];
     ["Offset of field: Binding_::u"][::std::mem::offset_of!(Binding_, u) - 8usize];
 };
+impl Default for Binding_ {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 unsafe extern "C" {
     pub fn make_VBind(p0: LVar, p1: Vertex, p2: Graph) -> Binding;
 }
@@ -709,6 +844,15 @@ const _: () = {
     ["Offset of field: GraphBinding___bindgen_ty_2__bindgen_ty_1::uvar_"]
         [::std::mem::offset_of!(GraphBinding___bindgen_ty_2__bindgen_ty_1, uvar_) - 16usize];
 };
+impl Default for GraphBinding___bindgen_ty_2__bindgen_ty_1 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of GraphBinding___bindgen_ty_2"]
@@ -718,6 +862,15 @@ const _: () = {
     ["Offset of field: GraphBinding___bindgen_ty_2::gBind_"]
         [::std::mem::offset_of!(GraphBinding___bindgen_ty_2, gBind_) - 0usize];
 };
+impl Default for GraphBinding___bindgen_ty_2 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of GraphBinding_"][::std::mem::size_of::<GraphBinding_>() - 32usize];
@@ -725,6 +878,15 @@ const _: () = {
     ["Offset of field: GraphBinding_::kind"][::std::mem::offset_of!(GraphBinding_, kind) - 0usize];
     ["Offset of field: GraphBinding_::u"][::std::mem::offset_of!(GraphBinding_, u) - 8usize];
 };
+impl Default for GraphBinding_ {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 unsafe extern "C" {
     pub fn make_GBind(p0: UVar, p1: Graph, p2: Graph) -> GraphBinding;
 }
@@ -755,6 +917,15 @@ const _: () = {
     ["Offset of field: Vertex___bindgen_ty_2__bindgen_ty_1::name_"]
         [::std::mem::offset_of!(Vertex___bindgen_ty_2__bindgen_ty_1, name_) - 0usize];
 };
+impl Default for Vertex___bindgen_ty_2__bindgen_ty_1 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of Vertex___bindgen_ty_2"][::std::mem::size_of::<Vertex___bindgen_ty_2>() - 8usize];
@@ -763,6 +934,15 @@ const _: () = {
     ["Offset of field: Vertex___bindgen_ty_2::vName_"]
         [::std::mem::offset_of!(Vertex___bindgen_ty_2, vName_) - 0usize];
 };
+impl Default for Vertex___bindgen_ty_2 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of Vertex_"][::std::mem::size_of::<Vertex_>() - 16usize];
@@ -770,6 +950,15 @@ const _: () = {
     ["Offset of field: Vertex_::kind"][::std::mem::offset_of!(Vertex_, kind) - 0usize];
     ["Offset of field: Vertex_::u"][::std::mem::offset_of!(Vertex_, u) - 8usize];
 };
+impl Default for Vertex_ {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 unsafe extern "C" {
     pub fn make_VName(p0: Name) -> Vertex;
 }
@@ -807,6 +996,15 @@ const _: () = {
     ["Offset of field: Name___bindgen_ty_2__bindgen_ty_1::lvar_"]
         [::std::mem::offset_of!(Name___bindgen_ty_2__bindgen_ty_1, lvar_) - 0usize];
 };
+impl Default for Name___bindgen_ty_2__bindgen_ty_1 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Name___bindgen_ty_2__bindgen_ty_2 {
@@ -821,6 +1019,15 @@ const _: () = {
     ["Offset of field: Name___bindgen_ty_2__bindgen_ty_2::uvar_"]
         [::std::mem::offset_of!(Name___bindgen_ty_2__bindgen_ty_2, uvar_) - 0usize];
 };
+impl Default for Name___bindgen_ty_2__bindgen_ty_2 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Name___bindgen_ty_2__bindgen_ty_3 {
@@ -835,6 +1042,15 @@ const _: () = {
     ["Offset of field: Name___bindgen_ty_2__bindgen_ty_3::graph_"]
         [::std::mem::offset_of!(Name___bindgen_ty_2__bindgen_ty_3, graph_) - 0usize];
 };
+impl Default for Name___bindgen_ty_2__bindgen_ty_3 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Name___bindgen_ty_2__bindgen_ty_4 {
@@ -849,6 +1065,15 @@ const _: () = {
     ["Offset of field: Name___bindgen_ty_2__bindgen_ty_4::vertex_"]
         [::std::mem::offset_of!(Name___bindgen_ty_2__bindgen_ty_4, vertex_) - 0usize];
 };
+impl Default for Name___bindgen_ty_2__bindgen_ty_4 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of Name___bindgen_ty_2"][::std::mem::size_of::<Name___bindgen_ty_2>() - 8usize];
@@ -862,6 +1087,15 @@ const _: () = {
     ["Offset of field: Name___bindgen_ty_2::nameQuoteVertex_"]
         [::std::mem::offset_of!(Name___bindgen_ty_2, nameQuoteVertex_) - 0usize];
 };
+impl Default for Name___bindgen_ty_2 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of Name_"][::std::mem::size_of::<Name_>() - 16usize];
@@ -869,6 +1103,15 @@ const _: () = {
     ["Offset of field: Name_::kind"][::std::mem::offset_of!(Name_, kind) - 0usize];
     ["Offset of field: Name_::u"][::std::mem::offset_of!(Name_, u) - 8usize];
 };
+impl Default for Name_ {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 unsafe extern "C" {
     pub fn make_NameWildcard() -> Name;
 }
@@ -898,6 +1141,15 @@ const _: () = {
     ["Offset of field: ListName_::listname_"]
         [::std::mem::offset_of!(ListName_, listname_) - 8usize];
 };
+impl Default for ListName_ {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 unsafe extern "C" {
     pub fn make_ListName(p1: Name, p2: ListName) -> ListName;
 }
@@ -939,171 +1191,44 @@ unsafe extern "C" {
 unsafe extern "C" {
     pub fn free_ListName(p: ListName);
 }
-pub type visitGTensor = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGNominate = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGEdgeAnon = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGEdgeNamed = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGRuleAnon = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGRuleNamed = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitBindingCallback = ::std::option::Option<unsafe extern "C" fn(p: Binding)>;
-pub type visitGraphBindingCallback = ::std::option::Option<unsafe extern "C" fn(p: GraphBinding)>;
-pub type visitVertexCallback = ::std::option::Option<unsafe extern "C" fn(p: Vertex)>;
-pub type visitNameCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitUVarCallback = ::std::option::Option<unsafe extern "C" fn(p: UVar)>;
-pub type visitLVarCallback = ::std::option::Option<unsafe extern "C" fn(p: LVar)>;
-pub type visitIdentCallback = ::std::option::Option<unsafe extern "C" fn(i: Ident)>;
-pub type visitIntegerCallback = ::std::option::Option<unsafe extern "C" fn(i: Integer)>;
-pub type visitDoubleCallback = ::std::option::Option<unsafe extern "C" fn(d: Double)>;
-pub type visitCharCallback = ::std::option::Option<unsafe extern "C" fn(c: Char)>;
-pub type visitStringCallback = ::std::option::Option<unsafe extern "C" fn(s: String)>;
-pub type visitGSubgraph = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGVertexCallback = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGVar = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGNilCallback = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitVBindCallback = ::std::option::Option<unsafe extern "C" fn(p: Binding)>;
-pub type visitGBindCallback = ::std::option::Option<unsafe extern "C" fn(p: GraphBinding)>;
-pub type visitIsVNameCallback = ::std::option::Option<unsafe extern "C" fn(p: Vertex)>;
-pub type visitNameWildcardCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitNameVVarCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitNameGVarCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitIsNameQuoteGraph = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitIsNameQuoteVertex = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitListNameCallback = ::std::option::Option<unsafe extern "C" fn(listname: ListName)>;
-#[repr(C)]
-#[derive(Debug, Copy, Clone)]
-pub struct Visitor {
-    pub visitIsGTensorCallback: visitGTensor,
-    pub visitIsGNominate: visitGNominate,
-    pub visitIsGEdgeAnon: visitGEdgeAnon,
-    pub visitIsGEdgeNamed: visitGEdgeNamed,
-    pub visitIsGRuleAnonCallback: visitGRuleAnon,
-    pub visitIsGRuleNamedCallback: visitGRuleNamed,
-    pub visitBindingCallback: visitBindingCallback,
-    pub visitGraphBindingCallback: visitGraphBindingCallback,
-    pub visitVertexCallback: visitVertexCallback,
-    pub visitIsGVarCallback: visitGVar,
-    pub visitNameCallback: visitNameCallback,
-    pub visitIsGSubgraphCallback: visitGSubgraph,
-    pub visitUVar: visitUVarCallback,
-    pub visitLVar: visitLVarCallback,
-    pub visitIdent: visitIdentCallback,
-    pub visitIntegerCallback: visitIntegerCallback,
-    pub visitDoubleCallback: visitDoubleCallback,
-    pub visitCharCallback: visitCharCallback,
-    pub visitStringCallback: visitStringCallback,
-    pub visitIsGVertexCallback: visitGVertexCallback,
-    pub visitIsGNilCallback: visitGNilCallback,
-    pub visitIsVBindCallback: visitVBindCallback,
-    pub visitIsGBindCallback: visitGBindCallback,
-    pub visitIsVNameCallback: visitIsVNameCallback,
-    pub visitNameWildcardCallback: visitNameWildcardCallback,
-    pub visitNameVVarCallback: visitNameVVarCallback,
-    pub visitNameGVarCallback: visitNameGVarCallback,
-    pub visitIsNameQuoteGraph: visitIsNameQuoteGraph,
-    pub visitIsNameQuoteVertex: visitIsNameQuoteVertex,
-    pub visitListName: visitListNameCallback,
-}
-#[allow(clippy::unnecessary_operation, clippy::identity_op)]
-const _: () = {
-    ["Size of Visitor"][::std::mem::size_of::<Visitor>() - 240usize];
-    ["Alignment of Visitor"][::std::mem::align_of::<Visitor>() - 8usize];
-    ["Offset of field: Visitor::visitIsGTensorCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGTensorCallback) - 0usize];
-    ["Offset of field: Visitor::visitIsGNominate"]
-        [::std::mem::offset_of!(Visitor, visitIsGNominate) - 8usize];
-    ["Offset of field: Visitor::visitIsGEdgeAnon"]
-        [::std::mem::offset_of!(Visitor, visitIsGEdgeAnon) - 16usize];
-    ["Offset of field: Visitor::visitIsGEdgeNamed"]
-        [::std::mem::offset_of!(Visitor, visitIsGEdgeNamed) - 24usize];
-    ["Offset of field: Visitor::visitIsGRuleAnonCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGRuleAnonCallback) - 32usize];
-    ["Offset of field: Visitor::visitIsGRuleNamedCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGRuleNamedCallback) - 40usize];
-    ["Offset of field: Visitor::visitBindingCallback"]
-        [::std::mem::offset_of!(Visitor, visitBindingCallback) - 48usize];
-    ["Offset of field: Visitor::visitGraphBindingCallback"]
-        [::std::mem::offset_of!(Visitor, visitGraphBindingCallback) - 56usize];
-    ["Offset of field: Visitor::visitVertexCallback"]
-        [::std::mem::offset_of!(Visitor, visitVertexCallback) - 64usize];
-    ["Offset of field: Visitor::visitIsGVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGVarCallback) - 72usize];
-    ["Offset of field: Visitor::visitNameCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameCallback) - 80usize];
-    ["Offset of field: Visitor::visitIsGSubgraphCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGSubgraphCallback) - 88usize];
-    ["Offset of field: Visitor::visitUVar"][::std::mem::offset_of!(Visitor, visitUVar) - 96usize];
-    ["Offset of field: Visitor::visitLVar"][::std::mem::offset_of!(Visitor, visitLVar) - 104usize];
-    ["Offset of field: Visitor::visitIdent"]
-        [::std::mem::offset_of!(Visitor, visitIdent) - 112usize];
-    ["Offset of field: Visitor::visitIntegerCallback"]
-        [::std::mem::offset_of!(Visitor, visitIntegerCallback) - 120usize];
-    ["Offset of field: Visitor::visitDoubleCallback"]
-        [::std::mem::offset_of!(Visitor, visitDoubleCallback) - 128usize];
-    ["Offset of field: Visitor::visitCharCallback"]
-        [::std::mem::offset_of!(Visitor, visitCharCallback) - 136usize];
-    ["Offset of field: Visitor::visitStringCallback"]
-        [::std::mem::offset_of!(Visitor, visitStringCallback) - 144usize];
-    ["Offset of field: Visitor::visitIsGVertexCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGVertexCallback) - 152usize];
-    ["Offset of field: Visitor::visitIsGNilCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGNilCallback) - 160usize];
-    ["Offset of field: Visitor::visitIsVBindCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsVBindCallback) - 168usize];
-    ["Offset of field: Visitor::visitIsGBindCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGBindCallback) - 176usize];
-    ["Offset of field: Visitor::visitIsVNameCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsVNameCallback) - 184usize];
-    ["Offset of field: Visitor::visitNameWildcardCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameWildcardCallback) - 192usize];
-    ["Offset of field: Visitor::visitNameVVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameVVarCallback) - 200usize];
-    ["Offset of field: Visitor::visitNameGVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameGVarCallback) - 208usize];
-    ["Offset of field: Visitor::visitIsNameQuoteGraph"]
-        [::std::mem::offset_of!(Visitor, visitIsNameQuoteGraph) - 216usize];
-    ["Offset of field: Visitor::visitIsNameQuoteVertex"]
-        [::std::mem::offset_of!(Visitor, visitIsNameQuoteVertex) - 224usize];
-    ["Offset of field: Visitor::visitListName"]
-        [::std::mem::offset_of!(Visitor, visitListName) - 232usize];
-};
 unsafe extern "C" {
-    pub fn visitGraph(p: Graph, visitor: Visitor);
+    pub fn visitGraph(p: Graph);
 }
 unsafe extern "C" {
-    pub fn visitBinding(p: Binding, visitor: Visitor);
+    pub fn visitBinding(p: Binding);
 }
 unsafe extern "C" {
-    pub fn visitGraphBinding(p: GraphBinding, visitor: Visitor);
+    pub fn visitGraphBinding(p: GraphBinding);
 }
 unsafe extern "C" {
-    pub fn visitVertex(p: Vertex, visitor: Visitor);
+    pub fn visitVertex(p: Vertex);
 }
 unsafe extern "C" {
-    pub fn visitName(p: Name, visitor: Visitor);
+    pub fn visitName(p: Name);
 }
 unsafe extern "C" {
-    pub fn visitListName(p: ListName, visitor: Visitor);
+    pub fn visitListName(p: ListName);
 }
 unsafe extern "C" {
-    pub fn visitUVar(p: UVar, visitor: Visitor);
+    pub fn visitUVar(p: UVar);
 }
 unsafe extern "C" {
-    pub fn visitLVar(p: LVar, visitor: Visitor);
+    pub fn visitLVar(p: LVar);
 }
 unsafe extern "C" {
-    pub fn visitIdent(i: Ident, visitor: Visitor);
+    pub fn visitIdent(i: Ident);
 }
 unsafe extern "C" {
-    pub fn visitInteger(i: Integer, visitor: Visitor);
+    pub fn visitInteger(i: Integer);
 }
 unsafe extern "C" {
-    pub fn visitDouble(d: Double, visitor: Visitor);
+    pub fn visitDouble(d: Double);
 }
 unsafe extern "C" {
-    pub fn visitChar(c: Char, visitor: Visitor);
+    pub fn visitChar(c: Char);
 }
 unsafe extern "C" {
-    pub fn visitString(s: String, visitor: Visitor);
+    pub fn visitString(s: String);
 }
 pub type va_list = __builtin_va_list;
 pub type __gnuc_va_list = __builtin_va_list;
@@ -1142,7 +1267,7 @@ pub type __off_t = ::std::os::raw::c_long;
 pub type __off64_t = ::std::os::raw::c_long;
 pub type __pid_t = ::std::os::raw::c_int;
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct __fsid_t {
     pub __val: [::std::os::raw::c_int; 2usize],
 }
@@ -1203,6 +1328,15 @@ const _: () = {
     ["Offset of field: __mbstate_t__bindgen_ty_1::__wchb"]
         [::std::mem::offset_of!(__mbstate_t__bindgen_ty_1, __wchb) - 0usize];
 };
+impl Default for __mbstate_t__bindgen_ty_1 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of __mbstate_t"][::std::mem::size_of::<__mbstate_t>() - 8usize];
@@ -1212,6 +1346,15 @@ const _: () = {
     ["Offset of field: __mbstate_t::__value"]
         [::std::mem::offset_of!(__mbstate_t, __value) - 4usize];
 };
+impl Default for __mbstate_t {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct _G_fpos_t {
@@ -1225,6 +1368,15 @@ const _: () = {
     ["Offset of field: _G_fpos_t::__pos"][::std::mem::offset_of!(_G_fpos_t, __pos) - 0usize];
     ["Offset of field: _G_fpos_t::__state"][::std::mem::offset_of!(_G_fpos_t, __state) - 8usize];
 };
+impl Default for _G_fpos_t {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 pub type __fpos_t = _G_fpos_t;
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1240,6 +1392,15 @@ const _: () = {
     ["Offset of field: _G_fpos64_t::__state"]
         [::std::mem::offset_of!(_G_fpos64_t, __state) - 8usize];
 };
+impl Default for _G_fpos64_t {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 pub type __fpos64_t = _G_fpos64_t;
 pub type __FILE = _IO_FILE;
 pub type FILE = _IO_FILE;
@@ -1344,6 +1505,15 @@ const _: () = {
     ["Offset of field: _IO_FILE::_mode"][::std::mem::offset_of!(_IO_FILE, _mode) - 192usize];
     ["Offset of field: _IO_FILE::_unused2"][::std::mem::offset_of!(_IO_FILE, _unused2) - 196usize];
 };
+impl Default for _IO_FILE {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
 pub type off_t = __off_t;
 pub type fpos_t = __fpos_t;
 unsafe extern "C" {
@@ -1940,7 +2110,7 @@ unsafe extern "C" {
     pub fn resizeBuffer();
 }
 #[repr(C)]
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Default, Copy, Clone)]
 pub struct __locale_data {
     pub _address: u8,
 }
@@ -1966,3 +2136,12 @@ const _: () = {
     ["Offset of field: __va_list_tag::reg_save_area"]
         [::std::mem::offset_of!(__va_list_tag, reg_save_area) - 16usize];
 };
+impl Default for __va_list_tag {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
