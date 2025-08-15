@@ -23,7 +23,7 @@ build_obj:
 archive:
 	cd parser && ar rcs libparser.a Absyn.o Parser.o Printer.o Buffer.o Lexer.o
 
-build: gen_parser build_obj archive
+build: build_obj archive
 	@echo "Done"
 
 test:
