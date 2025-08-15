@@ -9,8 +9,10 @@ ifeq ($(wildcard $(PARSER_MAKEFILE)),)
 	mkdir -p ./parser/dist
 else
 	@echo "File exists."
-	cd parser && make distclean
 endif
+
+clean:
+	cd parder && make clean
 
 gen_parser: check_file
 	bnfc --c -m -o ./parser  etc/grammar.bnfc

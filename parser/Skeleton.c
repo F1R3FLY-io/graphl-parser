@@ -5,63 +5,67 @@
    To use, copy Skeleton.h and Skeleton.c to
    new files. */
 
+#include <stddef.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "Skeleton.h"
 
-void visitGraph(Graph p)
+void visitGraph(Graph p, Visitor visitor)
 {
   switch(p->kind)
   {
   case is_GTensor:
-    /* Code for GTensor Goes Here */
-    visitGraph(p->u.gTensor_.graph_1);
-    visitGraph(p->u.gTensor_.graph_2);
-    break;
+    visitor.visitIsGTensorCallback(p);
+      visitGraph(p->u.gTensor_.graph_1, visitor);
+      visitGraph(p->u.gTensor_.graph_2, visitor);
+      break;
   case is_GNominate:
-    /* Code for GNominate Goes Here */
-    visitBinding(p->u.gNominate_.binding_);
-    break;
+     visitor.visitIsGNominate(p);
+     visitBinding(p->u.gNominate_.binding_, visitor);
+     break;
   case is_GEdgeAnon:
-    /* Code for GEdgeAnon Goes Here */
-    visitBinding(p->u.gEdgeAnon_.binding_1);
-    visitBinding(p->u.gEdgeAnon_.binding_2);
+    visitor.visitIsGEdgeAnon(p);
+    visitBinding(p->u.gEdgeAnon_.binding_1, visitor);
+    visitBinding(p->u.gEdgeAnon_.binding_2, visitor);
     break;
   case is_GEdgeNamed:
-    /* Code for GEdgeNamed Goes Here */
-    visitName(p->u.gEdgeNamed_.name_);
-    visitBinding(p->u.gEdgeNamed_.binding_1);
-    visitBinding(p->u.gEdgeNamed_.binding_2);
-    break;
+    visitor.visitIsGEdgeNamed(p);
+      visitName(p->u.gEdgeNamed_.name_, visitor);
+      visitBinding(p->u.gEdgeNamed_.binding_1, visitor);
+      visitBinding(p->u.gEdgeNamed_.binding_2, visitor);
+      break;
   case is_GRuleAnon:
-    /* Code for GRuleAnon Goes Here */
-    visitGraph(p->u.gRuleAnon_.graph_1);
-    visitGraph(p->u.gRuleAnon_.graph_2);
-    break;
+    visitor.visitIsGRuleAnonCallback(p);
+      visitGraph(p->u.gRuleAnon_.graph_1, visitor);
+      visitGraph(p->u.gRuleAnon_.graph_2, visitor);
+      break;
   case is_GRuleNamed:
-    /* Code for GRuleNamed Goes Here */
-    visitName(p->u.gRuleNamed_.name_);
-    visitGraph(p->u.gRuleNamed_.graph_1);
-    visitGraph(p->u.gRuleNamed_.graph_2);
+     visitor.visitIsGRuleNamedCallback(
+      p);
+      visitName(p->u.gRuleNamed_.name_, visitor);
+      visitGraph(p->u.gRuleNamed_.graph_1, visitor);
+      visitGraph(p->u.gRuleNamed_.graph_2, visitor);
     break;
   case is_GSubgraph:
-    /* Code for GSubgraph Goes Here */
-    visitGraphBinding(p->u.gSubgraph_.graphbinding_);
-    break;
+     visitor.visitIsGSubgraphCallback(p);
+      visitGraphBinding(
+        p->u.gSubgraph_.graphbinding_,
+        visitor
+      );
+      break;
   case is_GVertex:
-    /* Code for GVertex Goes Here */
-    visitVertex(p->u.gVertex_.vertex_);
-    visitGraph(p->u.gVertex_.graph_);
-    break;
+     visitor.visitIsGVertexCallback(p);
+      visitVertex(p->u.gVertex_.vertex_, visitor);
+      visitGraph(p->u.gVertex_.graph_, visitor);
+      break;
   case is_GVar:
-    /* Code for GVar Goes Here */
-    visitLVar(p->u.gVar_.lvar_);
-    visitGraph(p->u.gVar_.graph_);
-    break;
+    visitor.visitIsGVarCallback(p);
+      visitLVar(p->u.gVar_.lvar_, visitor);
+      visitGraph(p->u.gVar_.graph_, visitor);
+      break;
   case is_GNil:
-    /* Code for GNil Goes Here */
-    break;
+    visitor.visitIsGNilCallback(p);
 
   default:
     fprintf(stderr, "Error: bad kind field when printing Graph!\n");
@@ -69,16 +73,16 @@ void visitGraph(Graph p)
   }
 }
 
-void visitBinding(Binding p)
+void visitBinding(Binding p, Visitor visitor)
 {
   switch(p->kind)
   {
   case is_VBind:
-    /* Code for VBind Goes Here */
-    visitLVar(p->u.vBind_.lvar_);
-    visitVertex(p->u.vBind_.vertex_);
-    visitGraph(p->u.vBind_.graph_);
-    break;
+    visitor.visitIsVBindCallback(p);
+      visitLVar(p->u.vBind_.lvar_, visitor);
+      visitVertex(p->u.vBind_.vertex_, visitor);
+      visitGraph(p->u.vBind_.graph_, visitor);
+      break;
 
   default:
     fprintf(stderr, "Error: bad kind field when printing Binding!\n");
@@ -86,15 +90,15 @@ void visitBinding(Binding p)
   }
 }
 
-void visitGraphBinding(GraphBinding p)
+void visitGraphBinding(GraphBinding p, Visitor visitor)
 {
   switch(p->kind)
   {
   case is_GBind:
-    /* Code for GBind Goes Here */
-    visitUVar(p->u.gBind_.uvar_);
-    visitGraph(p->u.gBind_.graph_1);
-    visitGraph(p->u.gBind_.graph_2);
+     visitor.visitIsGBindCallback(p);
+    visitUVar(p->u.gBind_.uvar_, visitor);
+    visitGraph(p->u.gBind_.graph_1, visitor);
+    visitGraph(p->u.gBind_.graph_2, visitor);
     break;
 
   default:
@@ -103,13 +107,15 @@ void visitGraphBinding(GraphBinding p)
   }
 }
 
-void visitVertex(Vertex p)
+void visitVertex(Vertex p, Visitor visitor)
 {
   switch(p->kind)
   {
   case is_VName:
-    /* Code for VName Goes Here */
-    visitName(p->u.vName_.name_);
+    visitor.visitIsVNameCallback(
+      p
+    );
+    visitName(p->u.vName_.name_, visitor);
     break;
 
   default:
@@ -118,71 +124,69 @@ void visitVertex(Vertex p)
   }
 }
 
-void visitName(Name p)
+void visitName(Name p, Visitor visitor)
 {
   switch(p->kind)
   {
   case is_NameWildcard:
-    /* Code for NameWildcard Goes Here */
+    visitor.visitNameWildcardCallback(p);
     break;
   case is_NameVVar:
-    /* Code for NameVVar Goes Here */
-    visitLVar(p->u.nameVVar_.lvar_);
+     visitor.visitNameVVarCallback(p );
+     visitLVar(p->u.nameVVar_.lvar_, visitor);
     break;
   case is_NameGVar:
-    /* Code for NameGVar Goes Here */
-    visitUVar(p->u.nameGVar_.uvar_);
-    break;
+     visitor.visitNameGVarCallback(p );
+     visitUVar(p->u.nameGVar_.uvar_, visitor);
   case is_NameQuoteGraph:
-    /* Code for NameQuoteGraph Goes Here */
-    visitGraph(p->u.nameQuoteGraph_.graph_);
-    break;
+     visitor.visitIsNameQuoteGraph(p);
+     visitGraph(p->u.nameQuoteGraph_.graph_, visitor);
+     break;
   case is_NameQuoteVertex:
-    /* Code for NameQuoteVertex Goes Here */
-    visitVertex(p->u.nameQuoteVertex_.vertex_);
-    break;
-
+     visitor.visitIsNameQuoteVertex(p);
+     visitVertex(p->u.nameQuoteVertex_.vertex_, visitor);
+     break;
   default:
     fprintf(stderr, "Error: bad kind field when printing Name!\n");
     exit(1);
   }
 }
 
-void visitListName(ListName listname)
+void visitListName(ListName listname, Visitor visitor)
 {
   while(listname  != 0)
   {
-    /* Code For ListName Goes Here */
-    visitName(listname->name_);
+    visitor.visitListName(listname);
+    visitName(listname->name_, visitor);
     listname = listname->listname_;
   }
 }
 
-void visitUVar(UVar p)
+void visitUVar(UVar p, Visitor visitor)
 {
-  /* Code for UVar Goes Here */
+   visitor.visitUVar(p);
 }
-void visitLVar(LVar p)
+void visitLVar(LVar p, Visitor visitor)
 {
-  /* Code for LVar Goes Here */
+   visitor.visitLVar(p);
 }
-void visitIdent(Ident i)
+void visitIdent(Ident i, Visitor visitor)
 {
-  /* Code for Ident Goes Here */
+   visitor.visitIdent(i);
 }
-void visitInteger(Integer i)
+void visitInteger(Integer i, Visitor visitor)
 {
-  /* Code for Integer Goes Here */
+   visitor.visitIntegerCallback(i);
 }
-void visitDouble(Double d)
+void visitDouble(Double d, Visitor visitor)
 {
-  /* Code for Double Goes Here */
+   visitor.visitDoubleCallback(d);
 }
-void visitChar(Char c)
+void visitChar(Char c, Visitor visitor)
 {
-  /* Code for Char Goes Here */
+   visitor.visitCharCallback(c);
 }
-void visitString(String s)
+void visitString(String s, Visitor visitor)
 {
-  /* Code for String Goes Here */
+   visitor.visitStringCallback(s);
 }

@@ -6,7 +6,7 @@ pub fn parse(
     document: impl Into<CString>,
 ) -> Result<std::string::String, std::ffi::IntoStringError> {
     unsafe {
-        let graph = psGraph(document.into().as_ptr());
+        psGraph(document.into().as_ptr());
         visitGraph(graph);
         free_Graph(graph);
     }

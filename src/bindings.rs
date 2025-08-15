@@ -939,44 +939,171 @@ unsafe extern "C" {
 unsafe extern "C" {
     pub fn free_ListName(p: ListName);
 }
+pub type visitGTensor = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
+pub type visitGNominate = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
+pub type visitGEdgeAnon = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
+pub type visitGEdgeNamed = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
+pub type visitGRuleAnon = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
+pub type visitGRuleNamed = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
+pub type visitBindingCallback = ::std::option::Option<unsafe extern "C" fn(p: Binding)>;
+pub type visitGraphBindingCallback = ::std::option::Option<unsafe extern "C" fn(p: GraphBinding)>;
+pub type visitVertexCallback = ::std::option::Option<unsafe extern "C" fn(p: Vertex)>;
+pub type visitNameCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
+pub type visitUVarCallback = ::std::option::Option<unsafe extern "C" fn(p: UVar)>;
+pub type visitLVarCallback = ::std::option::Option<unsafe extern "C" fn(p: LVar)>;
+pub type visitIdentCallback = ::std::option::Option<unsafe extern "C" fn(i: Ident)>;
+pub type visitIntegerCallback = ::std::option::Option<unsafe extern "C" fn(i: Integer)>;
+pub type visitDoubleCallback = ::std::option::Option<unsafe extern "C" fn(d: Double)>;
+pub type visitCharCallback = ::std::option::Option<unsafe extern "C" fn(c: Char)>;
+pub type visitStringCallback = ::std::option::Option<unsafe extern "C" fn(s: String)>;
+pub type visitGSubgraph = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
+pub type visitGVertexCallback = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
+pub type visitGVar = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
+pub type visitGNilCallback = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
+pub type visitVBindCallback = ::std::option::Option<unsafe extern "C" fn(p: Binding)>;
+pub type visitGBindCallback = ::std::option::Option<unsafe extern "C" fn(p: GraphBinding)>;
+pub type visitIsVNameCallback = ::std::option::Option<unsafe extern "C" fn(p: Vertex)>;
+pub type visitNameWildcardCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
+pub type visitNameVVarCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
+pub type visitNameGVarCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
+pub type visitIsNameQuoteGraph = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
+pub type visitIsNameQuoteVertex = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
+pub type visitListNameCallback = ::std::option::Option<unsafe extern "C" fn(listname: ListName)>;
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct Visitor {
+    pub visitIsGTensorCallback: visitGTensor,
+    pub visitIsGNominate: visitGNominate,
+    pub visitIsGEdgeAnon: visitGEdgeAnon,
+    pub visitIsGEdgeNamed: visitGEdgeNamed,
+    pub visitIsGRuleAnonCallback: visitGRuleAnon,
+    pub visitIsGRuleNamedCallback: visitGRuleNamed,
+    pub visitBindingCallback: visitBindingCallback,
+    pub visitGraphBindingCallback: visitGraphBindingCallback,
+    pub visitVertexCallback: visitVertexCallback,
+    pub visitIsGVarCallback: visitGVar,
+    pub visitNameCallback: visitNameCallback,
+    pub visitIsGSubgraphCallback: visitGSubgraph,
+    pub visitUVar: visitUVarCallback,
+    pub visitLVar: visitLVarCallback,
+    pub visitIdent: visitIdentCallback,
+    pub visitIntegerCallback: visitIntegerCallback,
+    pub visitDoubleCallback: visitDoubleCallback,
+    pub visitCharCallback: visitCharCallback,
+    pub visitStringCallback: visitStringCallback,
+    pub visitIsGVertexCallback: visitGVertexCallback,
+    pub visitIsGNilCallback: visitGNilCallback,
+    pub visitIsVBindCallback: visitVBindCallback,
+    pub visitIsGBindCallback: visitGBindCallback,
+    pub visitIsVNameCallback: visitIsVNameCallback,
+    pub visitNameWildcardCallback: visitNameWildcardCallback,
+    pub visitNameVVarCallback: visitNameVVarCallback,
+    pub visitNameGVarCallback: visitNameGVarCallback,
+    pub visitIsNameQuoteGraph: visitIsNameQuoteGraph,
+    pub visitIsNameQuoteVertex: visitIsNameQuoteVertex,
+    pub visitListName: visitListNameCallback,
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of Visitor"][::std::mem::size_of::<Visitor>() - 240usize];
+    ["Alignment of Visitor"][::std::mem::align_of::<Visitor>() - 8usize];
+    ["Offset of field: Visitor::visitIsGTensorCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGTensorCallback) - 0usize];
+    ["Offset of field: Visitor::visitIsGNominate"]
+        [::std::mem::offset_of!(Visitor, visitIsGNominate) - 8usize];
+    ["Offset of field: Visitor::visitIsGEdgeAnon"]
+        [::std::mem::offset_of!(Visitor, visitIsGEdgeAnon) - 16usize];
+    ["Offset of field: Visitor::visitIsGEdgeNamed"]
+        [::std::mem::offset_of!(Visitor, visitIsGEdgeNamed) - 24usize];
+    ["Offset of field: Visitor::visitIsGRuleAnonCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGRuleAnonCallback) - 32usize];
+    ["Offset of field: Visitor::visitIsGRuleNamedCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGRuleNamedCallback) - 40usize];
+    ["Offset of field: Visitor::visitBindingCallback"]
+        [::std::mem::offset_of!(Visitor, visitBindingCallback) - 48usize];
+    ["Offset of field: Visitor::visitGraphBindingCallback"]
+        [::std::mem::offset_of!(Visitor, visitGraphBindingCallback) - 56usize];
+    ["Offset of field: Visitor::visitVertexCallback"]
+        [::std::mem::offset_of!(Visitor, visitVertexCallback) - 64usize];
+    ["Offset of field: Visitor::visitIsGVarCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGVarCallback) - 72usize];
+    ["Offset of field: Visitor::visitNameCallback"]
+        [::std::mem::offset_of!(Visitor, visitNameCallback) - 80usize];
+    ["Offset of field: Visitor::visitIsGSubgraphCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGSubgraphCallback) - 88usize];
+    ["Offset of field: Visitor::visitUVar"][::std::mem::offset_of!(Visitor, visitUVar) - 96usize];
+    ["Offset of field: Visitor::visitLVar"][::std::mem::offset_of!(Visitor, visitLVar) - 104usize];
+    ["Offset of field: Visitor::visitIdent"]
+        [::std::mem::offset_of!(Visitor, visitIdent) - 112usize];
+    ["Offset of field: Visitor::visitIntegerCallback"]
+        [::std::mem::offset_of!(Visitor, visitIntegerCallback) - 120usize];
+    ["Offset of field: Visitor::visitDoubleCallback"]
+        [::std::mem::offset_of!(Visitor, visitDoubleCallback) - 128usize];
+    ["Offset of field: Visitor::visitCharCallback"]
+        [::std::mem::offset_of!(Visitor, visitCharCallback) - 136usize];
+    ["Offset of field: Visitor::visitStringCallback"]
+        [::std::mem::offset_of!(Visitor, visitStringCallback) - 144usize];
+    ["Offset of field: Visitor::visitIsGVertexCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGVertexCallback) - 152usize];
+    ["Offset of field: Visitor::visitIsGNilCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGNilCallback) - 160usize];
+    ["Offset of field: Visitor::visitIsVBindCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsVBindCallback) - 168usize];
+    ["Offset of field: Visitor::visitIsGBindCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGBindCallback) - 176usize];
+    ["Offset of field: Visitor::visitIsVNameCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsVNameCallback) - 184usize];
+    ["Offset of field: Visitor::visitNameWildcardCallback"]
+        [::std::mem::offset_of!(Visitor, visitNameWildcardCallback) - 192usize];
+    ["Offset of field: Visitor::visitNameVVarCallback"]
+        [::std::mem::offset_of!(Visitor, visitNameVVarCallback) - 200usize];
+    ["Offset of field: Visitor::visitNameGVarCallback"]
+        [::std::mem::offset_of!(Visitor, visitNameGVarCallback) - 208usize];
+    ["Offset of field: Visitor::visitIsNameQuoteGraph"]
+        [::std::mem::offset_of!(Visitor, visitIsNameQuoteGraph) - 216usize];
+    ["Offset of field: Visitor::visitIsNameQuoteVertex"]
+        [::std::mem::offset_of!(Visitor, visitIsNameQuoteVertex) - 224usize];
+    ["Offset of field: Visitor::visitListName"]
+        [::std::mem::offset_of!(Visitor, visitListName) - 232usize];
+};
 unsafe extern "C" {
-    pub fn visitGraph(p: Graph);
+    pub fn visitGraph(p: Graph, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitBinding(p: Binding);
+    pub fn visitBinding(p: Binding, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitGraphBinding(p: GraphBinding);
+    pub fn visitGraphBinding(p: GraphBinding, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitVertex(p: Vertex);
+    pub fn visitVertex(p: Vertex, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitName(p: Name);
+    pub fn visitName(p: Name, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitListName(p: ListName);
+    pub fn visitListName(p: ListName, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitUVar(p: UVar);
+    pub fn visitUVar(p: UVar, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitLVar(p: LVar);
+    pub fn visitLVar(p: LVar, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitIdent(i: Ident);
+    pub fn visitIdent(i: Ident, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitInteger(i: Integer);
+    pub fn visitInteger(i: Integer, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitDouble(d: Double);
+    pub fn visitDouble(d: Double, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitChar(c: Char);
+    pub fn visitChar(c: Char, visitor: Visitor);
 }
 unsafe extern "C" {
-    pub fn visitString(s: String);
+    pub fn visitString(s: String, visitor: Visitor);
 }
 pub type va_list = __builtin_va_list;
 pub type __gnuc_va_list = __builtin_va_list;
