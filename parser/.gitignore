@@ -6,3 +6,5 @@
 !.gitignore
 !Skeleton.c
 !Skeleton.h
+!libparser.a
+!Makefile

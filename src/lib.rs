@@ -4,6 +4,12 @@
 
 include!("bindings.rs");
 
+impl ToString for Visitor {
+    fn to_string(&self) -> std::string::String {
+        return "Hello, World!".to_string();
+    }
+}
+
 mod parse;
 mod print;
 mod show;

@@ -21,10 +21,10 @@ build_obj:
 	cd parser && make
 
 archive:
-	cd parser && ar rcs libparser.a Absyn.o Parser.o Printer.o Buffer.o Lexer.o
+	cd parser && ar rcs libparser.a Absyn.o Parser.o Printer.o Buffer.o Lexer.o Skeleton.o
 
 build: build_obj archive
 	@echo "Done"
 
 test:
-	cargo test -- --no-capture --test-threads=1
+	cargo test --no-run -- --no-capture --test-threads=1
