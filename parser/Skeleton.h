@@ -36,6 +36,7 @@ typedef void (*visitNameGVarCallback)(Name p);
 typedef void (*visitIsNameQuoteGraph)(Name p);
 typedef void (*visitIsNameQuoteVertex)(Name p);
 typedef void (*visitListNameCallback)(ListName listname);
+typedef void (*visitCallback)(int p);
 
 
 typedef struct {

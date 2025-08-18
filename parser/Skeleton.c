@@ -11,7 +11,7 @@
 
 #include "Skeleton.h"
 
-void visitGraph(Graph p, Visitor * visitor) {
+void visitGraph(Graph p, Visitor *visitor) {
   switch (p->kind) {
   case is_GTensor:
     visitor->visitIsGTensorCallback(p);
@@ -60,6 +60,7 @@ void visitGraph(Graph p, Visitor * visitor) {
     break;
   case is_GNil:
     visitor->visitIsGNilCallback(p);
+    break;
 
   default:
     fprintf(stderr, "Error: bad kind field when printing Graph!\n");
