@@ -13,7 +13,7 @@ fn main() {
             .unwrap()
             .display()
     );
-    println!("cargo:rustc-link-lib={}", LIB_NAME);
+    println!("cargo:rustc-link-lib={LIB_NAME}");
 
     // The bindgen::Builder is the main entry point
     // to bindgen, and lets you build up options for

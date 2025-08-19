@@ -61,10 +61,8 @@ pub fn parse(document: impl Into<CString>) -> std::result::Result<String, String
 mod tests {
     use std::{
         ffi::{CStr, CString, c_void},
-        mem::forget,
         os::raw::c_char,
-        ptr::{copy_nonoverlapping, write},
-        str::FromStr,
+        ptr::copy_nonoverlapping,
     };
 
     use crate::Visitor;
@@ -82,7 +80,7 @@ mod tests {
 
             let value = unsafe { CStr::from_ptr(context as *mut c_char).to_str().unwrap() };
 
-            let updated_context = format!("{}Gnil Called", value);
+            let updated_context = format!("{value}Gnil Called");
             let updated_context_bytes = updated_context.as_bytes();
 
             unsafe {
