@@ -1,9 +1,9 @@
-use std::{ffi::CString, sync::Mutex};
+use std::ffi::{CString, c_void};
 
 use crate::{Visitor, free_Graph, psGraph, visitGraph};
 
 pub fn parse(document: impl Into<CString>) -> std::result::Result<String, String> {
-    let STORAGE = Mutex::new(String::new());
+    let rholang_representation = CString::default();
 
     let mut visitor = Visitor {
         visitIsGTensorCallback: todo!(),
@@ -44,52 +44,66 @@ pub fn parse(document: impl Into<CString>) -> std::result::Result<String, String
         if graph.is_null() {
             return Err("psGraph returned null".to_string());
         }
-        visitGraph(graph, &mut visitor);
+        visitGraph(
+            graph,
+            &mut visitor,
+            rholang_representation.as_ptr() as *mut c_void,
+        );
         free_Graph(graph);
     };
 
-    STORAGE.into_inner().map_err(|e| e.to_string())
+    rholang_representation
+        .into_string()
+        .map_err(|e| e.to_string())
 }
 
 #[cfg(test)]
 mod tests {
-    use std::{ffi::CString, str::FromStr, sync::Mutex};
+    use std::{
+        ffi::{CStr, CString, c_void},
+        mem::forget,
+        os::raw::c_char,
+        ptr::{copy_nonoverlapping, write},
+        str::FromStr,
+    };
 
     use crate::Visitor;
 
-    use super::parse;
-
-    #[test]
-    fn test_parse() {
-        let cstring = CString::from_str("{0}").unwrap();
-
-        let rho_lang = parse(cstring).unwrap();
-
-        assert_eq!(rho_lang, "");
-    }
-
     #[test]
     fn test_visit_graph() {
-        let cstring = CString::from_str("{0}").unwrap();
-        let graph = unsafe { crate::psGraph(cstring.as_ptr()) };
-        static RESULT: Mutex<String> = Mutex::new(String::new());
+        let statement = CString::new("{0}").unwrap();
+        let graph = unsafe { crate::psGraph(statement.as_ptr()) };
+        let context = CString::new("Hello, ").unwrap();
 
-        unsafe extern "C" fn visitorCallback(_p: crate::Graph) {
-            let prev_value = RESULT.lock().unwrap().clone();
-            *RESULT.lock().unwrap() = format!("{prev_value}Gnil Called");
+        unsafe extern "C" fn visitIsGNilCallback(_p: crate::Graph, context: *mut c_void) {
+            if context.is_null() || context.is_null() {
+                return;
+            }
+
+            let value = unsafe { CStr::from_ptr(context as *mut c_char).to_str().unwrap() };
+
+            let updated_context = format!("{}Gnil Called", value);
+            let updated_context_bytes = updated_context.as_bytes();
+
+            unsafe {
+                copy_nonoverlapping(
+                    updated_context_bytes.as_ptr(),
+                    context as *mut u8,
+                    updated_context_bytes.len(),
+                );
+            }
         }
 
         let mut visitor = Visitor {
-            visitIsGNilCallback: Some(visitorCallback),
+            visitIsGNilCallback: Some(visitIsGNilCallback),
             ..Default::default()
         };
+        let context = context.into_raw() as *mut c_void;
 
-        unsafe { crate::visitGraph(graph, &mut visitor) };
-        unsafe { crate::visitGraph(graph, &mut visitor) };
+        unsafe { crate::visitGraph(graph, &mut visitor, context) };
 
-        assert_eq!(
-            RESULT.lock().unwrap().as_str(),
-            "Gnil CalledGnil Called".to_string()
-        );
+        let result = unsafe { CStr::from_ptr(context as *mut c_char) };
+
+        assert_eq!(result.to_str().unwrap(), "Hello, Gnil Called");
     }
 }

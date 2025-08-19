@@ -1191,37 +1191,69 @@ unsafe extern "C" {
 unsafe extern "C" {
     pub fn free_ListName(p: ListName);
 }
-pub type visitGTensor = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGNominate = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGEdgeAnon = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGEdgeNamed = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGRuleAnon = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGRuleNamed = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitBindingCallback = ::std::option::Option<unsafe extern "C" fn(p: Binding)>;
-pub type visitGraphBindingCallback = ::std::option::Option<unsafe extern "C" fn(p: GraphBinding)>;
-pub type visitVertexCallback = ::std::option::Option<unsafe extern "C" fn(p: Vertex)>;
-pub type visitNameCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitUVarCallback = ::std::option::Option<unsafe extern "C" fn(p: UVar)>;
-pub type visitLVarCallback = ::std::option::Option<unsafe extern "C" fn(p: LVar)>;
-pub type visitIdentCallback = ::std::option::Option<unsafe extern "C" fn(i: Ident)>;
-pub type visitIntegerCallback = ::std::option::Option<unsafe extern "C" fn(i: Integer)>;
-pub type visitDoubleCallback = ::std::option::Option<unsafe extern "C" fn(d: Double)>;
-pub type visitCharCallback = ::std::option::Option<unsafe extern "C" fn(c: Char)>;
-pub type visitStringCallback = ::std::option::Option<unsafe extern "C" fn(s: String)>;
-pub type visitGSubgraph = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGVertexCallback = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGVar = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitGNilCallback = ::std::option::Option<unsafe extern "C" fn(p: Graph)>;
-pub type visitVBindCallback = ::std::option::Option<unsafe extern "C" fn(p: Binding)>;
-pub type visitGBindCallback = ::std::option::Option<unsafe extern "C" fn(p: GraphBinding)>;
-pub type visitIsVNameCallback = ::std::option::Option<unsafe extern "C" fn(p: Vertex)>;
-pub type visitNameWildcardCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitNameVVarCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitNameGVarCallback = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitIsNameQuoteGraph = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitIsNameQuoteVertex = ::std::option::Option<unsafe extern "C" fn(p: Name)>;
-pub type visitListNameCallback = ::std::option::Option<unsafe extern "C" fn(listname: ListName)>;
-pub type visitCallback = ::std::option::Option<unsafe extern "C" fn(p: ::std::os::raw::c_int)>;
+pub type visitGTensor =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGNominate =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGEdgeAnon =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGEdgeNamed =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGRuleAnon =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGRuleNamed =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitBindingCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Binding, context: *mut ::std::os::raw::c_void)>;
+pub type visitGraphBindingCallback = ::std::option::Option<
+    unsafe extern "C" fn(p: GraphBinding, context: *mut ::std::os::raw::c_void),
+>;
+pub type visitVertexCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Vertex, context: *mut ::std::os::raw::c_void)>;
+pub type visitNameCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitUVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: UVar, context: *mut ::std::os::raw::c_void)>;
+pub type visitLVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: LVar, context: *mut ::std::os::raw::c_void)>;
+pub type visitIdentCallback =
+    ::std::option::Option<unsafe extern "C" fn(i: Ident, context: *mut ::std::os::raw::c_void)>;
+pub type visitIntegerCallback =
+    ::std::option::Option<unsafe extern "C" fn(i: Integer, context: *mut ::std::os::raw::c_void)>;
+pub type visitDoubleCallback =
+    ::std::option::Option<unsafe extern "C" fn(d: Double, context: *mut ::std::os::raw::c_void)>;
+pub type visitCharCallback =
+    ::std::option::Option<unsafe extern "C" fn(c: Char, context: *mut ::std::os::raw::c_void)>;
+pub type visitStringCallback =
+    ::std::option::Option<unsafe extern "C" fn(s: String, context: *mut ::std::os::raw::c_void)>;
+pub type visitGSubgraph =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGVertexCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGVar =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGNilCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitVBindCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Binding, context: *mut ::std::os::raw::c_void)>;
+pub type visitGBindCallback = ::std::option::Option<
+    unsafe extern "C" fn(p: GraphBinding, context: *mut ::std::os::raw::c_void),
+>;
+pub type visitIsVNameCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Vertex, context: *mut ::std::os::raw::c_void)>;
+pub type visitNameWildcardCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitNameVVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitNameGVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsNameQuoteGraph =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsNameQuoteVertex =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitListNameCallback = ::std::option::Option<
+    unsafe extern "C" fn(listname: ListName, context: *mut ::std::os::raw::c_void),
+>;
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone)]
 pub struct Visitor {
@@ -1320,43 +1352,47 @@ const _: () = {
         [::std::mem::offset_of!(Visitor, visitListName) - 232usize];
 };
 unsafe extern "C" {
-    pub fn visitGraph(p: Graph, visitor: *mut Visitor);
+    pub fn visitGraph(p: Graph, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 unsafe extern "C" {
-    pub fn visitBinding(p: Binding, visitor: *mut Visitor);
+    pub fn visitBinding(p: Binding, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 unsafe extern "C" {
-    pub fn visitGraphBinding(p: GraphBinding, visitor: *mut Visitor);
+    pub fn visitGraphBinding(
+        p: GraphBinding,
+        visitor: *mut Visitor,
+        context: *mut ::std::os::raw::c_void,
+    );
 }
 unsafe extern "C" {
-    pub fn visitVertex(p: Vertex, visitor: *mut Visitor);
+    pub fn visitVertex(p: Vertex, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 unsafe extern "C" {
-    pub fn visitName(p: Name, visitor: *mut Visitor);
+    pub fn visitName(p: Name, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 unsafe extern "C" {
-    pub fn visitListName(p: ListName, visitor: *mut Visitor);
+    pub fn visitListName(p: ListName, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 unsafe extern "C" {
-    pub fn visitUVar(p: UVar, visitor: *mut Visitor);
+    pub fn visitUVar(p: UVar, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 unsafe extern "C" {
-    pub fn visitLVar(p: LVar, visitor: *mut Visitor);
+    pub fn visitLVar(p: LVar, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 unsafe extern "C" {
-    pub fn visitIdent(i: Ident, visitor: *mut Visitor);
+    pub fn visitIdent(i: Ident, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 unsafe extern "C" {
-    pub fn visitInteger(i: Integer, visitor: *mut Visitor);
+    pub fn visitInteger(i: Integer, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 unsafe extern "C" {
-    pub fn visitDouble(d: Double, visitor: *mut Visitor);
+    pub fn visitDouble(d: Double, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 unsafe extern "C" {
-    pub fn visitChar(c: Char, visitor: *mut Visitor);
+    pub fn visitChar(c: Char, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 unsafe extern "C" {
-    pub fn visitString(s: String, visitor: *mut Visitor);
+    pub fn visitString(s: String, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 pub type va_list = __builtin_va_list;
 pub type __gnuc_va_list = __builtin_va_list;
