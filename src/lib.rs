@@ -8,6 +8,8 @@ mod parse;
 mod print;
 mod show;
 
+pub use parse::parse;
+
 pub mod utils {
     pub use crate::print::*;
     pub use crate::show::*;
