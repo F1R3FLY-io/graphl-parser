@@ -5,7 +5,5 @@ build = "build.rs"
 version = "0.0.1"
 edition = "2024"
 
-[dependencies]
-
 [build-dependencies]
 bindgen = "*"

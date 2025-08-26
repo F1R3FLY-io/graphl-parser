@@ -19,47 +19,47 @@ void visitGraph(Graph p, Visitor *visitor, void *context) {
     visitGraph(p->u.gTensor_.graph_2, visitor, context);
     break;
   case is_GNominate:
-    visitor->visitIsGNominate(p, context);
+    visitor->visitIsGNominate(_p, context);
     visitBinding(p->u.gNominate_.binding_, visitor, context);
     break;
   case is_GEdgeAnon:
-    visitor->visitIsGEdgeAnon(p, context);
+    visitor->visitIsGEdgeAnon(_p, context);
     visitBinding(p->u.gEdgeAnon_.binding_1, visitor, context);
     visitBinding(p->u.gEdgeAnon_.binding_2, visitor, context);
     break;
   case is_GEdgeNamed:
-    visitor->visitIsGEdgeNamed(p, context);
+    visitor->visitIsGEdgeNamed(_p, context);
     visitName(p->u.gEdgeNamed_.name_, visitor, context);
     visitBinding(p->u.gEdgeNamed_.binding_1, visitor, context);
     visitBinding(p->u.gEdgeNamed_.binding_2, visitor, context);
     break;
   case is_GRuleAnon:
-    visitor->visitIsGRuleAnonCallback(p, context);
+    visitor->visitIsGRuleAnonCallback(_p, context);
     visitGraph(p->u.gRuleAnon_.graph_1, visitor, context);
     visitGraph(p->u.gRuleAnon_.graph_2, visitor, context);
     break;
   case is_GRuleNamed:
-    visitor->visitIsGRuleNamedCallback(p, context);
+    visitor->visitIsGRuleNamedCallback(_p, context);
     visitName(p->u.gRuleNamed_.name_, visitor, context);
     visitGraph(p->u.gRuleNamed_.graph_1, visitor, context);
     visitGraph(p->u.gRuleNamed_.graph_2, visitor, context);
     break;
   case is_GSubgraph:
-    visitor->visitIsGSubgraphCallback(p, context);
+    visitor->visitIsGSubgraphCallback(_p, context);
     visitGraphBinding(p->u.gSubgraph_.graphbinding_, visitor, context);
     break;
   case is_GVertex:
-    visitor->visitIsGVertexCallback(p, context);
+    visitor->visitIsGVertexCallback(_p, context);
     visitVertex(p->u.gVertex_.vertex_, visitor, context);
     visitGraph(p->u.gVertex_.graph_, visitor, context);
     break;
   case is_GVar:
-    visitor->visitIsGVarCallback(p, context);
+    visitor->visitIsGVarCallback(_p, context);
     visitLVar(p->u.gVar_.lvar_, visitor, context);
     visitGraph(p->u.gVar_.graph_, visitor, context);
     break;
   case is_GNil:
-    visitor->visitIsGNilCallback(p, context);
+    visitor->visitIsGNilCallback(_p, context);
     break;
 
   default:
@@ -71,7 +71,7 @@ void visitGraph(Graph p, Visitor *visitor, void *context) {
 void visitBinding(Binding p, Visitor *visitor, void *context) {
   switch (p->kind) {
   case is_VBind:
-    visitor->visitIsVBindCallback(p, context);
+    visitor->visitIsVBindCallback(_p, context);
     visitLVar(p->u.vBind_.lvar_, visitor, context);
     visitVertex(p->u.vBind_.vertex_, visitor, context);
     visitGraph(p->u.vBind_.graph_, visitor, context);
@@ -86,7 +86,7 @@ void visitBinding(Binding p, Visitor *visitor, void *context) {
 void visitGraphBinding(GraphBinding p, Visitor *visitor, void *context) {
   switch (p->kind) {
   case is_GBind:
-    visitor->visitIsGBindCallback(p, context);
+    visitor->visitIsGBindCallback(_p, context);
     visitUVar(p->u.gBind_.uvar_, visitor, context);
     visitGraph(p->u.gBind_.graph_1, visitor, context);
     visitGraph(p->u.gBind_.graph_2, visitor, context);
@@ -101,7 +101,7 @@ void visitGraphBinding(GraphBinding p, Visitor *visitor, void *context) {
 void visitVertex(Vertex p, Visitor *visitor, void *context) {
   switch (p->kind) {
   case is_VName:
-    visitor->visitIsVNameCallback(p, context);
+    visitor->visitIsVNameCallback(_p, context);
     visitName(p->u.vName_.name_, visitor, context);
     break;
 
@@ -114,10 +114,10 @@ void visitVertex(Vertex p, Visitor *visitor, void *context) {
 void visitName(Name p, Visitor *visitor, void *context) {
   switch (p->kind) {
   case is_NameWildcard:
-    visitor->visitNameWildcardCallback(p, context);
+    visitor->visitNameWildcardCallback(_p, context);
     break;
   case is_NameVVar:
-    visitor->visitNameVVarCallback(p, context);
+    visitor->visitNameVVarCallback(_p, context);
     visitLVar(p->u.nameVVar_.lvar_, visitor, context);
     break;
   case is_NameGVar:
