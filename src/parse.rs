@@ -185,16 +185,15 @@ pub fn parse(document: String) -> std::result::Result<String, String> {
 
     let rholang_representation = unsafe { Box::from_raw(rholang_representation_ptr) };
 
-    let result = Ok(*rholang_representation);
+    
 
-    result
+    Ok(*rholang_representation)
 }
 
 #[cfg(test)]
 mod tests {
     use std::{
-        ffi::{CStr, CString, c_void},
-        os::raw::c_char,
+        ffi::{CString, c_void},
         str::FromStr,
     };
 
