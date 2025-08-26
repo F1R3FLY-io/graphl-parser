@@ -185,8 +185,6 @@ pub fn parse(document: String) -> std::result::Result<String, String> {
 
     let rholang_representation = unsafe { Box::from_raw(rholang_representation_ptr) };
 
-    
-
     Ok(*rholang_representation)
 }
 
