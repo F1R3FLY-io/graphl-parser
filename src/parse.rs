@@ -34,98 +34,101 @@ fn save_context(context: *mut String, content: String) {
     };
 }
 
-visitor_callback!(visitIsGTensorCallback, Graph, |_p, context| format!(
+visitor_callback!(visitIsGTensorCallback, Graph, |p, context| format!(
     "{context}Gnil Called"
 ));
 
-visitor_callback!(visitIsGNominate, Graph, |_p, context| format!(
+visitor_callback!(visitIsGNominate, Graph, |p, context| format!(
     "{context}visitIsGNominate"
 ));
-visitor_callback!(visitIsGEdgeAnon, Graph, |_p, context| format!(
+visitor_callback!(visitIsGEdgeAnon, Graph, |p, context| format!(
     "{context}visitIsGEdgeAnon"
 ));
-visitor_callback!(visitIsGEdgeNamed, Graph, |_p, context| format!(
+visitor_callback!(visitIsGEdgeNamed, Graph, |p, context| format!(
     "{context}visitIsGEdgeNamed"
 ));
-visitor_callback!(visitIsGRuleAnonCallback, Graph, |_p, context| format!(
+visitor_callback!(visitIsGRuleAnonCallback, Graph, |p, context| format!(
     "{context}visitIsGRuleAnonCallback"
 ));
-visitor_callback!(visitIsGRuleNamedCallback, Graph, |_p, context| format!(
+visitor_callback!(visitIsGRuleNamedCallback, Graph, |p, context| format!(
     "{context}visitIsGRuleNamedCallback"
 ));
-visitor_callback!(visitBindingCallback, Binding, |_p, context| format!(
+visitor_callback!(visitBindingCallback, Binding, |p, context| format!(
     "{context}visitBindingCallback"
 ));
 visitor_callback!(
     visitGraphBindingCallback,
     GraphBinding,
-    |_p, context| format!("{context}visitGraphBindingCallback")
+    |p, context| format!("{context}visitGraphBindingCallback")
 );
-visitor_callback!(visitVertexCallback, Vertex, |_p, context| format!(
+visitor_callback!(visitVertexCallback, Vertex, |p, context| format!(
     "{context}visitVertexCallback"
 ));
-visitor_callback!(visitIsGVarCallback, Graph, |_p, context| format!(
+visitor_callback!(visitIsGVarCallback, Graph, |p, context| format!(
     "{context}visitIsGVarCallback"
 ));
-visitor_callback!(visitNameCallback, Name, |_p, context| format!(
+visitor_callback!(visitNameCallback, Name, |p, context| format!(
     "{context}visitNameCallback"
 ));
-visitor_callback!(visitIsGSubgraphCallback, Graph, |_p, context| format!(
+visitor_callback!(visitIsGSubgraphCallback, Graph, |p, context| format!(
     "{context}visitIsGSubgraphCallback"
 ));
-visitor_callback!(visitUVar, *mut i8, |_p, context| format!(
+visitor_callback!(visitUVar, *mut i8, |p, context| format!(
     "{context}visitUVar"
 ));
-visitor_callback!(visitLVar, *mut i8, |_p, context| format!(
+visitor_callback!(visitLVar, *mut i8, |p, context| format!(
     "{context}visitLVar"
 ));
-visitor_callback!(visitIdent, *mut i8, |_p, context| format!(
+visitor_callback!(visitIdent, *mut i8, |p, context| format!(
     "{context}visitIdent"
 ));
-visitor_callback!(visitIntegerCallback, i32, |_p, context| format!(
+visitor_callback!(visitIntegerCallback, i32, |p, context| format!(
     "{context}visitIntegerCallback"
 ));
-visitor_callback!(visitDoubleCallback, f64, |_p, context| format!(
+visitor_callback!(visitDoubleCallback, f64, |p, context| format!(
     "{context}visitDoubleCallback"
 ));
-visitor_callback!(visitCharCallback, i8, |_p, context| format!(
+visitor_callback!(visitCharCallback, i8, |p, context| format!(
     "{context}visitCharCallback"
 ));
-visitor_callback!(visitStringCallback, *mut i8, |_p, context| format!(
+visitor_callback!(visitStringCallback, *mut i8, |p, context| format!(
     "{context}visitStringCallback"
 ));
-visitor_callback!(visitIsGVertexCallback, Graph, |_p, context| format!(
+visitor_callback!(visitIsGVertexCallback, Graph, |p, context| format!(
     "{context}visitIsGVertexCallback"
 ));
-visitor_callback!(visitIsGNilCallback, Graph, |_p, context| format!(
+visitor_callback!(visitIsGNilCallback, Graph, |p, context| format!(
     "{context}visitIsGNilCallback"
 ));
-visitor_callback!(visitIsVBindCallback, Binding, |_p, context| format!(
+visitor_callback!(visitIsVBindCallback, Binding, |p, context| format!(
     "{context}visitIsVBindCallback"
 ));
-visitor_callback!(visitIsGBindCallback, GraphBinding, |_p, context| format!(
+visitor_callback!(visitIsGBindCallback, GraphBinding, |p, context| format!(
     "{context}visitIsGBindCallback"
 ));
-visitor_callback!(visitIsVNameCallback, Vertex, |_p, context| format!(
+visitor_callback!(visitIsVNameCallback, Vertex, |p, context| format!(
     "{context}visitIsVNameCallback"
 ));
-visitor_callback!(visitNameWildcardCallback, Name, |_p, context| format!(
+visitor_callback!(visitNameWildcardCallback, Name, |p, context| format!(
     "{context}visitNameWildcardCallback"
 ));
-visitor_callback!(visitNameVVarCallback, Name, |_p, context| format!(
+visitor_callback!(visitNameVVarCallback, Name, |p, context| format!(
     "{context}visitNameVVarCallback"
 ));
-visitor_callback!(visitNameGVarCallback, Name, |_p, context| format!(
+visitor_callback!(visitNameGVarCallback, Name, |p, context| format!(
     "{context}visitNameGVarCallback"
 ));
-visitor_callback!(visitIsNameQuoteGraph, Name, |_p, context| format!(
+visitor_callback!(visitIsNameQuoteGraph, Name, |p, context| format!(
     "{context}visitIsNameQuoteGraph"
 ));
-visitor_callback!(visitIsNameQuoteVertex, Name, |_p, context| format!(
+visitor_callback!(visitIsNameQuoteVertex, Name, |p, context| format!(
     "{context}visitIsNameQuoteVertex"
 ));
-visitor_callback!(visitListName, ListName, |_p, context| format!(
+visitor_callback!(visitListName, ListName, |p, context| format!(
     "{context}visitListName"
+));
+visitor_callback!(visitGraphCallback, Graph, |p, context| format!(
+    "{context}visitGraph"
 ));
 
 pub fn parse(document: String) -> std::result::Result<String, String> {
@@ -160,6 +163,7 @@ pub fn parse(document: String) -> std::result::Result<String, String> {
         visitIsNameQuoteGraph: Some(visitIsNameQuoteGraph),
         visitIsNameQuoteVertex: Some(visitIsNameQuoteVertex),
         visitListName: Some(visitListName),
+        visitGraphCallback: Some(visitGraphCallback),
     };
 
     let document = CString::from_str(&document).map_err(|e| e.to_string())?;
@@ -209,7 +213,7 @@ mod tests {
 
         assert_eq!(
             result,
-            "contract %contract_name(%arguments){%body}visitIsGNilCallback"
+            "contract %contract_name(%arguments){%body}visitGraphvisitIsGNilCallback"
         );
     }
 
@@ -217,12 +221,17 @@ mod tests {
     fn test_visit_callback_declaration_graph() {
         let context = String::from_str("Hello, ").unwrap();
 
-        visitor_callback!(visitIsGNilCallback, Graph, |_p, context| format!(
+        visitor_callback!(visitIsGNilCallback, Graph, |p, context| format!(
             "{context}Gnil Called"
+        ));
+
+        visitor_callback!(visigGraphCallback, Graph, |p, context| format!(
+            "{context}Graph Called"
         ));
 
         let mut visitor = Visitor {
             visitIsGNilCallback: Some(visitIsGNilCallback),
+            visitGraphCallback: Some(visigGraphCallback),
             ..Default::default()
         };
         let context = Box::into_raw(Box::new(context));
@@ -235,7 +244,7 @@ mod tests {
         let c = unsafe { Box::from_raw(context_ptr as *mut String) };
         let context = c.as_str();
 
-        assert_eq!(context, "Hello, Gnil Called");
+        assert_eq!(context, "Hello, Graph CalledGnil Called");
     }
 
     #[test]

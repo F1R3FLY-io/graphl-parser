@@ -36,9 +36,11 @@ typedef void (*visitNameGVarCallback)(Name p, void *context);
 typedef void (*visitIsNameQuoteGraph)(Name p, void *context);
 typedef void (*visitIsNameQuoteVertex)(Name p, void *context);
 typedef void (*visitListNameCallback)(ListName listname, void *context);
+typedef void (*visitGraphCallback)(Graph g, void* context);
 
 
 typedef struct {
+  visitGraphCallback visitGraphCallback;
   visitGTensor visitIsGTensorCallback;
   visitGNominate visitIsGNominate;
   visitGEdgeAnon visitIsGEdgeAnon;
