@@ -169,9 +169,13 @@ pub fn parse(document: String) -> std::result::Result<String, String> {
     let document = CString::from_str(&document).map_err(|e| e.to_string())?;
     let ptr = document.as_ptr();
 
-    let rholang_representation = String::from_str("contract %contract_name(%arguments){%body}")
-        .map(Box::new)
-        .unwrap();
+    let contract = r#"
+      contract %contract_name(%arguments){
+        %body
+      }
+    "#;
+
+    let rholang_representation = String::from_str(contract).map(Box::new).unwrap();
     let rholang_representation_ptr = Box::into_raw(rholang_representation);
 
     unsafe {

@@ -148,16 +148,24 @@ void visitListName(ListName listname, Visitor *visitor, void *context) {
   }
 }
 
-void visitUVar(UVar p, Visitor *visitor, void *context) { visitor->visitUVar(p, context); }
-void visitLVar(LVar p, Visitor *visitor, void *context) { visitor->visitLVar(p, context); }
-void visitIdent(Ident i, Visitor *visitor, void *context) { visitor->visitIdent(i, context); }
+void visitUVar(UVar p, Visitor *visitor, void *context) {
+  visitor->visitUVar(p, context);
+}
+void visitLVar(LVar p, Visitor *visitor, void *context) {
+  visitor->visitLVar(p, context);
+}
+void visitIdent(Ident i, Visitor *visitor, void *context) {
+  visitor->visitIdent(i, context);
+}
 void visitInteger(Integer i, Visitor *visitor, void *context) {
   visitor->visitIntegerCallback(i, context);
 }
 void visitDouble(Double d, Visitor *visitor, void *context) {
   visitor->visitDoubleCallback(d, context);
 }
-void visitChar(Char c, Visitor *visitor, void *context) { visitor->visitCharCallback(c, context); }
+void visitChar(Char c, Visitor *visitor, void *context) {
+  visitor->visitCharCallback(c, context);
+}
 void visitString(String s, Visitor *visitor, void *context) {
   visitor->visitStringCallback(s, context);
 }
