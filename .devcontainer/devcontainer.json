@@ -7,6 +7,5 @@
         "./bnfc": {},
         "./clang": {},
         "./homebrew": {}
-    },
-    "postCreateCommand": { "brew install gemini-cli": "" }
+    }
 }
