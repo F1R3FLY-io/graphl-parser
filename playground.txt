@@ -1,3 +1,1 @@
-let start = <a> in {
-  let end = <b> in { let E = (start , end) in E | 0}
-}
+<a> | <b> | (let x = <a> in <a> | <b> | 0, let y = <b> in <a> | <b> | 0)
