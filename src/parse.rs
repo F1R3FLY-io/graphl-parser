@@ -1,3 +1,5 @@
+#![allow(dead_code, non_snake_case, unused_variables)]
+
 use std::{
     ffi::{CString, c_void},
     str::FromStr,
