@@ -72,4 +72,3 @@ void bufReset(void);
 void resizeBuffer(void);
 
 #endif
-

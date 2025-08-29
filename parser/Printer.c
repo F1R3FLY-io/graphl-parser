@@ -885,4 +885,3 @@ void resizeBuffer(void)
 }
 char *buf_;
 size_t cur_, buf_size;
-

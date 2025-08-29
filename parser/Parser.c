@@ -2031,6 +2031,3 @@ ListName psListName(const char *str)
     return result.listname_;
   }
 }
-
-
-
