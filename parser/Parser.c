@@ -1641,7 +1641,8 @@ Graph psGraph(const char *str)
   YY_BUFFER_STATE buf = grammar__scan_string(str, scanner);
   int error = yyparse(scanner, &result);
   grammar__delete_buffer(buf, scanner);
-  grammar_lex_destroy(scanner);
+  // TODO: this crashes for some reason
+  // grammar_lex_destroy(scanner);
   if (error)
   { /* Failure */
     return 0;

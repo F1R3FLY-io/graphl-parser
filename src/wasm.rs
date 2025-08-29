@@ -3,6 +3,8 @@ use std::{
     ffi::CStr,
 };
 
+use wasm_bindgen::prelude::wasm_bindgen;
+
 #[unsafe(no_mangle)]
 pub fn rust_alloc(size: usize) -> *mut u8 {
     let layout = Layout::from_size_align(size, 16).unwrap();
@@ -19,4 +21,9 @@ pub fn rust_free(ptr: *mut u8, size: usize) {
 pub fn rust_panic(s: *const i8) {
     let str = unsafe { CStr::from_ptr(s) };
     panic!("{}", str.to_str().unwrap());
+}
+
+#[wasm_bindgen]
+pub fn init_panic_hook() {
+    console_error_panic_hook::set_once();
 }
