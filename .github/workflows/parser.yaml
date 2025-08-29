@@ -1,0 +1,31 @@
+name: Parser
+run-name: Parser ${{ github.event_name == 'push' && 'main' || format('MR {0}', github.event.pull_request.title) }}
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        id: setup-rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable, nightly
+          target: wasm32-unknown-unknown
+          cache: true
+
+      - name: Build
+        run: cargo build
+
+      - name: Build wasm
+        run: cargo build --target=wasm32-unknown-unknown
