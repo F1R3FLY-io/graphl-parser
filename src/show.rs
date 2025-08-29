@@ -1,6 +1,6 @@
 use std::ffi::{CStr, CString};
 
-use crate::{free_Graph, psGraph, showGraph};
+use crate::bindings::{free_Graph, psGraph, showGraph};
 
 /**
  * Show Graph

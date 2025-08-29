@@ -3,7 +3,7 @@ use std::{
     str::FromStr,
 };
 
-use crate::{
+use crate::bindings::{
     Binding, Graph, GraphBinding, ListName, Name, Vertex, Visitor, free_Graph, psGraph, visitGraph,
 };
 
@@ -131,7 +131,7 @@ visitor_callback!(visitGraphCallback, Graph, |p, context| format!(
     "{context}visitGraph"
 ));
 
-pub fn parse(document: String) -> std::result::Result<String, String> {
+pub fn parse(document: String) -> Result<String, String> {
     let mut visitor = Visitor {
         visitIsGTensorCallback: Some(visitIsGTensorCallback),
         visitIsGNominate: Some(visitIsGNominate),
@@ -204,11 +204,11 @@ mod tests {
     };
 
     use crate::{
-        Graph, Visitor,
-        parse::{get_context, save_context},
+        bindings::{Graph, Visitor},
+        parse::parse,
     };
 
-    use super::parse;
+    use crate::parse::{get_context, save_context};
 
     #[test]
     fn test_parse_empty_graph() {
@@ -242,8 +242,8 @@ mod tests {
         let context_ptr = context as *mut c_void;
 
         let statement = CString::new("{0}").unwrap();
-        let graph = unsafe { crate::psGraph(statement.as_ptr()) };
-        unsafe { crate::visitGraph(graph, &mut visitor, context_ptr) };
+        let graph = unsafe { crate::bindings::psGraph(statement.as_ptr()) };
+        unsafe { crate::bindings::visitGraph(graph, &mut visitor, context_ptr) };
 
         let c = unsafe { Box::from_raw(context_ptr as *mut String) };
         let context = c.as_str();

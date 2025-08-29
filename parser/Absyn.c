@@ -2,8 +2,15 @@
 
 /* C Abstract Syntax Implementation. */
 
+#ifdef WASM
+#include "wasm.h"
+#else
+#define _POSIX_C_SOURCE 200809L
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#endif
+
 #include "Absyn.h"
 
 /********************   GNil    ********************/
@@ -13,8 +20,7 @@ Graph make_GNil()
     Graph tmp = (Graph) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating GNil!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_GNil;
     return tmp;
@@ -27,8 +33,7 @@ Graph make_GVertex(Vertex p1, Graph p2)
     Graph tmp = (Graph) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating GVertex!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_GVertex;
     tmp->u.gVertex_.vertex_ = p1;
@@ -43,8 +48,7 @@ Graph make_GVar(LVar p1, Graph p2)
     Graph tmp = (Graph) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating GVar!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_GVar;
     tmp->u.gVar_.lvar_ = p1;
@@ -59,8 +63,7 @@ Graph make_GNominate(Binding p1)
     Graph tmp = (Graph) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating GNominate!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_GNominate;
     tmp->u.gNominate_.binding_ = p1;
@@ -74,8 +77,7 @@ Graph make_GEdgeAnon(Binding p1, Binding p2)
     Graph tmp = (Graph) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating GEdgeAnon!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_GEdgeAnon;
     tmp->u.gEdgeAnon_.binding_1 = p1;
@@ -90,8 +92,7 @@ Graph make_GEdgeNamed(Name p1, Binding p2, Binding p3)
     Graph tmp = (Graph) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating GEdgeNamed!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_GEdgeNamed;
     tmp->u.gEdgeNamed_.name_ = p1;
@@ -107,8 +108,7 @@ Graph make_GRuleAnon(Graph p1, Graph p2)
     Graph tmp = (Graph) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating GRuleAnon!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_GRuleAnon;
     tmp->u.gRuleAnon_.graph_1 = p1;
@@ -123,8 +123,7 @@ Graph make_GRuleNamed(Name p1, Graph p2, Graph p3)
     Graph tmp = (Graph) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating GRuleNamed!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_GRuleNamed;
     tmp->u.gRuleNamed_.name_ = p1;
@@ -140,8 +139,7 @@ Graph make_GSubgraph(GraphBinding p1)
     Graph tmp = (Graph) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating GSubgraph!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_GSubgraph;
     tmp->u.gSubgraph_.graphbinding_ = p1;
@@ -155,8 +153,7 @@ Graph make_GTensor(Graph p1, Graph p2)
     Graph tmp = (Graph) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating GTensor!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_GTensor;
     tmp->u.gTensor_.graph_1 = p1;
@@ -171,8 +168,7 @@ Binding make_VBind(LVar p1, Vertex p2, Graph p3)
     Binding tmp = (Binding) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating VBind!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_VBind;
     tmp->u.vBind_.lvar_ = p1;
@@ -188,8 +184,7 @@ GraphBinding make_GBind(UVar p1, Graph p2, Graph p3)
     GraphBinding tmp = (GraphBinding) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating GBind!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_GBind;
     tmp->u.gBind_.uvar_ = p1;
@@ -205,8 +200,7 @@ Vertex make_VName(Name p1)
     Vertex tmp = (Vertex) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating VName!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_VName;
     tmp->u.vName_.name_ = p1;
@@ -220,8 +214,7 @@ Name make_NameWildcard()
     Name tmp = (Name) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating NameWildcard!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_NameWildcard;
     return tmp;
@@ -234,8 +227,7 @@ Name make_NameVVar(LVar p1)
     Name tmp = (Name) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating NameVVar!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_NameVVar;
     tmp->u.nameVVar_.lvar_ = p1;
@@ -249,8 +241,7 @@ Name make_NameGVar(UVar p1)
     Name tmp = (Name) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating NameGVar!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_NameGVar;
     tmp->u.nameGVar_.uvar_ = p1;
@@ -264,8 +255,7 @@ Name make_NameQuoteGraph(Graph p1)
     Name tmp = (Name) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating NameQuoteGraph!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_NameQuoteGraph;
     tmp->u.nameQuoteGraph_.graph_ = p1;
@@ -279,8 +269,7 @@ Name make_NameQuoteVertex(Vertex p1)
     Name tmp = (Name) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating NameQuoteVertex!\n");
-        exit(1);
+        return NULL;
     }
     tmp->kind = is_NameQuoteVertex;
     tmp->u.nameQuoteVertex_.vertex_ = p1;
@@ -294,8 +283,7 @@ ListName make_ListName(Name p1, ListName p2)
     ListName tmp = (ListName) malloc(sizeof(*tmp));
     if (!tmp)
     {
-        fprintf(stderr, "Error: out of memory when allocating ListName!\n");
-        exit(1);
+        return NULL;
     }
     tmp->name_ = p1;
     tmp->listname_ = p2;
@@ -362,8 +350,7 @@ Graph clone_Graph(Graph p)
       );
 
   default:
-    fprintf(stderr, "Error: bad kind field when cloning Graph!\n");
-    exit(1);
+    return NULL;
   }
 }
 
@@ -379,8 +366,7 @@ Binding clone_Binding(Binding p)
       );
 
   default:
-    fprintf(stderr, "Error: bad kind field when cloning Binding!\n");
-    exit(1);
+    return NULL;
   }
 }
 
@@ -396,8 +382,7 @@ GraphBinding clone_GraphBinding(GraphBinding p)
       );
 
   default:
-    fprintf(stderr, "Error: bad kind field when cloning GraphBinding!\n");
-    exit(1);
+    return NULL;
   }
 }
 
@@ -409,8 +394,7 @@ Vertex clone_Vertex(Vertex p)
     return make_VName (clone_Name(p->u.vName_.name_));
 
   default:
-    fprintf(stderr, "Error: bad kind field when cloning Vertex!\n");
-    exit(1);
+    return NULL;
   }
 }
 
@@ -434,8 +418,7 @@ Name clone_Name(Name p)
     return make_NameQuoteVertex (clone_Vertex(p->u.nameQuoteVertex_.vertex_));
 
   default:
-    fprintf(stderr, "Error: bad kind field when cloning Name!\n");
-    exit(1);
+    return NULL;
   }
 }
 
@@ -513,10 +496,6 @@ void free_Graph(Graph p)
     free_Graph(p->u.gTensor_.graph_1);
     free_Graph(p->u.gTensor_.graph_2);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when freeing Graph!\n");
-    exit(1);
   }
   free(p);
 }
@@ -530,10 +509,6 @@ void free_Binding(Binding p)
     free_Vertex(p->u.vBind_.vertex_);
     free_Graph(p->u.vBind_.graph_);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when freeing Binding!\n");
-    exit(1);
   }
   free(p);
 }
@@ -547,10 +522,6 @@ void free_GraphBinding(GraphBinding p)
     free_Graph(p->u.gBind_.graph_1);
     free_Graph(p->u.gBind_.graph_2);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when freeing GraphBinding!\n");
-    exit(1);
   }
   free(p);
 }
@@ -562,10 +533,6 @@ void free_Vertex(Vertex p)
   case is_VName:
     free_Name(p->u.vName_.name_);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when freeing Vertex!\n");
-    exit(1);
   }
   free(p);
 }
@@ -592,10 +559,6 @@ void free_Name(Name p)
   case is_NameQuoteVertex:
     free_Vertex(p->u.nameQuoteVertex_.vertex_);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when freeing Name!\n");
-    exit(1);
   }
   free(p);
 }

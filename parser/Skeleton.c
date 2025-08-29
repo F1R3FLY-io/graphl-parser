@@ -5,9 +5,12 @@
    To use, copy Skeleton.h and Skeleton.c to
    new files. */
 
+#ifdef WASM
+#include "wasm.h"
+#else
 #include <stddef.h>
-#include <stdio.h>
 #include <stdlib.h>
+#endif
 
 #include "Skeleton.h"
 
@@ -63,10 +66,6 @@ void visitGraph(Graph p, Visitor *visitor, void *context) {
   case is_GNil:
     visitor->visitIsGNilCallback(p, context);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when printing Graph!\n");
-    exit(1);
   }
 }
 
@@ -78,10 +77,6 @@ void visitBinding(Binding p, Visitor *visitor, void *context) {
     visitVertex(p->u.vBind_.vertex_, visitor, context);
     visitGraph(p->u.vBind_.graph_, visitor, context);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when printing Binding!\n");
-    exit(1);
   }
 }
 
@@ -93,10 +88,6 @@ void visitGraphBinding(GraphBinding p, Visitor *visitor, void *context) {
     visitGraph(p->u.gBind_.graph_1, visitor, context);
     visitGraph(p->u.gBind_.graph_2, visitor, context);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when printing GraphBinding!\n");
-    exit(1);
   }
 }
 
@@ -106,10 +97,6 @@ void visitVertex(Vertex p, Visitor *visitor, void *context) {
     visitor->visitIsVNameCallback(p, context);
     visitName(p->u.vName_.name_, visitor, context);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when printing Vertex!\n");
-    exit(1);
   }
 }
 
@@ -134,9 +121,6 @@ void visitName(Name p, Visitor *visitor, void *context) {
     visitor->visitIsNameQuoteVertex(p, context);
     visitVertex(p->u.nameQuoteVertex_.vertex_, visitor, context);
     break;
-  default:
-    fprintf(stderr, "Error: bad kind field when printing Name!\n");
-    exit(1);
   }
 }
 

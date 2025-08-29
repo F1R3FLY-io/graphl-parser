@@ -2,11 +2,18 @@
 
 /*** Pretty Printer and Abstract Syntax Viewer ***/
 
+#ifdef WASM
+#include "wasm.h"
+#else
 #include <ctype.h>   /* isspace */
 #include <stddef.h>  /* size_t */
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#endif
+
+#include "panic.h"
+
 #include "Printer.h"
 
 #define INDENT_WIDTH 2
@@ -289,10 +296,6 @@ void ppGraph(Graph p, int _i_)
     renderC('0');
     if (_i_ > 3) renderC(_R_PAREN);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when printing Graph!\n");
-    exit(1);
   }
 }
 
@@ -310,10 +313,6 @@ void ppBinding(Binding p, int _i_)
     ppGraph(p->u.vBind_.graph_, 2);
     if (_i_ > 0) renderC(_R_PAREN);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when printing Binding!\n");
-    exit(1);
   }
 }
 
@@ -331,10 +330,6 @@ void ppGraphBinding(GraphBinding p, int _i_)
     ppGraph(p->u.gBind_.graph_2, 2);
     if (_i_ > 0) renderC(_R_PAREN);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when printing GraphBinding!\n");
-    exit(1);
   }
 }
 
@@ -349,10 +344,6 @@ void ppVertex(Vertex p, int _i_)
     renderC('>');
     if (_i_ > 0) renderC(_R_PAREN);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when printing Vertex!\n");
-    exit(1);
   }
 }
 
@@ -391,10 +382,6 @@ void ppName(Name p, int _i_)
     ppVertex(p->u.nameQuoteVertex_.vertex_, 0);
     if (_i_ > 0) renderC(_R_PAREN);
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when printing Name!\n");
-    exit(1);
   }
 }
 
@@ -596,10 +583,6 @@ void shGraph(Graph p)
 
 
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when showing Graph!\n");
-    exit(1);
   }
 }
 
@@ -623,10 +606,6 @@ void shBinding(Binding p)
     bufAppendC(')');
 
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when showing Binding!\n");
-    exit(1);
   }
 }
 
@@ -650,10 +629,6 @@ void shGraphBinding(GraphBinding p)
     bufAppendC(')');
 
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when showing GraphBinding!\n");
-    exit(1);
   }
 }
 
@@ -673,10 +648,6 @@ void shVertex(Vertex p)
     bufAppendC(')');
 
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when showing Vertex!\n");
-    exit(1);
   }
 }
 
@@ -740,10 +711,6 @@ void shName(Name p)
     bufAppendC(')');
 
     break;
-
-  default:
-    fprintf(stderr, "Error: bad kind field when showing Name!\n");
-    exit(1);
   }
 }
 
@@ -873,8 +840,7 @@ void resizeBuffer(void)
   char *temp = (char *) malloc(buf_size);
   if (!temp)
   {
-    fprintf(stderr, "Error: Out of memory while attempting to grow buffer!\n");
-    exit(1);
+    PANIC(__FILE__ "OOM");
   }
   if (buf_)
   {

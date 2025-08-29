@@ -1,6 +1,6 @@
 use std::ffi::{CStr, CString};
 
-use crate::{free_Graph, printGraph, psGraph};
+use crate::bindings::{free_Graph, printGraph, psGraph};
 
 pub fn print(
     document: impl Into<CString>,
