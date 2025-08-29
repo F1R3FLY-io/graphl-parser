@@ -2,7 +2,7 @@
 
 /* A dynamically allocated character buffer that grows as it is appended. */
 
-#ifdef WASM
+#ifdef __wasm__
 #include "wasm.h"
 #else
 #include <stdlib.h>  /* free, malloc */

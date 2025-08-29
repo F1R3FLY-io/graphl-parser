@@ -5,7 +5,7 @@
    To use, copy Skeleton.h and Skeleton.c to
    new files. */
 
-#ifdef WASM
+#ifdef __wasm__
 #include "wasm.h"
 #else
 #include <stddef.h>

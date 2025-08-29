@@ -5,7 +5,7 @@ const WRAPPER_HEADER_FILE: &str = "parser/wrapper.h";
 const BINDINGS_FILE: &str = "bindings.rs";
 
 fn main() {
-    println!("cargo:rerun-if-changed=parser");
+    println!("cargo:rerun-if-changed={INCLUDE_DIR}");
 
     let target = std::env::var("CARGO_CFG_TARGET_ARCH").unwrap();
     compile_in_parser(&target);
@@ -19,7 +19,7 @@ fn generate_bindings(target: &str) {
         .derive_default(true);
 
     if target == "wasm32" {
-        bindings = bindings.clang_args(["-fvisibility=default"]);
+        bindings = bindings.clang_arg("-fvisibility=default");
     }
 
     let bindings = bindings.generate().unwrap();
@@ -32,7 +32,7 @@ fn compile_in_parser(target: &str) {
     let mut cc = cc::Build::new();
 
     if target == "wasm32" {
-        cc.file("parser/wasm.c").flag("-DWASM=1");
+        cc.file("parser/wasm.c");
     } else {
         cc.flag("-std=gnu99");
     }

@@ -257,7 +257,7 @@
 
 /* begin standard C headers. */
 
-#ifdef WASM
+#ifdef __wasm__
 #include "wasm.h"
 #else
 #include <string.h>
@@ -274,7 +274,7 @@
 
 /* C99 systems have <inttypes.h>. Non-C99 systems may or may not. */
 
-#if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L && !WASM
+#if defined (__STDC_VERSION__) && __STDC_VERSION__ >= 199901L && !__wasm__
 
 /* C99 says to define __STDC_LIMIT_MACROS before including stdint.h,
  * if you want the limit (max/min) macros for int types.

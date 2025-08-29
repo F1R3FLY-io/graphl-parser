@@ -2,7 +2,7 @@
 
 /* C Abstract Syntax Implementation. */
 
-#ifdef WASM
+#ifdef __wasm__
 #include "wasm.h"
 #else
 #define _POSIX_C_SOURCE 200809L

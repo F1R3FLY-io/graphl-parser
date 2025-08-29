@@ -1,4 +1,4 @@
-#ifdef WASM
+#ifdef __wasm__
 #include "wasm.h"
 #define PANIC(s) panic(s)
 #else

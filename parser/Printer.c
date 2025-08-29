@@ -2,7 +2,7 @@
 
 /*** Pretty Printer and Abstract Syntax Viewer ***/
 
-#ifdef WASM
+#ifdef __wasm__
 #include "wasm.h"
 #else
 #include <ctype.h>   /* isspace */

@@ -74,7 +74,7 @@
 
 /* Begin C preamble code */
 
-#ifdef WASM
+#ifdef __wasm__
 #include "wasm.h"
 #else
 #include <stdio.h>
