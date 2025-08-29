@@ -405,13 +405,13 @@ void ppListName(ListName listname, int i)
 void ppInteger(Integer n, int i)
 {
   char tmp[20];
-  sprintf(tmp, "%d", n);
+  snprintf(tmp, 20, "%d", n);
   renderS(tmp);
 }
 void ppDouble(Double d, int i)
 {
   char tmp[24];
-  sprintf(tmp, "%.15g", d);
+  snprintf(tmp, 24, "%.15g", d);
   renderS(tmp);
 }
 void ppChar(Char c, int i)
@@ -737,13 +737,13 @@ void shListName(ListName listname)
 void shInteger(Integer i)
 {
   char tmp[20];
-  sprintf(tmp, "%d", i);
+  snprintf(tmp, 20, "%d", i);
   bufAppendS(tmp);
 }
 void shDouble(Double d)
 {
   char tmp[24];
-  sprintf(tmp, "%.15g", d);
+  snprintf(tmp, 24, "%.15g", d);
   bufAppendS(tmp);
 }
 void shChar(Char c)
