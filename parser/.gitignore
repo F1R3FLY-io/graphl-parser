@@ -4,8 +4,6 @@
 # *.*
 !wrapper.h
 !.gitignore
-!Skeleton.c
-!Skeleton.h
-!libparser.a
 !Makefile
-libparser.a
+!*.c
+!*.h

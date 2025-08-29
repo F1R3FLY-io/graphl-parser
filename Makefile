@@ -12,10 +12,10 @@ else
 endif
 
 clean:
-	cd parder && make clean
+	cd parser && make clean
 
 gen_parser: check_file
-	bnfc --c -m -o ./parser  etc/grammar.bnfc
+	bnfc --c -m -o ./parser etc/grammar.bnfc
 
 build_obj:
 	cd parser && make
