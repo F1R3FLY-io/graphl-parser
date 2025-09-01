@@ -3,15 +3,6 @@
 #ifndef ABSYN_HEADER
 #define ABSYN_HEADER
 
-/* strdup was not in the ISO C standard before 6/2019 (C2x), but in POSIX 1003.1.
- * See: https://en.cppreference.com/w/c/experimental/dynamic/strdup
- * Setting _POSIX_C_SOURCE to 200809L activates strdup in string.h.
- */
-#define _POSIX_C_SOURCE 200809L
-
-#include <stddef.h>  /* NULL */
-#include <string.h>  /* strdup */
-
 /* C++ Abstract Syntax Interface.*/
 
 /********************   TypeDef Section    ********************/

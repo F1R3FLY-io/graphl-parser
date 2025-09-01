@@ -2,10 +2,15 @@
 
 /* A dynamically allocated character buffer that grows as it is appended. */
 
-#include <assert.h>  /* assert */
+#ifdef __wasm__
+#include "wasm.h"
+#else
 #include <stdlib.h>  /* free, malloc */
-#include <stdio.h>   /* fprintf */
 #include <string.h>  /* size_t, strncpy */
+#endif
+
+#include "panic.h"
+
 #include "Buffer.h"
 
 /* Internal functions. */
@@ -23,10 +28,6 @@ static void resizeBuffer(Buffer buffer);
 /* Create a new buffer of the given size. */
 
 Buffer newBuffer (const unsigned int size) {
-
-  /* The buffer cannot be of size 0. */
-  assert (size >= 1);
-
   /* Allocate and initialize a new Buffer structure. */
   Buffer buffer    = (Buffer) malloc(sizeof(struct buffer));
   buffer->size     = size;
@@ -116,19 +117,8 @@ static void bufferAllocateChars (Buffer buffer, const unsigned int n) {
 
 static void resizeBuffer(Buffer buffer)
 {
-  /* The new size needs to be strictly greater than the currently
-   * used part, otherwise writing to position buffer->current will
-   * be out of bounds.
-   */
-  assert(buffer->size > buffer->current);
-
   /* Resize (or, the first time allocate) the buffer. */
   buffer->chars = (char*) realloc(buffer->chars, buffer->size);
 
-  /* Crash if out-of-memory. */
-  if (! buffer->chars)
-  {
-    fprintf(stderr, "Buffer.c: Error: Out of memory while attempting to grow buffer!\n");
-    exit(1);  /* This seems to be the right exit code for out-of-memory. 137 is only when the OS kills us. */
-  }
+  PANIC(__FILE__ "OOM");
 }

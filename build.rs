@@ -1,35 +1,52 @@
 use std::path::PathBuf;
 
-const OBJECT_FILES_DIR: &str = "parser";
-const LIB_NAME: &str = "parser";
+const INCLUDE_DIR: &str = "parser";
 const WRAPPER_HEADER_FILE: &str = "parser/wrapper.h";
-const BINDINGS_FILE: &str = "src/bindings.rs";
+const BINDINGS_FILE: &str = "bindings.rs";
 
 fn main() {
-    println!(
-        "cargo:rustc-link-search={}",
-        PathBuf::from(OBJECT_FILES_DIR)
-            .canonicalize()
-            .unwrap()
-            .display()
-    );
-    println!("cargo:rustc-link-lib={LIB_NAME}");
+    println!("cargo:rerun-if-changed={INCLUDE_DIR}");
 
-    // The bindgen::Builder is the main entry point
-    // to bindgen, and lets you build up options for
-    // the resulting bindings.
-    bindgen::Builder::default()
-        // The input header we would like to generate
-        // bindings for.
+    let target = std::env::var("CARGO_CFG_TARGET_ARCH").unwrap();
+    compile_in_parser(&target);
+    generate_bindings(&target);
+}
+
+fn generate_bindings(target: &str) {
+    let mut bindings = bindgen::Builder::default()
         .header(WRAPPER_HEADER_FILE)
-        // Tell cargo to invalidate the built crate whenever any of the
-        // included header files changed.
         .parse_callbacks(Box::new(bindgen::CargoCallbacks::new()))
-        .derive_default(true)
-        // Finish the builder and generate the bindings.
-        .generate()
-        // Unwrap the Result and panic on failure.
-        .expect("Unable to generate bindings")
-        .write_to_file(BINDINGS_FILE)
-        .expect("Couldn't write bindings!");
+        .derive_default(true);
+
+    if target == "wasm32" {
+        bindings = bindings.clang_arg("-fvisibility=default");
+    }
+
+    let bindings = bindings.generate().unwrap();
+
+    let out_path = PathBuf::from(std::env::var("OUT_DIR").unwrap()).join(BINDINGS_FILE);
+    bindings.write_to_file(out_path).unwrap()
+}
+
+fn compile_in_parser(target: &str) {
+    let mut cc = cc::Build::new();
+
+    if target == "wasm32" {
+        cc.file("parser/wasm.c");
+    } else {
+        cc.flag("-std=gnu99");
+    }
+
+    cc.files([
+        "parser/Absyn.c",
+        "parser/Buffer.c",
+        "parser/Lexer.c",
+        "parser/Parser.c",
+        "parser/Printer.c",
+        "parser/Skeleton.c",
+    ])
+    .flag("-Werror=implicit-function-declaration")
+    .include(INCLUDE_DIR);
+
+    cc.compile("parser")
 }

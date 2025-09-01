@@ -5,5 +5,18 @@ build = "build.rs"
 version = "0.0.1"
 edition = "2024"
 
+[lib]
+crate-type = ["cdylib"]
+
+[dependencies]
+scopeguard = "1.2"
+serde = { version = "1.0", features = ["derive"] }
+
 [build-dependencies]
-bindgen = "*"
+bindgen = "0.72"
+cc = "1.2"
+
+[target.wasm32-unknown-unknown.dependencies]
+tsify = "0.5"
+wasm-bindgen = "0.2"
+console_error_panic_hook = { version = "0.1" }

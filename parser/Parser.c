@@ -71,14 +71,19 @@
 #define yydebug         grammar_debug
 #define yynerrs         grammar_nerrs
 
-/* First part of user prologue.  */
-#line 20 "grammar.y"
 
 /* Begin C preamble code */
 
+#ifdef __wasm__
+#include "wasm.h"
+#else
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#endif
+
+#include "panic.h"
+
 #include "Absyn.h"
 
 #define YYMAXDEPTH 10000000
@@ -96,7 +101,7 @@ extern void grammar__delete_buffer(YY_BUFFER_STATE buf, yyscan_t scanner);
 extern void grammar_lex_destroy(yyscan_t scanner);
 extern char* grammar_get_text(yyscan_t scanner);
 
-extern yyscan_t grammar__initialize_lexer(FILE * inp);
+extern yyscan_t grammar__initialize_lexer(void * inp);
 
 /* List reversal functions. */
 ListName reverseListName(ListName l)
@@ -114,8 +119,6 @@ ListName reverseListName(ListName l)
 }
 
 /* End C preamble code */
-
-#line 119 "Parser.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -180,19 +183,13 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 
 
 /* Second part of user prologue.  */
-#line 77 "grammar.y"
-
 void yyerror(YYLTYPE *loc, yyscan_t scanner, YYSTYPE *result, const char *msg)
 {
-  fprintf(stderr, "error: %d,%d: %s at %s\n",
-    loc->first_line, loc->first_column, msg, grammar_get_text(scanner));
 }
 
 int yyparse(yyscan_t scanner, YYSTYPE *result);
 
 extern int yylex(YYSTYPE *lvalp, YYLTYPE *llocp, yyscan_t scanner);
-
-#line 196 "Parser.c"
 
 
 #ifdef short
@@ -782,8 +779,7 @@ enum { YYENOMEM = -2 };
 #if YYDEBUG
 
 # ifndef YYFPRINTF
-#  include <stdio.h> /* INFRINGES ON USER NAME SPACE */
-#  define YYFPRINTF fprintf
+#  define YYFPRINTF(...) 0
 # endif
 
 # define YYDPRINTF(Args)                        \
@@ -811,7 +807,7 @@ do {                                            \
 
 YY_ATTRIBUTE_UNUSED
 static int
-yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
+yy_location_print_ (void *yyo, YYLTYPE const * const yylocp)
 {
   int res = 0;
   int end_col = 0 != yylocp->last_column ? yylocp->last_column - 1 : 0;
@@ -856,10 +852,10 @@ yy_location_print_ (FILE *yyo, YYLTYPE const * const yylocp)
 do {                                                                      \
   if (yydebug)                                                            \
     {                                                                     \
-      YYFPRINTF (stderr, "%s ", Title);                                   \
-      yy_symbol_print (stderr,                                            \
+      YYFPRINTF (NULL, "%s ", Title);                                   \
+      yy_symbol_print (NULL,                                            \
                   Kind, Value, Location, scanner, result); \
-      YYFPRINTF (stderr, "\n");                                           \
+      YYFPRINTF (NULL, "\n");                                           \
     }                                                                     \
 } while (0)
 
@@ -869,10 +865,10 @@ do {                                                                      \
 `-----------------------------------*/
 
 static void
-yy_symbol_value_print (FILE *yyo,
+yy_symbol_value_print (void *yyo,
                        yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, yyscan_t scanner, YYSTYPE *result)
 {
-  FILE *yyoutput = yyo;
+  void *yyoutput = yyo;
   YY_USE (yyoutput);
   YY_USE (yylocationp);
   YY_USE (scanner);
@@ -890,7 +886,7 @@ yy_symbol_value_print (FILE *yyo,
 `---------------------------*/
 
 static void
-yy_symbol_print (FILE *yyo,
+yy_symbol_print (void *yyo,
                  yysymbol_kind_t yykind, YYSTYPE const * const yyvaluep, YYLTYPE const * const yylocationp, yyscan_t scanner, YYSTYPE *result)
 {
   YYFPRINTF (yyo, "%s %s (",
@@ -910,13 +906,13 @@ yy_symbol_print (FILE *yyo,
 static void
 yy_stack_print (yy_state_t *yybottom, yy_state_t *yytop)
 {
-  YYFPRINTF (stderr, "Stack now");
+  YYFPRINTF (NULL, "Stack now");
   for (; yybottom <= yytop; yybottom++)
     {
       int yybot = *yybottom;
-      YYFPRINTF (stderr, " %d", yybot);
+      YYFPRINTF (NULL, " %d", yybot);
     }
-  YYFPRINTF (stderr, "\n");
+  YYFPRINTF (NULL, "\n");
 }
 
 # define YY_STACK_PRINT(Bottom, Top)                            \
@@ -937,17 +933,17 @@ yy_reduce_print (yy_state_t *yyssp, YYSTYPE *yyvsp, YYLTYPE *yylsp,
   int yylno = yyrline[yyrule];
   int yynrhs = yyr2[yyrule];
   int yyi;
-  YYFPRINTF (stderr, "Reducing stack by rule %d (line %d):\n",
+  YYFPRINTF (NULL, "Reducing stack by rule %d (line %d):\n",
              yyrule - 1, yylno);
   /* The symbols being reduced.  */
   for (yyi = 0; yyi < yynrhs; yyi++)
     {
-      YYFPRINTF (stderr, "   $%d = ", yyi + 1);
-      yy_symbol_print (stderr,
+      YYFPRINTF (NULL, "   $%d = ", yyi + 1);
+      yy_symbol_print (NULL,
                        YY_ACCESSING_SYMBOL (+yyssp[yyi + 1 - yynrhs]),
                        &yyvsp[(yyi + 1) - (yynrhs)],
                        &(yylsp[(yyi + 1) - (yynrhs)]), scanner, result);
-      YYFPRINTF (stderr, "\n");
+      YYFPRINTF (NULL, "\n");
     }
 }
 
@@ -1089,7 +1085,7 @@ YYLTYPE yylloc = yyloc_default;
      Keep to zero when no symbol should be popped.  */
   int yylen = 0;
 
-  YYDPRINTF ((stderr, "Starting parse\n"));
+  YYDPRINTF ((NULL, "Starting parse\n"));
 
   yychar = YYEMPTY; /* Cause a token to be read.  */
 
@@ -1110,7 +1106,7 @@ yynewstate:
 | yysetstate -- set current state (the top of the stack) to yystate.  |
 `--------------------------------------------------------------------*/
 yysetstate:
-  YYDPRINTF ((stderr, "Entering state %d\n", yystate));
+  YYDPRINTF ((NULL, "Entering state %d\n", yystate));
   YY_ASSERT (0 <= yystate && yystate < YYNSTATES);
   YY_IGNORE_USELESS_CAST_BEGIN
   *yyssp = YY_CAST (yy_state_t, yystate);
@@ -1176,7 +1172,7 @@ yysetstate:
       yylsp = yyls + yysize - 1;
 
       YY_IGNORE_USELESS_CAST_BEGIN
-      YYDPRINTF ((stderr, "Stack size increased to %ld\n",
+      YYDPRINTF ((NULL, "Stack size increased to %ld\n",
                   YY_CAST (long, yystacksize)));
       YY_IGNORE_USELESS_CAST_END
 
@@ -1209,7 +1205,7 @@ yybackup:
   /* YYCHAR is either empty, or end-of-input, or a valid lookahead.  */
   if (yychar == YYEMPTY)
     {
-      YYDPRINTF ((stderr, "Reading a token\n"));
+      YYDPRINTF ((NULL, "Reading a token\n"));
       yychar = yylex (&yylval, &yylloc, scanner);
     }
 
@@ -1217,7 +1213,7 @@ yybackup:
     {
       yychar = YYEOF;
       yytoken = YYSYMBOL_YYEOF;
-      YYDPRINTF ((stderr, "Now at end of input.\n"));
+      YYDPRINTF ((NULL, "Now at end of input.\n"));
     }
   else if (yychar == YYerror)
     {
@@ -1634,63 +1630,19 @@ yyreturnlab:
 
 #line 159 "grammar.y"
 
-
-
-/* Entrypoint: parse Graph from file. */
-Graph pGraph(FILE *inp)
-{
-  YYSTYPE result;
-  yyscan_t scanner = grammar__initialize_lexer(inp);
-  if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
-    return 0;
-  }
-  int error = yyparse(scanner, &result);
-  grammar_lex_destroy(scanner);
-  if (error)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return result.graph_;
-  }
-}
-
 /* Entrypoint: parse Graph from string. */
 Graph psGraph(const char *str)
 {
   YYSTYPE result;
   yyscan_t scanner = grammar__initialize_lexer(0);
   if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
     return 0;
   }
   YY_BUFFER_STATE buf = grammar__scan_string(str, scanner);
   int error = yyparse(scanner, &result);
   grammar__delete_buffer(buf, scanner);
-  grammar_lex_destroy(scanner);
-  if (error)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return result.graph_;
-  }
-}
-
-/* Entrypoint: parse Graph from file. */
-Graph pGraph1(FILE *inp)
-{
-  YYSTYPE result;
-  yyscan_t scanner = grammar__initialize_lexer(inp);
-  if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
-    return 0;
-  }
-  int error = yyparse(scanner, &result);
-  grammar_lex_destroy(scanner);
+  // TODO: this crashes for some reason
+  // grammar_lex_destroy(scanner);
   if (error)
   { /* Failure */
     return 0;
@@ -1707,33 +1659,11 @@ Graph psGraph1(const char *str)
   YYSTYPE result;
   yyscan_t scanner = grammar__initialize_lexer(0);
   if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
     return 0;
   }
   YY_BUFFER_STATE buf = grammar__scan_string(str, scanner);
   int error = yyparse(scanner, &result);
   grammar__delete_buffer(buf, scanner);
-  grammar_lex_destroy(scanner);
-  if (error)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return result.graph_;
-  }
-}
-
-/* Entrypoint: parse Graph from file. */
-Graph pGraph2(FILE *inp)
-{
-  YYSTYPE result;
-  yyscan_t scanner = grammar__initialize_lexer(inp);
-  if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
-    return 0;
-  }
-  int error = yyparse(scanner, &result);
   grammar_lex_destroy(scanner);
   if (error)
   { /* Failure */
@@ -1751,33 +1681,11 @@ Graph psGraph2(const char *str)
   YYSTYPE result;
   yyscan_t scanner = grammar__initialize_lexer(0);
   if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
     return 0;
   }
   YY_BUFFER_STATE buf = grammar__scan_string(str, scanner);
   int error = yyparse(scanner, &result);
   grammar__delete_buffer(buf, scanner);
-  grammar_lex_destroy(scanner);
-  if (error)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return result.graph_;
-  }
-}
-
-/* Entrypoint: parse Graph from file. */
-Graph pGraph3(FILE *inp)
-{
-  YYSTYPE result;
-  yyscan_t scanner = grammar__initialize_lexer(inp);
-  if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
-    return 0;
-  }
-  int error = yyparse(scanner, &result);
   grammar_lex_destroy(scanner);
   if (error)
   { /* Failure */
@@ -1795,7 +1703,6 @@ Graph psGraph3(const char *str)
   YYSTYPE result;
   yyscan_t scanner = grammar__initialize_lexer(0);
   if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
     return 0;
   }
   YY_BUFFER_STATE buf = grammar__scan_string(str, scanner);
@@ -1812,34 +1719,12 @@ Graph psGraph3(const char *str)
   }
 }
 
-/* Entrypoint: parse Binding from file. */
-Binding pBinding(FILE *inp)
-{
-  YYSTYPE result;
-  yyscan_t scanner = grammar__initialize_lexer(inp);
-  if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
-    return 0;
-  }
-  int error = yyparse(scanner, &result);
-  grammar_lex_destroy(scanner);
-  if (error)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return result.binding_;
-  }
-}
-
 /* Entrypoint: parse Binding from string. */
 Binding psBinding(const char *str)
 {
   YYSTYPE result;
   yyscan_t scanner = grammar__initialize_lexer(0);
   if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
     return 0;
   }
   YY_BUFFER_STATE buf = grammar__scan_string(str, scanner);
@@ -1853,27 +1738,6 @@ Binding psBinding(const char *str)
   else
   { /* Success */
     return result.binding_;
-  }
-}
-
-/* Entrypoint: parse GraphBinding from file. */
-GraphBinding pGraphBinding(FILE *inp)
-{
-  YYSTYPE result;
-  yyscan_t scanner = grammar__initialize_lexer(inp);
-  if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
-    return 0;
-  }
-  int error = yyparse(scanner, &result);
-  grammar_lex_destroy(scanner);
-  if (error)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return result.graphbinding_;
   }
 }
 
@@ -1883,7 +1747,6 @@ GraphBinding psGraphBinding(const char *str)
   YYSTYPE result;
   yyscan_t scanner = grammar__initialize_lexer(0);
   if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
     return 0;
   }
   YY_BUFFER_STATE buf = grammar__scan_string(str, scanner);
@@ -1900,34 +1763,12 @@ GraphBinding psGraphBinding(const char *str)
   }
 }
 
-/* Entrypoint: parse Vertex from file. */
-Vertex pVertex(FILE *inp)
-{
-  YYSTYPE result;
-  yyscan_t scanner = grammar__initialize_lexer(inp);
-  if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
-    return 0;
-  }
-  int error = yyparse(scanner, &result);
-  grammar_lex_destroy(scanner);
-  if (error)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return result.vertex_;
-  }
-}
-
 /* Entrypoint: parse Vertex from string. */
 Vertex psVertex(const char *str)
 {
   YYSTYPE result;
   yyscan_t scanner = grammar__initialize_lexer(0);
   if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
     return 0;
   }
   YY_BUFFER_STATE buf = grammar__scan_string(str, scanner);
@@ -1941,27 +1782,6 @@ Vertex psVertex(const char *str)
   else
   { /* Success */
     return result.vertex_;
-  }
-}
-
-/* Entrypoint: parse Name from file. */
-Name pName(FILE *inp)
-{
-  YYSTYPE result;
-  yyscan_t scanner = grammar__initialize_lexer(inp);
-  if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
-    return 0;
-  }
-  int error = yyparse(scanner, &result);
-  grammar_lex_destroy(scanner);
-  if (error)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return result.name_;
   }
 }
 
@@ -1971,7 +1791,6 @@ Name psName(const char *str)
   YYSTYPE result;
   yyscan_t scanner = grammar__initialize_lexer(0);
   if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
     return 0;
   }
   YY_BUFFER_STATE buf = grammar__scan_string(str, scanner);
@@ -1988,34 +1807,12 @@ Name psName(const char *str)
   }
 }
 
-/* Entrypoint: parse ListName from file. */
-ListName pListName(FILE *inp)
-{
-  YYSTYPE result;
-  yyscan_t scanner = grammar__initialize_lexer(inp);
-  if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
-    return 0;
-  }
-  int error = yyparse(scanner, &result);
-  grammar_lex_destroy(scanner);
-  if (error)
-  { /* Failure */
-    return 0;
-  }
-  else
-  { /* Success */
-    return result.listname_;
-  }
-}
-
 /* Entrypoint: parse ListName from string. */
 ListName psListName(const char *str)
 {
   YYSTYPE result;
   yyscan_t scanner = grammar__initialize_lexer(0);
   if (!scanner) {
-    fprintf(stderr, "Failed to initialize lexer.\n");
     return 0;
   }
   YY_BUFFER_STATE buf = grammar__scan_string(str, scanner);
