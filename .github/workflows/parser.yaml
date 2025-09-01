@@ -121,7 +121,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: rholang-tree-sitter
+        working-directory: js-package/src
 
     steps:
       - name: Checkout code
