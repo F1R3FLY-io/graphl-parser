@@ -26,25 +26,14 @@ impl Header {
         header_layout.extend(self.allocation_layout)
     }
 
-    unsafe fn allocate(self) -> Result<*mut u8, LayoutError> {
+    unsafe fn allocate(self, zeroed: bool) -> Result<*mut u8, LayoutError> {
         let (combined_layout, offset) = self.combined_layout()?;
 
-        let ptr = unsafe { std::alloc::alloc(combined_layout) };
-        if ptr.is_null() {
-            return Ok(ptr::null_mut());
-        }
-
-        let header_ptr = ptr as *mut Header;
-        unsafe {
-            header_ptr.write(self);
-            Ok(ptr.add(offset))
-        }
-    }
-
-    unsafe fn allocate_zeroed(self) -> Result<*mut u8, LayoutError> {
-        let (combined_layout, offset) = self.combined_layout()?;
-
-        let ptr = unsafe { std::alloc::alloc_zeroed(combined_layout) };
+        let ptr = if zeroed {
+            unsafe { std::alloc::alloc_zeroed(combined_layout) }
+        } else {
+            unsafe { std::alloc::alloc(combined_layout) }
+        };
         if ptr.is_null() {
             return Ok(ptr::null_mut());
         }
@@ -93,18 +82,18 @@ impl Header {
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn malloc(size: usize) -> *mut c_void {
+pub(crate) unsafe extern "C" fn malloc(size: usize) -> *mut c_void {
     if size == 0 {
         return ptr::null_mut();
     }
 
     Header::new(size)
-        .and_then(|header| unsafe { header.allocate() })
+        .and_then(|header| unsafe { header.allocate(false) })
         .unwrap_or_default() as _
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn free(ptr: *mut c_void) {
+pub(crate) unsafe extern "C" fn free(ptr: *mut c_void) {
     if ptr.is_null() {
         return;
     }
@@ -113,7 +102,7 @@ pub unsafe extern "C" fn free(ptr: *mut c_void) {
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn realloc(ptr: *mut c_void, new_size: usize) -> *mut c_void {
+pub(crate) unsafe extern "C" fn realloc(ptr: *mut c_void, new_size: usize) -> *mut c_void {
     if ptr.is_null() {
         return unsafe { self::malloc(new_size) };
     }
@@ -127,7 +116,7 @@ pub unsafe extern "C" fn realloc(ptr: *mut c_void, new_size: usize) -> *mut c_vo
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn calloc(num: usize, size: usize) -> *mut c_void {
+pub(crate) unsafe extern "C" fn calloc(num: usize, size: usize) -> *mut c_void {
     let total_size = match num.checked_mul(size) {
         Some(total_size) => total_size,
         None => return ptr::null_mut(),
@@ -138,12 +127,12 @@ pub unsafe extern "C" fn calloc(num: usize, size: usize) -> *mut c_void {
     }
 
     Header::new(total_size)
-        .and_then(|header| unsafe { header.allocate_zeroed() })
+        .and_then(|header| unsafe { header.allocate(true) })
         .unwrap_or_default() as _
 }
 
 #[unsafe(no_mangle)]
-pub unsafe extern "C" fn rust_panic(prefix: *const i8, s: *const i8) {
+pub(crate) unsafe extern "C" fn rust_panic(prefix: *const i8, s: *const i8) {
     let prefix = unsafe { CStr::from_ptr(prefix) };
     let s = unsafe { CStr::from_ptr(s) };
     panic!("{}{}", prefix.to_str().unwrap(), s.to_str().unwrap())
