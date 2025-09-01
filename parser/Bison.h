@@ -35,12 +35,9 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#ifndef YY_GRAMMAR_BISON_H_INCLUDED
-#define YY_GRAMMAR_BISON_H_INCLUDED
+#pragma once
+
 /* Debug traces.  */
-#ifndef YYDEBUG
-#define YYDEBUG 1
-#endif
 #if YYDEBUG
 extern int grammar_debug;
 #endif
@@ -82,8 +79,6 @@ typedef enum yytokentype yytoken_kind_t;
 #if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 64 "grammar.y"
-
   int _int;
   char _char;
   double _double;
@@ -94,8 +89,6 @@ union YYSTYPE
   Vertex vertex_;
   Name name_;
   ListName listname_;
-
-#line 99 "Bison.h"
 };
 typedef union YYSTYPE YYSTYPE;
 #define YYSTYPE_IS_TRIVIAL 1
@@ -117,5 +110,3 @@ struct YYLTYPE
 #endif
 
 int grammar_parse(yyscan_t scanner, YYSTYPE *result);
-
-#endif /* !YY_GRAMMAR_BISON_H_INCLUDED  */

@@ -17,6 +17,10 @@ pub fn parse_to_ast(code: String) -> Result<ast::Graph, ast::Error> {
     })?;
     let graph = unsafe { bindings::psGraph(c_code.as_ptr()) };
 
+    if graph.is_null() {
+        return Err(ast::Error::InvalidGraphL);
+    }
+
     scopeguard::defer!({
         unsafe { bindings::free_Graph(graph) };
     });

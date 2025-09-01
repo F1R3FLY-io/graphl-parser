@@ -1,0 +1,51 @@
+[tasks.clippy]
+args          = ["clippy", "--workspace", "--all-targets", "--all-features"]
+command       = "cargo"
+install_crate = "clippy"
+toolchain     = "nightly"
+
+[tasks.audit]
+args          = ["audit", "--deny", "warnings"]
+command       = "cargo"
+install_crate = "cargo-audit"
+
+[tasks.format]
+args          = ["fmt", "--all"]
+command       = "cargo"
+install_crate = "rustfmt"
+toolchain     = "nightly"
+
+[tasks.fmt]
+alias = "format"
+
+[tasks.format-check]
+args          = ["fmt", "--all", "--check"]
+command       = "cargo"
+install_crate = "rustfmt"
+toolchain     = "nightly"
+
+[tasks.bnfc]
+args    = ["--c", "-o", "parser", "etc/grammar.bnfc"]
+command = "bnfc"
+
+[tasks.build-wasm]
+args    = ["build", "--target", "wasm32-unknown-unknown", "--profile", "wasm"]
+command = "cargo"
+
+[tasks.wasm-build]
+alias = "build-wasm"
+
+[tasks.pack-wasm]
+args = [
+    "target/wasm32-unknown-unknown/wasm/graph_to_rholang_parser.wasm",
+    "--out-dir",
+    "js-package/src",
+    "--typescript",
+    "--target",
+    "bundler",
+]
+command = "wasm-bindgen"
+install_crate = "wasm-bindgen-cli"
+
+[tasks.wasm-pack]
+alias = "pack-wasm"
