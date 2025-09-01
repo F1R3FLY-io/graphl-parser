@@ -1,6 +1,6 @@
 use crate::{
     Attr, AttrName, AttrVal, Binding, Graph, GraphBinding, Ident, LVar, ListAttr, ListName, Name,
-    UVar, Vertex,
+    UVar, Vertex, context::INNER_PLACEHOLDER,
 };
 use std::ffi::c_void;
 
@@ -22,240 +22,319 @@ macro_rules! visitor_callback {
 
 pub(crate) use visitor_callback;
 
-visitor_callback!(visitIsGTensorCallback, Graph, |p, context| format!(
-    "{context}visitIsGTensorCallback"
+visitor_callback!(visitIsGTensorCallback, Graph, |_p, _context| format!(
+    "visitIsGTensorCallback"
 ));
 
-visitor_callback!(visitIsGRuleAnonCallback, Graph, |p, context| format!(
-    "{context}visitIsGRuleAnonCallback"
+visitor_callback!(visitIsGRuleAnonCallback, Graph, |_p, _context| format!(
+    "visitIsGRuleAnonCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitIsGRuleNamedCallback, Graph, |p, context| format!(
-    "{context}visitIsGRuleNamedCallback"
+visitor_callback!(visitIsGRuleNamedCallback, Graph, |_p, _context| format!(
+    "visitIsGRuleNamedCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitBindingCallback, Binding, |p, context| format!(
-    "{context}visitBindingCallback"
+visitor_callback!(visitBindingCallback, Binding, |_p, _context| format!(
+    "visitBindingCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitVertexCallback, Vertex, |p, context| format!(
-    "{context}visitVertexCallback"
+visitor_callback!(visitVertexCallback, Vertex, |_p, _context| format!(
+    "visitVertexCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitIsGVarCallback, Graph, |p, context| format!(
-    "{context}visitIsGVarCallback"
+visitor_callback!(visitIsGVarCallback, Graph, |_p, _context| format!(
+    "visitIsGVarCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitNameCallback, Name, |p, context| format!(
-    "{context}visitNameCallback"
+visitor_callback!(visitNameCallback, Name, |_p, _context| format!(
+    "visitNameCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitIsGSubgraphCallback, Graph, |p, context| format!(
-    "{context}visitIsGSubgraphCallback"
+visitor_callback!(visitIsGSubgraphCallback, Graph, |_p, _context| format!(
+    "visitIsGSubgraphCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitIntegerCallback, i32, |p, context| format!(
-    "{context}visitIntegerCallback"
+visitor_callback!(visitIntegerCallback, i32, |_p, _context| format!(
+    "visitIntegerCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitDoubleCallback, f64, |p, context| format!(
-    "{context}visitDoubleCallback"
+visitor_callback!(visitDoubleCallback, f64, |_p, _context| format!(
+    "visitDoubleCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitCharCallback, i8, |p, context| format!(
-    "{context}visitCharCallback"
+visitor_callback!(visitCharCallback, i8, |_p, _context| format!(
+    "visitCharCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitStringCallback, *mut i8, |p, context| format!(
-    "{context}visitStringCallback"
+visitor_callback!(visitStringCallback, *mut i8, |_p, _context| format!(
+    "visitStringCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitIsGVertexCallback, Graph, |p, context| format!(
-    "{context}visitIsGVertexCallback"
+visitor_callback!(visitIsGVertexCallback, Graph, |_p, _context| format!(
+    "visitIsGVertexCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
 visitor_callback!(
     visitIsGNilCallback,
     Graph,
-    |p, context: &'static mut String| context.replace("new %vertexes in {%placehodler}", "")
+    |_p, context: &'static mut String| context.replace("new %vertexes in {%placehodler}", "")
 );
-visitor_callback!(visitIsVBindCallback, Binding, |p, context| format!(
-    "{context}visitIsVBindCallback"
+visitor_callback!(visitIsVBindCallback, Binding, |_p, _context| format!(
+    "visitIsVBindCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitIsGBindCallback, GraphBinding, |p, context| format!(
-    "{context}visitIsGBindCallback"
+visitor_callback!(visitIsGBindCallback, GraphBinding, |_p, _context| format!(
+    "visitIsGBindCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitIsVNameCallback, Vertex, |p, context| format!(
-    "{context}visitIsVNameCallback"
+visitor_callback!(visitIsVNameCallback, Vertex, |_p, _context| format!(
+    "visitIsVNameCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitNameWildcardCallback, Name, |p, context| format!(
-    "{context}visitNameWildcardCallback"
+visitor_callback!(visitNameWildcardCallback, Name, |_p, _context| format!(
+    "visitNameWildcardCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitNameVVarCallback, Name, |p, context| format!(
-    "{context}visitNameVVarCallback"
+visitor_callback!(visitNameVVarCallback, Name, |_p, _context| format!(
+    "visitNameVVarCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
-visitor_callback!(visitNameGVarCallback, Name, |p, context| format!(
-    "{context}visitNameGVarCallback"
+visitor_callback!(visitNameGVarCallback, Name, |_p, _context| format!(
+    "visitNameGVarCallback{{ {} }}",
+    INNER_PLACEHOLDER
 ));
 visitor_callback!(
     visitGraphCallback,
     Graph,
-    |p, context: &'static mut String| {
-        let placeholder = "new %vertexes in {%placehodler}";
-        context.replace("%placeholder", placeholder)
+    |p, _context: &'static mut String| {
+        dbg!(p);
+        format!("Graph {{ {} }}", INNER_PLACEHOLDER)
     }
 );
 
 visitor_callback!(
     visitAttrCallback,
     Attr,
-    |p, context: &'static mut String| { format!("{context}visitAttrCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitAttrCallback {{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitAttrNameCallback,
     AttrName,
-    |p, context: &'static mut String| { format!("{context}visitAttrNameCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitAttrNameCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitAttrValCallback,
     AttrVal,
-    |p, context: &'static mut String| { format!("{context}visitAttrValCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitAttrValCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitGBindCallback,
     GraphBinding,
-    |p, context: &'static mut String| { format!("{context}visitGBindCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitGBindCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitGEdgeAnonCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitGEdgeAnonCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitGEdgeAnonCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitGEdgeNamedCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitGEdgeNamedCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitGEdgeNamedCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitGNilCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitGNilCallback") }
+    |_p, _context: &'static mut String| { format!("visitGNilCallback{{ {} }}", INNER_PLACEHOLDER) }
 );
 visitor_callback!(
     visitGNominateCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitGNominateCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitGNominateCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitGRuleAnonCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitGRuleAnonCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitGRuleAnonCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitGRuleNamedCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitGRuleNamedCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitGRuleNamedCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitGSubgraphCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitGSubgraphCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitGSubgraphCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitGTensorCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitGTensorCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitGTensorCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitGVarCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitGVarCallback") }
+    |_p, _context: &'static mut String| { format!("visitGVarCallback{{ {} }}", INNER_PLACEHOLDER) }
 );
 visitor_callback!(
     visitGVertexCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitGVertexCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitGVertexCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIdentCallback,
     Ident,
-    |p, context: &'static mut String| { format!("{context}visitIdentCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIdentCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsAttrListCallback,
     Attr,
-    |p, context: &'static mut String| { format!("{context}visitIsAttrListCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsAttrListCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsAttributeNameCallback,
     LVar,
-    |p, context: &'static mut String| { format!("{context}visitIsAttributeNameCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsAttributeNameCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsAttributePairCallback,
     AttrName,
-    |p, context: &'static mut String| { format!("{context}visitIsAttributePairCallback") }
+    |_p, _context: &'static mut String| {
+        format!(
+            "visitIsAttributePairCallback{{ {} }}{{ {} }}",
+            INNER_PLACEHOLDER, INNER_PLACEHOLDER
+        )
+    }
 );
 visitor_callback!(
     visitIsAttributeValueCallback,
     LVar,
-    |p, context: &'static mut String| { format!("{context}visitIsAttributeValueCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsAttributeValueCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsGEdgeAnonCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitIsGEdgeAnonCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsGEdgeAnonCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsGEdgeNamedCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitIsGEdgeNamedCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsGEdgeNamedCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsGNominateCallback,
     Graph,
-    |p, context: &'static mut String| { format!("{context}visitIsGNominateCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsGNominateCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsNameGVarCallback,
     Name,
-    |p, context: &'static mut String| { format!("{context}visitIsNameGVarCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsNameGVarCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsNameQuoteGraphCallback,
     Name,
-    |p, context: &'static mut String| { format!("{context}visitIsNameQuoteGraphCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsNameQuoteGraphCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsNameQuoteVertexCallback,
     Name,
-    |p, context: &'static mut String| { format!("{context}visitIsNameQuoteVertexCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsNameQuoteVertexCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsNameVVarCallback,
     Name,
-    |p, context: &'static mut String| { format!("{context}visitIsNameVVarCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsNameVVarCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsNameWildcardCallback,
     Name,
-    |p, context: &'static mut String| { format!("{context}visitIsNameWildcardCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsNameWildcardCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitIsEmptyAttrListCallback,
     ListAttr,
-    |p, context: &'static mut String| { format!("{context}visitIsEmptyAttrListCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitIsEmptyAttrListCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitListAttrCallback,
     ListAttr,
-    |p, context: &'static mut String| { format!("{context}visitListAttrCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitListAttrCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitListNameCallback,
     ListName,
-    |p, context: &'static mut String| { format!("{context}visitListNameCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitListNameCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );
 visitor_callback!(
     visitLVarCallback,
     LVar,
-    |p, context: &'static mut String| { format!("{context}visitLVarCallback") }
+    |_p, _context: &'static mut String| { format!("visitLVarCallback{{ {} }}", INNER_PLACEHOLDER) }
 );
 visitor_callback!(
     visitUVarCallback,
     UVar,
-    |p, context: &'static mut String| { format!("{context}visitUVarCallback") }
+    |_p, _context: &'static mut String| { format!("visitUVarCallback{{ {} }}", INNER_PLACEHOLDER) }
 );
 visitor_callback!(
     visitVBindCallback,
     Binding,
-    |p, context: &'static mut String| { format!("{context}visitVBindCallback") }
+    |_p, _context: &'static mut String| {
+        format!("visitVBindCallback{{ {} }}", INNER_PLACEHOLDER)
+    }
 );

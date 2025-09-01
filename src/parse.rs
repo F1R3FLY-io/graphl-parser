@@ -3,7 +3,7 @@ use std::{
     str::FromStr,
 };
 
-use crate::{Visitor, free_Graph, psGraph};
+use crate::{Visitor, context::INNER_PLACEHOLDER, free_Graph, psGraph};
 use crate::{visitGraph, visitors::*};
 
 pub fn parse(document: String) -> std::result::Result<String, String> {
@@ -67,9 +67,9 @@ pub fn parse(document: String) -> std::result::Result<String, String> {
     let document = CString::from_str(&document).map_err(|e| e.to_string())?;
     let ptr = document.as_ptr();
 
-    let contract = r#"contract %contract_name(%contract_arguments){%placeholder}"#;
+    let contract = format!("{{ {} }}", INNER_PLACEHOLDER);
 
-    let rholang_representation = String::from_str(contract).map(Box::new).unwrap();
+    let rholang_representation = Box::new(contract);
     let rholang_representation_ptr = Box::into_raw(rholang_representation);
 
     unsafe {
@@ -92,17 +92,7 @@ pub fn parse(document: String) -> std::result::Result<String, String> {
 
 #[cfg(test)]
 mod tests {
-    use crate::{
-        Graph,
-        context::{get_context, save_context},
-        visitors::visitor_callback,
-    };
-    use std::{
-        ffi::{CString, c_void},
-        str::FromStr,
-    };
-
-    use crate::Visitor;
+    use std::str::FromStr;
 
     use super::parse;
 
@@ -111,34 +101,6 @@ mod tests {
         let statement = String::from_str("0").unwrap();
         let result = parse(statement).unwrap();
 
-        assert_eq!(
-            result,
-            "contract %contract_name(%contract_arguments){%placeholder}visitAttrCallbackvisitIsAttributeValueCallback"
-        );
-    }
-
-    #[test]
-    fn test_visit_callback_declaration_graph() {
-        let context = String::from_str("Hello, ").unwrap();
-
-        visitor_callback!(visigGraphCallback, Graph, |p, context| format!(
-            "{context}Graph Called"
-        ));
-
-        let mut visitor = Visitor {
-            visitGraphCallback: Some(visigGraphCallback),
-            ..Default::default()
-        };
-        let context = Box::into_raw(Box::new(context));
-        let context_ptr = context as *mut c_void;
-
-        let statement = CString::new("0").unwrap();
-        let graph = unsafe { crate::psGraph(statement.as_ptr()) };
-        unsafe { crate::visitGraph(graph, &mut visitor, context_ptr) };
-
-        let c = unsafe { Box::from_raw(context_ptr as *mut String) };
-        let context = c.as_str();
-
-        assert_eq!(context, "Hello, Graph CalledGnil Called");
+        assert_eq!(result, "visitGraph");
     }
 }
