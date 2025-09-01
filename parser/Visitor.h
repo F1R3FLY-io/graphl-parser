@@ -52,6 +52,8 @@ typedef void (*visitStringCallback)(String s, void *context);
 typedef void (*visitUVarCallback)(UVar p, void *context);
 typedef void (*visitVBindCallback)(Binding p, void *context);
 typedef void (*visitVertexCallback)(Vertex p, void *context);
+typedef void (*visitDoubleCallback)(Double p, void *context);
+typedef void (*visitCharCallback)(Char p, void *context);
 
 typedef struct {
   visitAttrCallback visitAttrCallback;
@@ -106,4 +108,6 @@ typedef struct {
   visitUVarCallback visitUVarCallback;
   visitVBindCallback visitVBindCallback;
   visitVertexCallback visitVertexCallback;
+  visitDoubleCallback visitDoubleCallback;
+  visitCharCallback visitCharCallback;
 } Visitor;

@@ -1626,6 +1626,10 @@ pub type visitVBindCallback =
     ::std::option::Option<unsafe extern "C" fn(p: Binding, context: *mut ::std::os::raw::c_void)>;
 pub type visitVertexCallback =
     ::std::option::Option<unsafe extern "C" fn(p: Vertex, context: *mut ::std::os::raw::c_void)>;
+pub type visitDoubleCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Double, context: *mut ::std::os::raw::c_void)>;
+pub type visitCharCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Char, context: *mut ::std::os::raw::c_void)>;
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone)]
 pub struct Visitor {
@@ -1681,10 +1685,12 @@ pub struct Visitor {
     pub visitUVarCallback: visitUVarCallback,
     pub visitVBindCallback: visitVBindCallback,
     pub visitVertexCallback: visitVertexCallback,
+    pub visitDoubleCallback: visitDoubleCallback,
+    pub visitCharCallback: visitCharCallback,
 }
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
-    ["Size of Visitor"][::std::mem::size_of::<Visitor>() - 416usize];
+    ["Size of Visitor"][::std::mem::size_of::<Visitor>() - 432usize];
     ["Alignment of Visitor"][::std::mem::align_of::<Visitor>() - 8usize];
     ["Offset of field: Visitor::visitAttrCallback"]
         [::std::mem::offset_of!(Visitor, visitAttrCallback) - 0usize];
@@ -1790,6 +1796,10 @@ const _: () = {
         [::std::mem::offset_of!(Visitor, visitVBindCallback) - 400usize];
     ["Offset of field: Visitor::visitVertexCallback"]
         [::std::mem::offset_of!(Visitor, visitVertexCallback) - 408usize];
+    ["Offset of field: Visitor::visitDoubleCallback"]
+        [::std::mem::offset_of!(Visitor, visitDoubleCallback) - 416usize];
+    ["Offset of field: Visitor::visitCharCallback"]
+        [::std::mem::offset_of!(Visitor, visitCharCallback) - 424usize];
 };
 unsafe extern "C" {
     pub fn visitGraph(p: Graph, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);

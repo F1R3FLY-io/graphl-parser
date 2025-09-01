@@ -4,9 +4,11 @@
 
 include!("bindings.rs");
 
+mod context;
 mod parse;
 mod print;
 mod show;
+mod visitors;
 
 pub use parse::parse;
 
