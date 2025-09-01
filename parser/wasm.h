@@ -1,5 +1,4 @@
-#ifndef WASM_HEADER
-#define WASM_HEADER
+#pragma once
 
 #include <stddef.h>
 
@@ -18,6 +17,4 @@ char *strdup(const char *s);
 char *strncpy(char *restrict dest, const char *restrict src, size_t count);
 int isspace(int c);
 
-void __attribute__((noreturn)) panic(const char *s);
-
-#endif
+void __attribute__((noreturn)) panic(const char *prefix, const char *s);

@@ -1,86 +1,19 @@
+#include <stddef.h>
+#include <limits.h>
+
+#define NANOPRINTF_IMPLEMENTATION
+#include "nanoprintf.h"
+
 #include "wasm.h"
-
-void *rust_alloc(size_t size);
-void *rust_realloc(void *ptr, size_t new_size);
-void rust_free(void *ptr, size_t size);
-
-void *malloc(size_t size)
-{
-  if (size == 0)
-  {
-    return NULL;
-  }
-
-  size_t *ret = rust_alloc(size + sizeof(size_t));
-  if (ret == NULL)
-  {
-    return NULL;
-  }
-
-  *ret = size;
-  return ret + 1;
-}
-
-void *realloc(void *ptr, size_t new_size)
-{
-  if (ptr == NULL)
-  {
-    return malloc(new_size);
-  }
-
-  if (new_size == 0)
-  {
-    free(ptr);
-    return NULL;
-  }
-
-  size_t *ret = rust_alloc(new_size + sizeof(size_t));
-  if (ret == NULL)
-  {
-    return NULL;
-  }
-
-  *ret = new_size;
-
-  size_t size = *(((size_t *)ptr) - 1);
-  memcpy(ret + 1, ptr, size);
-  free(ptr);
-
-  return ret + 1;
-}
-
-void free(void *ptr)
-{
-  if (ptr == NULL)
-  {
-    return;
-  }
-
-  size_t *orig = ((size_t *)ptr) - 1;
-  size_t size = *orig;
-  rust_free(orig, size);
-}
 
 void *memcpy(void *restrict dest, const void *restrict src, size_t count)
 {
-  unsigned char *d = dest;
-  const unsigned char *s = src;
-
-  while (count--)
-  {
-    *d++ = *s++;
-  }
-  return dest;
+  return __builtin_memcpy(dest, src, count);
 }
 
 void *memset(void *dest, int ch, size_t count)
 {
-  unsigned char *p = dest;
-  while (count--)
-  {
-    *p++ = (unsigned char)ch;
-  }
-  return dest;
+  return __builtin_memset(dest, ch, count);
 }
 
 size_t strlen(const char *str)
@@ -106,14 +39,14 @@ char *strncpy(char *restrict dest, const char *restrict src, size_t count)
   size_t len = src_len < count ? src_len : count;
 
   memcpy(dest, src, len);
-  memset(dest + len, '\0', len - count);
+  memset(dest + len, '\0', count - len);
 
   return dest;
 }
 
-void __attribute__((noreturn)) rust_panic(const char *s);
+extern void __attribute__((noreturn)) rust_panic(const char *prefix, const char *s);
 
-void __attribute__((noreturn)) panic(const char *s) { rust_panic(s); }
+void __attribute__((noreturn)) panic(const char *prefix, const char *s) { rust_panic(prefix, s); }
 
 int isspace(int c)
 {

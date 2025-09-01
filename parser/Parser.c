@@ -75,7 +75,6 @@
 #ifdef __wasm__
 #include "wasm.h"
 #else
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #endif
@@ -97,7 +96,7 @@ typedef struct yy_buffer_state *YY_BUFFER_STATE;
 extern YY_BUFFER_STATE grammar__scan_string(const char *str, yyscan_t scanner);
 extern void grammar__delete_buffer(YY_BUFFER_STATE buf, yyscan_t scanner);
 
-extern void grammar_lex_destroy(yyscan_t scanner);
+extern int grammar_lex_destroy(yyscan_t scanner);
 extern char *grammar_get_text(yyscan_t scanner);
 
 extern yyscan_t grammar__initialize_lexer(void *inp);
@@ -183,6 +182,10 @@ typedef enum yysymbol_kind_t yysymbol_kind_t;
 /* Second part of user prologue.  */
 void yyerror(YYLTYPE *loc, yyscan_t scanner, YYSTYPE *result, const char *msg)
 {
+  (void)loc;
+  (void)scanner;
+  (void)result;
+  (void)msg;
 }
 
 int yyparse(yyscan_t scanner, YYSTYPE *result);
@@ -1226,208 +1229,162 @@ yyreduce:
   switch (yyn)
   {
   case 2: /* Graph: Graph1  */
-#line 124 "grammar.y"
   {
     (yyval.graph_) = (yyvsp[0].graph_);
     result->graph_ = (yyval.graph_);
   }
-#line 1308 "Parser.c"
   break;
 
   case 3: /* Graph: Graph _STAR Graph1  */
-#line 125 "grammar.y"
   {
     (yyval.graph_) = make_GTensor((yyvsp[-2].graph_), (yyvsp[0].graph_));
     result->graph_ = (yyval.graph_);
   }
-#line 1314 "Parser.c"
   break;
 
   case 4: /* Graph1: Graph2  */
-#line 127 "grammar.y"
   {
     (yyval.graph_) = (yyvsp[0].graph_);
     result->graph_ = (yyval.graph_);
   }
-#line 1320 "Parser.c"
   break;
 
   case 5: /* Graph1: Binding  */
-#line 128 "grammar.y"
   {
     (yyval.graph_) = make_GNominate((yyvsp[0].binding_));
     result->graph_ = (yyval.graph_);
   }
-#line 1326 "Parser.c"
   break;
 
   case 6: /* Graph1: _LPAREN Binding _COMMA Binding _RPAREN  */
-#line 129 "grammar.y"
   {
     (yyval.graph_) = make_GEdgeAnon((yyvsp[-3].binding_), (yyvsp[-1].binding_));
     result->graph_ = (yyval.graph_);
   }
-#line 1332 "Parser.c"
   break;
 
   case 7: /* Graph1: Name _LPAREN Binding _COMMA Binding _RPAREN  */
-#line 130 "grammar.y"
   {
     (yyval.graph_) = make_GEdgeNamed((yyvsp[-5].name_), (yyvsp[-3].binding_),
                                      (yyvsp[-1].binding_));
     result->graph_ = (yyval.graph_);
   }
-#line 1338 "Parser.c"
   break;
 
   case 8: /* Graph1: _LBRACK _EQ Graph Graph _RBRACK  */
-#line 131 "grammar.y"
   {
     (yyval.graph_) = make_GRuleAnon((yyvsp[-2].graph_), (yyvsp[-1].graph_));
     result->graph_ = (yyval.graph_);
   }
-#line 1344 "Parser.c"
   break;
 
   case 9: /* Graph1: Name _LBRACK _EQ Graph Graph _RBRACK  */
-#line 132 "grammar.y"
   {
     (yyval.graph_) = make_GRuleNamed((yyvsp[-5].name_), (yyvsp[-2].graph_),
                                      (yyvsp[-1].graph_));
     result->graph_ = (yyval.graph_);
   }
-#line 1350 "Parser.c"
   break;
 
   case 10: /* Graph1: GraphBinding  */
-#line 133 "grammar.y"
   {
     (yyval.graph_) = make_GSubgraph((yyvsp[0].graphbinding_));
     result->graph_ = (yyval.graph_);
   }
-#line 1356 "Parser.c"
   break;
 
   case 11: /* Graph2: Graph3  */
-#line 135 "grammar.y"
   {
     (yyval.graph_) = (yyvsp[0].graph_);
     result->graph_ = (yyval.graph_);
   }
-#line 1362 "Parser.c"
   break;
 
   case 12: /* Graph2: Vertex _BAR Graph1  */
-#line 136 "grammar.y"
   {
     (yyval.graph_) = make_GVertex((yyvsp[-2].vertex_), (yyvsp[0].graph_));
     result->graph_ = (yyval.graph_);
   }
-#line 1368 "Parser.c"
   break;
 
   case 13: /* Graph2: T_LVar _BAR Graph1  */
-#line 137 "grammar.y"
   {
     (yyval.graph_) = make_GVar((yyvsp[-2]._string), (yyvsp[0].graph_));
     result->graph_ = (yyval.graph_);
   }
-#line 1374 "Parser.c"
   break;
 
   case 14: /* Graph3: _LBRACE Graph _RBRACE  */
-#line 139 "grammar.y"
   {
     (yyval.graph_) = (yyvsp[-1].graph_);
     result->graph_ = (yyval.graph_);
   }
-#line 1380 "Parser.c"
   break;
 
   case 15: /* Graph3: _SYMB_2  */
-#line 140 "grammar.y"
   {
     (yyval.graph_) = make_GNil();
     result->graph_ = (yyval.graph_);
   }
-#line 1386 "Parser.c"
   break;
 
   case 16: /* Binding: _KW_let T_LVar _EQ Vertex _KW_in Graph2  */
-#line 142 "grammar.y"
   {
     (yyval.binding_) =
         make_VBind((yyvsp[-4]._string), (yyvsp[-2].vertex_), (yyvsp[0].graph_));
     result->binding_ = (yyval.binding_);
   }
-#line 1392 "Parser.c"
   break;
 
   case 17: /* GraphBinding: _KW_let T_UVar _EQ Graph _KW_in Graph2  */
-#line 144 "grammar.y"
   {
     (yyval.graphbinding_) =
         make_GBind((yyvsp[-4]._string), (yyvsp[-2].graph_), (yyvsp[0].graph_));
     result->graphbinding_ = (yyval.graphbinding_);
   }
-#line 1398 "Parser.c"
   break;
 
   case 18: /* Vertex: _LT Name _GT  */
-#line 146 "grammar.y"
   {
     (yyval.vertex_) = make_VName((yyvsp[-1].name_));
     result->vertex_ = (yyval.vertex_);
   }
-#line 1404 "Parser.c"
   break;
 
   case 19: /* Name: _UNDERSCORE  */
-#line 148 "grammar.y"
   {
     (yyval.name_) = make_NameWildcard();
     result->name_ = (yyval.name_);
   }
-#line 1410 "Parser.c"
   break;
 
   case 20: /* Name: T_LVar  */
-#line 149 "grammar.y"
   {
     (yyval.name_) = make_NameVVar((yyvsp[0]._string));
     result->name_ = (yyval.name_);
   }
-#line 1416 "Parser.c"
   break;
 
   case 21: /* Name: T_UVar  */
-#line 150 "grammar.y"
   {
     (yyval.name_) = make_NameGVar((yyvsp[0]._string));
     result->name_ = (yyval.name_);
   }
-#line 1422 "Parser.c"
   break;
 
   case 22: /* Name: _AT Graph  */
-#line 151 "grammar.y"
   {
     (yyval.name_) = make_NameQuoteGraph((yyvsp[0].graph_));
     result->name_ = (yyval.name_);
   }
-#line 1428 "Parser.c"
   break;
 
   case 23: /* Name: _AT Vertex  */
-#line 152 "grammar.y"
   {
     (yyval.name_) = make_NameQuoteVertex((yyvsp[0].vertex_));
     result->name_ = (yyval.name_);
   }
-#line 1434 "Parser.c"
   break;
-
-#line 1438 "Parser.c"
 
   default:
     break;
@@ -1620,8 +1577,6 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 159 "grammar.y"
-
 /* Entrypoint: parse Graph from string. */
 Graph psGraph(const char *str)
 {
@@ -1634,8 +1589,7 @@ Graph psGraph(const char *str)
   YY_BUFFER_STATE buf = grammar__scan_string(str, scanner);
   int error = yyparse(scanner, &result);
   grammar__delete_buffer(buf, scanner);
-  // TODO: this crashes for some reason
-  // grammar_lex_destroy(scanner);
+  grammar_lex_destroy(scanner);
   if (error)
   { /* Failure */
     return 0;

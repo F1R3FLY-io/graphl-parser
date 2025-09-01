@@ -1,12 +1,19 @@
 #![allow(dead_code, non_snake_case, unused_variables)]
 
-use std::{
-    ffi::{CString, c_void},
-    str::FromStr,
-};
+use std::ffi::{CString, c_void};
+use std::str::FromStr;
 
 use crate::bindings::{
-    Binding, Graph, GraphBinding, ListName, Name, Vertex, Visitor, free_Graph, psGraph, visitGraph,
+    Binding,
+    Graph,
+    GraphBinding,
+    ListName,
+    Name,
+    Vertex,
+    Visitor,
+    free_Graph,
+    psGraph,
+    visitGraph,
 };
 
 macro_rules! visitor_callback {
@@ -200,17 +207,11 @@ pub fn parse(document: String) -> Result<String, String> {
 
 #[cfg(test)]
 mod tests {
-    use std::{
-        ffi::{CString, c_void},
-        str::FromStr,
-    };
+    use std::ffi::{CString, c_void};
+    use std::str::FromStr;
 
-    use crate::{
-        bindings::{Graph, Visitor},
-        parse::parse,
-    };
-
-    use crate::parse::{get_context, save_context};
+    use crate::bindings::{Graph, Visitor};
+    use crate::parse::{get_context, parse, save_context};
 
     #[test]
     fn test_parse_empty_graph() {

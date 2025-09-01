@@ -13,3 +13,12 @@ updates:
       all:
         patterns:
           - "*"
+
+  - package-ecosystem: "npm"
+    directory: "/js-package"
+    schedule:
+      interval: "weekly"
+    groups:
+      all:
+        patterns:
+          - "*"

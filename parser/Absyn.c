@@ -5,8 +5,6 @@
 #ifdef __wasm__
 #include "wasm.h"
 #else
-#define _POSIX_C_SOURCE 200809L
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #endif
@@ -15,7 +13,7 @@
 
 /********************   GNil    ********************/
 
-Graph make_GNil()
+Graph make_GNil(void)
 {
   Graph tmp = (Graph)malloc(sizeof(*tmp));
   if (!tmp)
@@ -209,7 +207,7 @@ Vertex make_VName(Name p1)
 
 /********************   NameWildcard    ********************/
 
-Name make_NameWildcard()
+Name make_NameWildcard(void)
 {
   Name tmp = (Name)malloc(sizeof(*tmp));
   if (!tmp)

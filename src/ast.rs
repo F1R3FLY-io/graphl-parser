@@ -1,11 +1,13 @@
-use serde::{Deserialize, Serialize};
+#![allow(clippy::not_unsafe_ptr_arg_deref)]
 
+use serde::{Deserialize, Serialize};
 #[cfg(target_arch = "wasm32")]
 use tsify::Tsify;
 
 use crate::bindings;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(tag = "type")]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi, from_wasm_abi))]
 pub enum Error {
@@ -13,6 +15,7 @@ pub enum Error {
     InvalidUtf8String,
     NullPointer { context: String },
     InvalidVariant { context: String },
+    InvalidGraphL,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -122,12 +125,13 @@ impl TryFrom<bindings::Vertex> for Vertex {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(tag = "type")]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi, from_wasm_abi))]
 pub enum Name {
     Wildcard,
-    VVar(String),
-    GVar(String),
+    VVar { value: String },
+    GVar { value: String },
     QuoteGraph(Box<Graph>),
     QuoteVertex(Box<Vertex>),
 }
@@ -146,10 +150,10 @@ impl TryFrom<bindings::Name> for Name {
             match (*value).kind {
                 bindings::Name__is_NameWildcard => Ok(Self::Wildcard),
                 bindings::Name__is_NameVVar => {
-                    to_string((*value).u.nameVVar_.lvar_).map(Self::VVar)
+                    to_string((*value).u.nameVVar_.lvar_).map(|value| Self::VVar { value })
                 }
                 bindings::Name__is_NameGVar => {
-                    to_string((*value).u.nameGVar_.uvar_).map(Self::GVar)
+                    to_string((*value).u.nameGVar_.uvar_).map(|value| Self::GVar { value })
                 }
                 bindings::Name__is_NameQuoteGraph => (*value)
                     .u
@@ -230,6 +234,7 @@ pub struct GTensor {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(tag = "type")]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi, from_wasm_abi))]
 pub enum Graph {

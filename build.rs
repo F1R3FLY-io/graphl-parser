@@ -32,9 +32,19 @@ fn compile_in_parser(target: &str) {
     let mut cc = cc::Build::new();
 
     if target == "wasm32" {
-        cc.file("parser/wasm.c");
+        cc.file("parser/wasm.c")
+            .flag("-std=c17")
+            .flags(["-Xclang", "-target-feature", "-Xclang", "+simd128"])
+            .flags(["-Xclang", "-target-feature", "-Xclang", "+bulk-memory"])
+            .flags([
+                "-Xclang",
+                "-target-feature",
+                "-Xclang",
+                "+nontrapping-fptoint",
+            ])
+            .flags(["-Xclang", "-target-feature", "-Xclang", "+sign-ext"]);
     } else {
-        cc.flag("-std=gnu99");
+        cc.flag("-std=gnu17");
     }
 
     cc.files([
@@ -45,7 +55,13 @@ fn compile_in_parser(target: &str) {
         "parser/Printer.c",
         "parser/Skeleton.c",
     ])
-    .flag("-Werror=implicit-function-declaration")
+    .flags([
+        "-Wall",
+        "-Wextra",
+        "-Werror=implicit-function-declaration",
+        "-Wstrict-prototypes",
+        "-Wno-unused-but-set-variable",
+    ])
     .include(INCLUDE_DIR);
 
     cc.compile("parser")

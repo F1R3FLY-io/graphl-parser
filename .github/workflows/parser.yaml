@@ -20,12 +20,83 @@ jobs:
         id: setup-rust
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          toolchain: stable, nightly
+          toolchain: nightly, stable
+          components: rustfmt, clippy
+          cache: true
+
+      - name: Cache cargo tools
+        id: cache-cargo-tools
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/cargo-make
+            ~/.cargo/bin/cargo-audit
+            ~/.cargo/bin/wasm-bindgen
+          key: cargo-tools-${{ runner.os }}-${{ steps.setup-rust.outputs.cargo-version }}
+
+      - name: Install cargo tools
+        if: steps.cache-cargo-tools.outputs.cache-hit != 'true'
+        run: cargo install cargo-make
+        shell: bash
+
+      - name: Check formatting
+        run: cargo make format-check
+
+      - name: Run security audit
+        run: cargo make audit
+
+      - name: Run clippy
+        run: cargo make clippy
+
+      - name: Build
+        run: cargo make build
+
+  build-wasm:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        id: setup-rust
+        uses: actions-rust-lang/setup-rust-toolchain@v1
+        with:
+          toolchain: stable
           target: wasm32-unknown-unknown
           cache: true
 
-      - name: Build
-        run: cargo build
+      - name: Cache cargo tools
+        id: cache-cargo-tools
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/cargo-make
+            ~/.cargo/bin/cargo-audit
+            ~/.cargo/bin/wasm-bindgen
+          key: cargo-tools-${{ runner.os }}-${{ steps.setup-rust.outputs.cargo-version }}
+
+      - name: Install cargo tools
+        if: steps.cache-cargo-tools.outputs.cache-hit != 'true'
+        run: |
+          cargo install cargo-make
+          cargo install wasm-tools
+        shell: bash
 
       - name: Build wasm
-        run: cargo build --target=wasm32-unknown-unknown
+        run: cargo make build-wasm
+
+      - name: Pack wasm
+        run: cargo make pack-wasm
+
+      - name: Validate wasm
+        run: |
+          if wasm-tools print js-package/src/graph_to_rholang_parser_bg.wasm | grep -q "signature_mismatch"; then
+            echo "Error: signature_mismatch detected in wasm module!"
+            wasm-tools print js-package/src/graph_to_rholang_parser_bg.wasm | grep "signature_mismatch"
+            exit 1
+          fi
+          if wasm-tools print js-package/src/graph_to_rholang_parser_bg.wasm | grep -q "import \"env\""; then
+            echo "Error: unresolved symbols detected in wasm module!"
+            wasm-tools print js-package/src/graph_to_rholang_parser_bg.wasm | grep "import \"env\""
+            exit 1
+          fi

@@ -7,7 +7,6 @@
 #else
 #include <ctype.h>  /* isspace */
 #include <stddef.h> /* size_t */
-#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #endif
@@ -113,21 +112,21 @@ void backup(void)
     buf_[--cur_] = 0;
 }
 
-void removeTrailingSpaces()
+void removeTrailingSpaces(void)
 {
   while (cur_ && buf_[cur_ - 1] == ' ')
     --cur_;
   buf_[cur_] = 0;
 }
 
-void removeTrailingWhitespace()
+void removeTrailingWhitespace(void)
 {
   while (cur_ && (buf_[cur_ - 1] == ' ' || buf_[cur_ - 1] == '\n'))
     --cur_;
   buf_[cur_] = 0;
 }
 
-void onEmptyLine()
+void onEmptyLine(void)
 {
   removeTrailingSpaces();
   if (cur_ && buf_[cur_ - 1] != '\n')
@@ -173,7 +172,7 @@ char *printListName(ListName p)
 {
   _n_ = 0;
   bufReset();
-  ppListName(p, 0);
+  ppListName(p);
   return buf_;
 }
 char *showGraph(Graph p)
@@ -311,7 +310,7 @@ void ppGraph(Graph p, int _i_)
   case is_GVar:
     if (_i_ > 2)
       renderC(_L_PAREN);
-    ppIdent(p->u.gVar_.lvar_, 0);
+    ppIdent(p->u.gVar_.lvar_);
     renderC('|');
     ppGraph(p->u.gVar_.graph_, 1);
     if (_i_ > 2)
@@ -336,7 +335,7 @@ void ppBinding(Binding p, int _i_)
     if (_i_ > 0)
       renderC(_L_PAREN);
     renderS("let");
-    ppIdent(p->u.vBind_.lvar_, 0);
+    ppIdent(p->u.vBind_.lvar_);
     renderC('=');
     ppVertex(p->u.vBind_.vertex_, 0);
     renderS("in");
@@ -355,7 +354,7 @@ void ppGraphBinding(GraphBinding p, int _i_)
     if (_i_ > 0)
       renderC(_L_PAREN);
     renderS("let");
-    ppIdent(p->u.gBind_.uvar_, 0);
+    ppIdent(p->u.gBind_.uvar_);
     renderC('=');
     ppGraph(p->u.gBind_.graph_1, 0);
     renderS("in");
@@ -397,7 +396,7 @@ void ppName(Name p, int _i_)
   case is_NameVVar:
     if (_i_ > 0)
       renderC(_L_PAREN);
-    ppIdent(p->u.nameVVar_.lvar_, 0);
+    ppIdent(p->u.nameVVar_.lvar_);
     if (_i_ > 0)
       renderC(_R_PAREN);
     break;
@@ -405,7 +404,7 @@ void ppName(Name p, int _i_)
   case is_NameGVar:
     if (_i_ > 0)
       renderC(_L_PAREN);
-    ppIdent(p->u.nameGVar_.uvar_, 0);
+    ppIdent(p->u.nameGVar_.uvar_);
     if (_i_ > 0)
       renderC(_R_PAREN);
     break;
@@ -430,7 +429,7 @@ void ppName(Name p, int _i_)
   }
 }
 
-void ppListName(ListName listname, int i)
+void ppListName(ListName listname)
 {
   if (listname == 0)
   { /* nil */
@@ -443,41 +442,41 @@ void ppListName(ListName listname, int i)
   { /* cons */
     ppName(listname->name_, 0);
     renderC(',');
-    ppListName(listname->listname_, 0);
+    ppListName(listname->listname_);
   }
 }
 
-void ppInteger(Integer n, int i)
+void ppInteger(Integer n)
 {
   char tmp[20];
   snprintf(tmp, 20, "%d", n);
   renderS(tmp);
 }
-void ppDouble(Double d, int i)
+void ppDouble(Double d)
 {
   char tmp[24];
   snprintf(tmp, 24, "%.15g", d);
   renderS(tmp);
 }
-void ppChar(Char c, int i)
+void ppChar(Char c)
 {
   bufAppendC('\'');
   bufEscapeC(c);
   bufAppendC('\'');
   bufAppendC(' ');
 }
-void ppString(String s, int i)
+void ppString(String s)
 {
   bufAppendC('\"');
   bufEscapeS(s);
   bufAppendC('\"');
   bufAppendC(' ');
 }
-void ppIdent(String s, int i) { renderS(s); }
+void ppIdent(String s) { renderS(s); }
 
-void ppUVar(String s, int i) { renderS(s); }
+void ppUVar(String s) { renderS(s); }
 
-void ppLVar(String s, int i) { renderS(s); }
+void ppLVar(String s) { renderS(s); }
 
 void shGraph(Graph p)
 {

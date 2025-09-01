@@ -2,8 +2,7 @@
 
 /* A dynamically allocated character buffer that grows as it is appended. */
 
-#ifndef BUFFER_HEADER
-#define BUFFER_HEADER
+#pragma once
 
 typedef struct buffer
 {
@@ -35,5 +34,3 @@ void bufferAppendChar(Buffer buffer, const char c);
 
 /* Give read-only access to the buffer content. */
 const char *bufferContent(Buffer buffer);
-
-#endif
