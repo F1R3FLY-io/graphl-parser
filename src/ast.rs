@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
 use crate::bindings;
+use crate::guard::{Guard, Guarded};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type")]
@@ -54,6 +55,20 @@ impl TryFrom<bindings::Binding> for Binding {
     }
 }
 
+impl TryFrom<Binding> for Guard<bindings::Binding> {
+    type Error = Error;
+
+    fn try_from(value: Binding) -> Result<Self, Self::Error> {
+        let graph: Guard<_> = (*value.graph).try_into()?;
+        let var = to_c_string(value.var)?;
+        let vertex: Guard<_> = value.vertex.try_into()?;
+        Ok(unsafe {
+            bindings::make_VBind(var.into_inner(), vertex.into_inner(), graph.into_inner())
+        }
+        .guarded())
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi, from_wasm_abi))]
@@ -94,6 +109,20 @@ impl TryFrom<bindings::GraphBinding> for GraphBinding {
     }
 }
 
+impl TryFrom<GraphBinding> for Guard<bindings::GraphBinding> {
+    type Error = Error;
+
+    fn try_from(value: GraphBinding) -> Result<Self, Self::Error> {
+        let graph_1: Guard<_> = (*value.graph_1).try_into()?;
+        let graph_2: Guard<_> = (*value.graph_2).try_into()?;
+        let var = to_c_string(value.var)?;
+        Ok(unsafe {
+            bindings::make_GBind(var.into_inner(), graph_1.into_inner(), graph_2.into_inner())
+        }
+        .guarded())
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi, from_wasm_abi))]
@@ -121,6 +150,15 @@ impl TryFrom<bindings::Vertex> for Vertex {
                 }),
             }
         }
+    }
+}
+
+impl TryFrom<Vertex> for Guard<bindings::Vertex> {
+    type Error = Error;
+
+    fn try_from(value: Vertex) -> Result<Self, Self::Error> {
+        let name: Guard<_> = value.name.try_into()?;
+        Ok(unsafe { bindings::make_VName(name.into_inner()) }.guarded())
     }
 }
 
@@ -170,6 +208,32 @@ impl TryFrom<bindings::Name> for Name {
                 _ => Err(Self::Error::InvalidVariant {
                     context: "Name".into(),
                 }),
+            }
+        }
+    }
+}
+
+impl TryFrom<Name> for Guard<bindings::Name> {
+    type Error = Error;
+
+    fn try_from(value: Name) -> Result<Self, Self::Error> {
+        match value {
+            Name::Wildcard => Ok(unsafe { bindings::make_NameWildcard() }.guarded()),
+            Name::VVar { value } => {
+                let value = to_c_string(value)?;
+                Ok(unsafe { bindings::make_NameVVar(value.into_inner()) }.guarded())
+            }
+            Name::GVar { value } => {
+                let value = to_c_string(value)?;
+                Ok(unsafe { bindings::make_NameGVar(value.into_inner()) }.guarded())
+            }
+            Name::QuoteGraph(graph) => {
+                let graph: Guard<_> = (*graph).try_into()?;
+                Ok(unsafe { bindings::make_NameQuoteGraph(graph.into_inner()) }.guarded())
+            }
+            Name::QuoteVertex(vertex) => {
+                let vertex: Guard<_> = (*vertex).try_into()?;
+                Ok(unsafe { bindings::make_NameQuoteVertex(vertex.into_inner()) }.guarded())
             }
         }
     }
@@ -336,9 +400,99 @@ impl TryFrom<bindings::Graph> for Graph {
     }
 }
 
-fn to_string(chars: *mut ::std::os::raw::c_char) -> Result<String, Error> {
+impl TryFrom<Graph> for Guard<bindings::Graph> {
+    type Error = Error;
+
+    fn try_from(value: Graph) -> Result<Self, Self::Error> {
+        match value {
+            Graph::Nil => Ok(unsafe { bindings::make_GNil() }.guarded()),
+            Graph::Vertex(gvertex) => {
+                let graph: Guard<_> = (*gvertex.graph).try_into()?;
+                let vertex: Guard<_> = gvertex.vertex.try_into()?;
+                Ok(
+                    unsafe { bindings::make_GVertex(vertex.into_inner(), graph.into_inner()) }
+                        .guarded(),
+                )
+            }
+            Graph::Var(gvar) => {
+                let graph: Guard<_> = (*gvar.graph).try_into()?;
+                let var = to_c_string(gvar.var)?;
+                Ok(unsafe { bindings::make_GVar(var.into_inner(), graph.into_inner()) }.guarded())
+            }
+            Graph::Nominate(binding) => {
+                let binding: Guard<_> = binding.try_into()?;
+                Ok(unsafe { bindings::make_GNominate(binding.into_inner()) }.guarded())
+            }
+            Graph::EdgeAnon(gedge_anon) => {
+                let binding_1: Guard<_> = gedge_anon.binding_1.try_into()?;
+                let binding_2: Guard<_> = gedge_anon.binding_2.try_into()?;
+                Ok(unsafe {
+                    bindings::make_GEdgeAnon(binding_1.into_inner(), binding_2.into_inner())
+                }
+                .guarded())
+            }
+            Graph::EdgeNamed(gedge_named) => {
+                let binding_1: Guard<_> = gedge_named.binding_1.try_into()?;
+                let binding_2: Guard<_> = gedge_named.binding_2.try_into()?;
+                let name: Guard<_> = gedge_named.name.try_into()?;
+                Ok(unsafe {
+                    bindings::make_GEdgeNamed(
+                        name.into_inner(),
+                        binding_1.into_inner(),
+                        binding_2.into_inner(),
+                    )
+                }
+                .guarded())
+            }
+            Graph::RuleAnon(grule_anon) => {
+                let graph_1: Guard<_> = (*grule_anon.graph_1).try_into()?;
+                let graph_2: Guard<_> = (*grule_anon.graph_2).try_into()?;
+                Ok(
+                    unsafe { bindings::make_GRuleAnon(graph_1.into_inner(), graph_2.into_inner()) }
+                        .guarded(),
+                )
+            }
+            Graph::RuleNamed(grule_named) => {
+                let graph_1: Guard<_> = (*grule_named.graph_1).try_into()?;
+                let graph_2: Guard<_> = (*grule_named.graph_2).try_into()?;
+                let name: Guard<_> = grule_named.name.try_into()?;
+                Ok(unsafe {
+                    bindings::make_GRuleNamed(
+                        name.into_inner(),
+                        graph_1.into_inner(),
+                        graph_2.into_inner(),
+                    )
+                }
+                .guarded())
+            }
+            Graph::Subgraph(graph_binding) => {
+                let graph_binding: Guard<_> = graph_binding.try_into()?;
+                Ok(unsafe { bindings::make_GSubgraph(graph_binding.into_inner()) }.guarded())
+            }
+            Graph::Tensor(gtensor) => {
+                let graph_1: Guard<_> = (*gtensor.graph_1).try_into()?;
+                let graph_2: Guard<_> = (*gtensor.graph_2).try_into()?;
+                Ok(
+                    unsafe { bindings::make_GTensor(graph_1.into_inner(), graph_2.into_inner()) }
+                        .guarded(),
+                )
+            }
+        }
+    }
+}
+
+fn to_string(chars: *mut std::os::raw::c_char) -> Result<String, Error> {
     unsafe { std::ffi::CStr::from_ptr(chars) }
         .to_str()
         .map_err(|_| Error::InvalidUtf8String)
         .map(ToOwned::to_owned)
+}
+
+fn to_c_string(str: String) -> Result<Guard<*mut std::os::raw::c_char>, Error> {
+    let c_str = std::ffi::CString::new(str).map_err(|err| Error::InvalidCString {
+        position: err.nul_position(),
+    })?;
+
+    // we need to reallocate with malloc
+    Ok(unsafe { bindings::make_LVar(c_str.as_ptr()) }.guarded())
 }

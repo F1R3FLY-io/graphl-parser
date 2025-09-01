@@ -274,6 +274,16 @@ Name make_NameQuoteVertex(Vertex p1)
   return tmp;
 }
 
+LVar make_LVar(const char *p0)
+{
+  return strdup(p0);
+}
+
+UVar make_UVar(const char *p0)
+{
+  return strdup(p0);
+}
+
 /********************   ListName    ********************/
 
 ListName make_ListName(Name p1, ListName p2)
@@ -399,6 +409,16 @@ Name clone_Name(Name p)
   default:
     return NULL;
   }
+}
+
+LVar clone_LVar(LVar p0)
+{
+  return strdup(p0);
+}
+
+UVar clone_UVar(UVar p0)
+{
+  return strdup(p0);
 }
 
 ListName clone_ListName(ListName listname)
@@ -539,6 +559,16 @@ void free_Name(Name p)
     break;
   }
   free(p);
+}
+
+void free_LVar(LVar p0)
+{
+  return free(p0);
+}
+
+void free_UVar(UVar p0)
+{
+  return free(p0);
 }
 
 void free_ListName(ListName listname)
