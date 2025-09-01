@@ -14,10 +14,12 @@
 
 #include "Skeleton.h"
 
-void visitGraph(Graph p, Visitor *visitor, void *context) {
+void visitGraph(Graph p, Visitor *visitor, void *context)
+{
   visitor->visitGraphCallback(p, context);
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_GTensor:
     visitor->visitIsGTensorCallback(p, context);
     visitGraph(p->u.gTensor_.graph_1, visitor, context);
@@ -69,8 +71,10 @@ void visitGraph(Graph p, Visitor *visitor, void *context) {
   }
 }
 
-void visitBinding(Binding p, Visitor *visitor, void *context) {
-  switch (p->kind) {
+void visitBinding(Binding p, Visitor *visitor, void *context)
+{
+  switch (p->kind)
+  {
   case is_VBind:
     visitor->visitIsVBindCallback(p, context);
     visitLVar(p->u.vBind_.lvar_, visitor, context);
@@ -80,8 +84,10 @@ void visitBinding(Binding p, Visitor *visitor, void *context) {
   }
 }
 
-void visitGraphBinding(GraphBinding p, Visitor *visitor, void *context) {
-  switch (p->kind) {
+void visitGraphBinding(GraphBinding p, Visitor *visitor, void *context)
+{
+  switch (p->kind)
+  {
   case is_GBind:
     visitor->visitIsGBindCallback(p, context);
     visitUVar(p->u.gBind_.uvar_, visitor, context);
@@ -91,8 +97,10 @@ void visitGraphBinding(GraphBinding p, Visitor *visitor, void *context) {
   }
 }
 
-void visitVertex(Vertex p, Visitor *visitor, void *context) {
-  switch (p->kind) {
+void visitVertex(Vertex p, Visitor *visitor, void *context)
+{
+  switch (p->kind)
+  {
   case is_VName:
     visitor->visitIsVNameCallback(p, context);
     visitName(p->u.vName_.name_, visitor, context);
@@ -100,8 +108,10 @@ void visitVertex(Vertex p, Visitor *visitor, void *context) {
   }
 }
 
-void visitName(Name p, Visitor *visitor, void *context) {
-  switch (p->kind) {
+void visitName(Name p, Visitor *visitor, void *context)
+{
+  switch (p->kind)
+  {
   case is_NameWildcard:
     visitor->visitNameWildcardCallback(p, context);
     break;
@@ -124,32 +134,41 @@ void visitName(Name p, Visitor *visitor, void *context) {
   }
 }
 
-void visitListName(ListName listname, Visitor *visitor, void *context) {
-  while (listname != 0) {
+void visitListName(ListName listname, Visitor *visitor, void *context)
+{
+  while (listname != 0)
+  {
     visitor->visitListName(listname, context);
     visitName(listname->name_, visitor, context);
     listname = listname->listname_;
   }
 }
 
-void visitUVar(UVar p, Visitor *visitor, void *context) {
+void visitUVar(UVar p, Visitor *visitor, void *context)
+{
   visitor->visitUVar(p, context);
 }
-void visitLVar(LVar p, Visitor *visitor, void *context) {
+void visitLVar(LVar p, Visitor *visitor, void *context)
+{
   visitor->visitLVar(p, context);
 }
-void visitIdent(Ident i, Visitor *visitor, void *context) {
+void visitIdent(Ident i, Visitor *visitor, void *context)
+{
   visitor->visitIdent(i, context);
 }
-void visitInteger(Integer i, Visitor *visitor, void *context) {
+void visitInteger(Integer i, Visitor *visitor, void *context)
+{
   visitor->visitIntegerCallback(i, context);
 }
-void visitDouble(Double d, Visitor *visitor, void *context) {
+void visitDouble(Double d, Visitor *visitor, void *context)
+{
   visitor->visitDoubleCallback(d, context);
 }
-void visitChar(Char c, Visitor *visitor, void *context) {
+void visitChar(Char c, Visitor *visitor, void *context)
+{
   visitor->visitCharCallback(c, context);
 }
-void visitString(String s, Visitor *visitor, void *context) {
+void visitString(String s, Visitor *visitor, void *context)
+{
   visitor->visitStringCallback(s, context);
 }

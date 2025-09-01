@@ -17,337 +17,322 @@
 
 Graph make_GNil()
 {
-    Graph tmp = (Graph) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_GNil;
-    return tmp;
+  Graph tmp = (Graph)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GNil;
+  return tmp;
 }
 
 /********************   GVertex    ********************/
 
 Graph make_GVertex(Vertex p1, Graph p2)
 {
-    Graph tmp = (Graph) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_GVertex;
-    tmp->u.gVertex_.vertex_ = p1;
-    tmp->u.gVertex_.graph_ = p2;
-    return tmp;
+  Graph tmp = (Graph)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GVertex;
+  tmp->u.gVertex_.vertex_ = p1;
+  tmp->u.gVertex_.graph_ = p2;
+  return tmp;
 }
 
 /********************   GVar    ********************/
 
 Graph make_GVar(LVar p1, Graph p2)
 {
-    Graph tmp = (Graph) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_GVar;
-    tmp->u.gVar_.lvar_ = p1;
-    tmp->u.gVar_.graph_ = p2;
-    return tmp;
+  Graph tmp = (Graph)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GVar;
+  tmp->u.gVar_.lvar_ = p1;
+  tmp->u.gVar_.graph_ = p2;
+  return tmp;
 }
 
 /********************   GNominate    ********************/
 
 Graph make_GNominate(Binding p1)
 {
-    Graph tmp = (Graph) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_GNominate;
-    tmp->u.gNominate_.binding_ = p1;
-    return tmp;
+  Graph tmp = (Graph)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GNominate;
+  tmp->u.gNominate_.binding_ = p1;
+  return tmp;
 }
 
 /********************   GEdgeAnon    ********************/
 
 Graph make_GEdgeAnon(Binding p1, Binding p2)
 {
-    Graph tmp = (Graph) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_GEdgeAnon;
-    tmp->u.gEdgeAnon_.binding_1 = p1;
-    tmp->u.gEdgeAnon_.binding_2 = p2;
-    return tmp;
+  Graph tmp = (Graph)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GEdgeAnon;
+  tmp->u.gEdgeAnon_.binding_1 = p1;
+  tmp->u.gEdgeAnon_.binding_2 = p2;
+  return tmp;
 }
 
 /********************   GEdgeNamed    ********************/
 
 Graph make_GEdgeNamed(Name p1, Binding p2, Binding p3)
 {
-    Graph tmp = (Graph) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_GEdgeNamed;
-    tmp->u.gEdgeNamed_.name_ = p1;
-    tmp->u.gEdgeNamed_.binding_1 = p2;
-    tmp->u.gEdgeNamed_.binding_2 = p3;
-    return tmp;
+  Graph tmp = (Graph)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GEdgeNamed;
+  tmp->u.gEdgeNamed_.name_ = p1;
+  tmp->u.gEdgeNamed_.binding_1 = p2;
+  tmp->u.gEdgeNamed_.binding_2 = p3;
+  return tmp;
 }
 
 /********************   GRuleAnon    ********************/
 
 Graph make_GRuleAnon(Graph p1, Graph p2)
 {
-    Graph tmp = (Graph) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_GRuleAnon;
-    tmp->u.gRuleAnon_.graph_1 = p1;
-    tmp->u.gRuleAnon_.graph_2 = p2;
-    return tmp;
+  Graph tmp = (Graph)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GRuleAnon;
+  tmp->u.gRuleAnon_.graph_1 = p1;
+  tmp->u.gRuleAnon_.graph_2 = p2;
+  return tmp;
 }
 
 /********************   GRuleNamed    ********************/
 
 Graph make_GRuleNamed(Name p1, Graph p2, Graph p3)
 {
-    Graph tmp = (Graph) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_GRuleNamed;
-    tmp->u.gRuleNamed_.name_ = p1;
-    tmp->u.gRuleNamed_.graph_1 = p2;
-    tmp->u.gRuleNamed_.graph_2 = p3;
-    return tmp;
+  Graph tmp = (Graph)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GRuleNamed;
+  tmp->u.gRuleNamed_.name_ = p1;
+  tmp->u.gRuleNamed_.graph_1 = p2;
+  tmp->u.gRuleNamed_.graph_2 = p3;
+  return tmp;
 }
 
 /********************   GSubgraph    ********************/
 
 Graph make_GSubgraph(GraphBinding p1)
 {
-    Graph tmp = (Graph) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_GSubgraph;
-    tmp->u.gSubgraph_.graphbinding_ = p1;
-    return tmp;
+  Graph tmp = (Graph)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GSubgraph;
+  tmp->u.gSubgraph_.graphbinding_ = p1;
+  return tmp;
 }
 
 /********************   GTensor    ********************/
 
 Graph make_GTensor(Graph p1, Graph p2)
 {
-    Graph tmp = (Graph) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_GTensor;
-    tmp->u.gTensor_.graph_1 = p1;
-    tmp->u.gTensor_.graph_2 = p2;
-    return tmp;
+  Graph tmp = (Graph)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GTensor;
+  tmp->u.gTensor_.graph_1 = p1;
+  tmp->u.gTensor_.graph_2 = p2;
+  return tmp;
 }
 
 /********************   VBind    ********************/
 
 Binding make_VBind(LVar p1, Vertex p2, Graph p3)
 {
-    Binding tmp = (Binding) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_VBind;
-    tmp->u.vBind_.lvar_ = p1;
-    tmp->u.vBind_.vertex_ = p2;
-    tmp->u.vBind_.graph_ = p3;
-    return tmp;
+  Binding tmp = (Binding)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_VBind;
+  tmp->u.vBind_.lvar_ = p1;
+  tmp->u.vBind_.vertex_ = p2;
+  tmp->u.vBind_.graph_ = p3;
+  return tmp;
 }
 
 /********************   GBind    ********************/
 
 GraphBinding make_GBind(UVar p1, Graph p2, Graph p3)
 {
-    GraphBinding tmp = (GraphBinding) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_GBind;
-    tmp->u.gBind_.uvar_ = p1;
-    tmp->u.gBind_.graph_1 = p2;
-    tmp->u.gBind_.graph_2 = p3;
-    return tmp;
+  GraphBinding tmp = (GraphBinding)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GBind;
+  tmp->u.gBind_.uvar_ = p1;
+  tmp->u.gBind_.graph_1 = p2;
+  tmp->u.gBind_.graph_2 = p3;
+  return tmp;
 }
 
 /********************   VName    ********************/
 
 Vertex make_VName(Name p1)
 {
-    Vertex tmp = (Vertex) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_VName;
-    tmp->u.vName_.name_ = p1;
-    return tmp;
+  Vertex tmp = (Vertex)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_VName;
+  tmp->u.vName_.name_ = p1;
+  return tmp;
 }
 
 /********************   NameWildcard    ********************/
 
 Name make_NameWildcard()
 {
-    Name tmp = (Name) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_NameWildcard;
-    return tmp;
+  Name tmp = (Name)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_NameWildcard;
+  return tmp;
 }
 
 /********************   NameVVar    ********************/
 
 Name make_NameVVar(LVar p1)
 {
-    Name tmp = (Name) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_NameVVar;
-    tmp->u.nameVVar_.lvar_ = p1;
-    return tmp;
+  Name tmp = (Name)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_NameVVar;
+  tmp->u.nameVVar_.lvar_ = p1;
+  return tmp;
 }
 
 /********************   NameGVar    ********************/
 
 Name make_NameGVar(UVar p1)
 {
-    Name tmp = (Name) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_NameGVar;
-    tmp->u.nameGVar_.uvar_ = p1;
-    return tmp;
+  Name tmp = (Name)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_NameGVar;
+  tmp->u.nameGVar_.uvar_ = p1;
+  return tmp;
 }
 
 /********************   NameQuoteGraph    ********************/
 
 Name make_NameQuoteGraph(Graph p1)
 {
-    Name tmp = (Name) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_NameQuoteGraph;
-    tmp->u.nameQuoteGraph_.graph_ = p1;
-    return tmp;
+  Name tmp = (Name)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_NameQuoteGraph;
+  tmp->u.nameQuoteGraph_.graph_ = p1;
+  return tmp;
 }
 
 /********************   NameQuoteVertex    ********************/
 
 Name make_NameQuoteVertex(Vertex p1)
 {
-    Name tmp = (Name) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->kind = is_NameQuoteVertex;
-    tmp->u.nameQuoteVertex_.vertex_ = p1;
-    return tmp;
+  Name tmp = (Name)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_NameQuoteVertex;
+  tmp->u.nameQuoteVertex_.vertex_ = p1;
+  return tmp;
 }
 
 /********************   ListName    ********************/
 
 ListName make_ListName(Name p1, ListName p2)
 {
-    ListName tmp = (ListName) malloc(sizeof(*tmp));
-    if (!tmp)
-    {
-        return NULL;
-    }
-    tmp->name_ = p1;
-    tmp->listname_ = p2;
-    return tmp;
+  ListName tmp = (ListName)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->name_ = p1;
+  tmp->listname_ = p2;
+  return tmp;
 }
 
 /***************************   Cloning   ******************************/
 
 Graph clone_Graph(Graph p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_GNil:
-    return make_GNil ();
+    return make_GNil();
 
   case is_GVertex:
-    return make_GVertex
-      ( clone_Vertex(p->u.gVertex_.vertex_)
-      , clone_Graph(p->u.gVertex_.graph_)
-      );
+    return make_GVertex(clone_Vertex(p->u.gVertex_.vertex_),
+                        clone_Graph(p->u.gVertex_.graph_));
 
   case is_GVar:
-    return make_GVar
-      ( strdup(p->u.gVar_.lvar_)
-      , clone_Graph(p->u.gVar_.graph_)
-      );
+    return make_GVar(strdup(p->u.gVar_.lvar_), clone_Graph(p->u.gVar_.graph_));
 
   case is_GNominate:
-    return make_GNominate (clone_Binding(p->u.gNominate_.binding_));
+    return make_GNominate(clone_Binding(p->u.gNominate_.binding_));
 
   case is_GEdgeAnon:
-    return make_GEdgeAnon
-      ( clone_Binding(p->u.gEdgeAnon_.binding_1)
-      , clone_Binding(p->u.gEdgeAnon_.binding_2)
-      );
+    return make_GEdgeAnon(clone_Binding(p->u.gEdgeAnon_.binding_1),
+                          clone_Binding(p->u.gEdgeAnon_.binding_2));
 
   case is_GEdgeNamed:
-    return make_GEdgeNamed
-      ( clone_Name(p->u.gEdgeNamed_.name_)
-      , clone_Binding(p->u.gEdgeNamed_.binding_1)
-      , clone_Binding(p->u.gEdgeNamed_.binding_2)
-      );
+    return make_GEdgeNamed(clone_Name(p->u.gEdgeNamed_.name_),
+                           clone_Binding(p->u.gEdgeNamed_.binding_1),
+                           clone_Binding(p->u.gEdgeNamed_.binding_2));
 
   case is_GRuleAnon:
-    return make_GRuleAnon
-      ( clone_Graph(p->u.gRuleAnon_.graph_1)
-      , clone_Graph(p->u.gRuleAnon_.graph_2)
-      );
+    return make_GRuleAnon(clone_Graph(p->u.gRuleAnon_.graph_1),
+                          clone_Graph(p->u.gRuleAnon_.graph_2));
 
   case is_GRuleNamed:
-    return make_GRuleNamed
-      ( clone_Name(p->u.gRuleNamed_.name_)
-      , clone_Graph(p->u.gRuleNamed_.graph_1)
-      , clone_Graph(p->u.gRuleNamed_.graph_2)
-      );
+    return make_GRuleNamed(clone_Name(p->u.gRuleNamed_.name_),
+                           clone_Graph(p->u.gRuleNamed_.graph_1),
+                           clone_Graph(p->u.gRuleNamed_.graph_2));
 
   case is_GSubgraph:
-    return make_GSubgraph (clone_GraphBinding(p->u.gSubgraph_.graphbinding_));
+    return make_GSubgraph(clone_GraphBinding(p->u.gSubgraph_.graphbinding_));
 
   case is_GTensor:
-    return make_GTensor
-      ( clone_Graph(p->u.gTensor_.graph_1)
-      , clone_Graph(p->u.gTensor_.graph_2)
-      );
+    return make_GTensor(clone_Graph(p->u.gTensor_.graph_1),
+                        clone_Graph(p->u.gTensor_.graph_2));
 
   default:
     return NULL;
@@ -356,14 +341,12 @@ Graph clone_Graph(Graph p)
 
 Binding clone_Binding(Binding p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_VBind:
-    return make_VBind
-      ( strdup(p->u.vBind_.lvar_)
-      , clone_Vertex(p->u.vBind_.vertex_)
-      , clone_Graph(p->u.vBind_.graph_)
-      );
+    return make_VBind(strdup(p->u.vBind_.lvar_),
+                      clone_Vertex(p->u.vBind_.vertex_),
+                      clone_Graph(p->u.vBind_.graph_));
 
   default:
     return NULL;
@@ -372,14 +355,12 @@ Binding clone_Binding(Binding p)
 
 GraphBinding clone_GraphBinding(GraphBinding p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_GBind:
-    return make_GBind
-      ( strdup(p->u.gBind_.uvar_)
-      , clone_Graph(p->u.gBind_.graph_1)
-      , clone_Graph(p->u.gBind_.graph_2)
-      );
+    return make_GBind(strdup(p->u.gBind_.uvar_),
+                      clone_Graph(p->u.gBind_.graph_1),
+                      clone_Graph(p->u.gBind_.graph_2));
 
   default:
     return NULL;
@@ -388,10 +369,10 @@ GraphBinding clone_GraphBinding(GraphBinding p)
 
 Vertex clone_Vertex(Vertex p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_VName:
-    return make_VName (clone_Name(p->u.vName_.name_));
+    return make_VName(clone_Name(p->u.vName_.name_));
 
   default:
     return NULL;
@@ -400,22 +381,22 @@ Vertex clone_Vertex(Vertex p)
 
 Name clone_Name(Name p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_NameWildcard:
-    return make_NameWildcard ();
+    return make_NameWildcard();
 
   case is_NameVVar:
-    return make_NameVVar (strdup(p->u.nameVVar_.lvar_));
+    return make_NameVVar(strdup(p->u.nameVVar_.lvar_));
 
   case is_NameGVar:
-    return make_NameGVar (strdup(p->u.nameGVar_.uvar_));
+    return make_NameGVar(strdup(p->u.nameGVar_.uvar_));
 
   case is_NameQuoteGraph:
-    return make_NameQuoteGraph (clone_Graph(p->u.nameQuoteGraph_.graph_));
+    return make_NameQuoteGraph(clone_Graph(p->u.nameQuoteGraph_.graph_));
 
   case is_NameQuoteVertex:
-    return make_NameQuoteVertex (clone_Vertex(p->u.nameQuoteVertex_.vertex_));
+    return make_NameQuoteVertex(clone_Vertex(p->u.nameQuoteVertex_.vertex_));
 
   default:
     return NULL;
@@ -427,12 +408,11 @@ ListName clone_ListName(ListName listname)
   if (listname)
   {
     /* clone of non-empty list */
-    return make_ListName
-      ( clone_Name(listname->name_)
-      , clone_ListName(listname->listname_)
-      );
+    return make_ListName(clone_Name(listname->name_),
+                         clone_ListName(listname->listname_));
   }
-  else return NULL; /* clone of empty list */
+  else
+    return NULL; /* clone of empty list */
 }
 
 /********************   Recursive Destructors    **********************/
@@ -447,7 +427,7 @@ ListName clone_ListName(ListName listname)
 
 void free_Graph(Graph p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_GNil:
     break;
@@ -502,7 +482,7 @@ void free_Graph(Graph p)
 
 void free_Binding(Binding p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_VBind:
     free(p->u.vBind_.lvar_);
@@ -515,7 +495,7 @@ void free_Binding(Binding p)
 
 void free_GraphBinding(GraphBinding p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_GBind:
     free(p->u.gBind_.uvar_);
@@ -528,7 +508,7 @@ void free_GraphBinding(GraphBinding p)
 
 void free_Vertex(Vertex p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_VName:
     free_Name(p->u.vName_.name_);
@@ -539,7 +519,7 @@ void free_Vertex(Vertex p)
 
 void free_Name(Name p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_NameWildcard:
     break;

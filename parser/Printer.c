@@ -5,11 +5,11 @@
 #ifdef __wasm__
 #include "wasm.h"
 #else
-#include <ctype.h>   /* isspace */
-#include <stddef.h>  /* size_t */
+#include <ctype.h>  /* isspace */
+#include <stddef.h> /* size_t */
 #include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
+#include <string.h>
 #endif
 
 #include "panic.h"
@@ -28,47 +28,49 @@ void renderC(Char c)
 {
   if (c == '{')
   {
-     onEmptyLine();
-     bufAppendC(c);
-     _n_ = _n_ + INDENT_WIDTH;
-     bufAppendC('\n');
-     indent();
+    onEmptyLine();
+    bufAppendC(c);
+    _n_ = _n_ + INDENT_WIDTH;
+    bufAppendC('\n');
+    indent();
   }
   else if (c == '(' || c == '[')
-     bufAppendC(c);
+    bufAppendC(c);
   else if (c == ')' || c == ']')
   {
-     removeTrailingWhitespace();
-     bufAppendC(c);
-     bufAppendC(' ');
+    removeTrailingWhitespace();
+    bufAppendC(c);
+    bufAppendC(' ');
   }
   else if (c == '}')
   {
-     _n_ = _n_ - INDENT_WIDTH;
-     onEmptyLine();
-     bufAppendC(c);
-     bufAppendC('\n');
-     indent();
+    _n_ = _n_ - INDENT_WIDTH;
+    onEmptyLine();
+    bufAppendC(c);
+    bufAppendC('\n');
+    indent();
   }
   else if (c == ',')
   {
-     removeTrailingWhitespace();
-     bufAppendC(c);
-     bufAppendC(' ');
+    removeTrailingWhitespace();
+    bufAppendC(c);
+    bufAppendC(' ');
   }
   else if (c == ';')
   {
-     removeTrailingWhitespace();
-     bufAppendC(c);
-     bufAppendC('\n');
-     indent();
+    removeTrailingWhitespace();
+    bufAppendC(c);
+    bufAppendC('\n');
+    indent();
   }
-  else if (c == ' ') bufAppendC(c);
-  else if (c == 0) return;
+  else if (c == ' ')
+    bufAppendC(c);
+  else if (c == 0)
+    return;
   else
   {
-     bufAppendC(c);
-     bufAppendC(' ');
+    bufAppendC(c);
+    bufAppendC(' ');
   }
 }
 
@@ -76,7 +78,8 @@ int allIsSpace(String s)
 {
   char c;
   while ((c = *s++))
-    if (! isspace(c)) return 0;
+    if (!isspace(c))
+      return 0;
   return 1;
 }
 
@@ -84,10 +87,13 @@ void renderS(String s)
 {
   if (*s) /* s[0] != '\0', string s not empty */
   {
-    if (allIsSpace(s)) {
+    if (allIsSpace(s))
+    {
       backup();
       bufAppendS(s);
-    } else {
+    }
+    else
+    {
       bufAppendS(s);
       bufAppendC(' ');
     }
@@ -109,20 +115,23 @@ void backup(void)
 
 void removeTrailingSpaces()
 {
-  while (cur_ && buf_[cur_ - 1] == ' ') --cur_;
+  while (cur_ && buf_[cur_ - 1] == ' ')
+    --cur_;
   buf_[cur_] = 0;
 }
 
 void removeTrailingWhitespace()
 {
-  while (cur_ && (buf_[cur_ - 1] == ' ' || buf_[cur_ - 1] == '\n')) --cur_;
+  while (cur_ && (buf_[cur_ - 1] == ' ' || buf_[cur_ - 1] == '\n'))
+    --cur_;
   buf_[cur_] = 0;
 }
 
 void onEmptyLine()
 {
   removeTrailingSpaces();
-  if (cur_ && buf_[cur_ - 1 ] != '\n') bufAppendC('\n');
+  if (cur_ && buf_[cur_ - 1] != '\n')
+    bufAppendC('\n');
   indent();
 }
 char *printGraph(Graph p)
@@ -211,176 +220,212 @@ char *showListName(ListName p)
 }
 void ppGraph(Graph p, int _i_)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_GTensor:
-    if (_i_ > 0) renderC(_L_PAREN);
+    if (_i_ > 0)
+      renderC(_L_PAREN);
     ppGraph(p->u.gTensor_.graph_1, 0);
     renderC('*');
     ppGraph(p->u.gTensor_.graph_2, 1);
-    if (_i_ > 0) renderC(_R_PAREN);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
     break;
 
   case is_GNominate:
-    if (_i_ > 1) renderC(_L_PAREN);
+    if (_i_ > 1)
+      renderC(_L_PAREN);
     ppBinding(p->u.gNominate_.binding_, 0);
-    if (_i_ > 1) renderC(_R_PAREN);
+    if (_i_ > 1)
+      renderC(_R_PAREN);
     break;
 
   case is_GEdgeAnon:
-    if (_i_ > 1) renderC(_L_PAREN);
+    if (_i_ > 1)
+      renderC(_L_PAREN);
     renderC('(');
     ppBinding(p->u.gEdgeAnon_.binding_1, 0);
     renderC(',');
     ppBinding(p->u.gEdgeAnon_.binding_2, 0);
     renderC(')');
-    if (_i_ > 1) renderC(_R_PAREN);
+    if (_i_ > 1)
+      renderC(_R_PAREN);
     break;
 
   case is_GEdgeNamed:
-    if (_i_ > 1) renderC(_L_PAREN);
+    if (_i_ > 1)
+      renderC(_L_PAREN);
     ppName(p->u.gEdgeNamed_.name_, 0);
     renderC('(');
     ppBinding(p->u.gEdgeNamed_.binding_1, 0);
     renderC(',');
     ppBinding(p->u.gEdgeNamed_.binding_2, 0);
     renderC(')');
-    if (_i_ > 1) renderC(_R_PAREN);
+    if (_i_ > 1)
+      renderC(_R_PAREN);
     break;
 
   case is_GRuleAnon:
-    if (_i_ > 1) renderC(_L_PAREN);
+    if (_i_ > 1)
+      renderC(_L_PAREN);
     renderC('[');
     renderC('=');
     ppGraph(p->u.gRuleAnon_.graph_1, 0);
     ppGraph(p->u.gRuleAnon_.graph_2, 0);
     renderC(']');
-    if (_i_ > 1) renderC(_R_PAREN);
+    if (_i_ > 1)
+      renderC(_R_PAREN);
     break;
 
   case is_GRuleNamed:
-    if (_i_ > 1) renderC(_L_PAREN);
+    if (_i_ > 1)
+      renderC(_L_PAREN);
     ppName(p->u.gRuleNamed_.name_, 0);
     renderC('[');
     renderC('=');
     ppGraph(p->u.gRuleNamed_.graph_1, 0);
     ppGraph(p->u.gRuleNamed_.graph_2, 0);
     renderC(']');
-    if (_i_ > 1) renderC(_R_PAREN);
+    if (_i_ > 1)
+      renderC(_R_PAREN);
     break;
 
   case is_GSubgraph:
-    if (_i_ > 1) renderC(_L_PAREN);
+    if (_i_ > 1)
+      renderC(_L_PAREN);
     ppGraphBinding(p->u.gSubgraph_.graphbinding_, 0);
-    if (_i_ > 1) renderC(_R_PAREN);
+    if (_i_ > 1)
+      renderC(_R_PAREN);
     break;
 
   case is_GVertex:
-    if (_i_ > 2) renderC(_L_PAREN);
+    if (_i_ > 2)
+      renderC(_L_PAREN);
     ppVertex(p->u.gVertex_.vertex_, 0);
     renderC('|');
     ppGraph(p->u.gVertex_.graph_, 1);
-    if (_i_ > 2) renderC(_R_PAREN);
+    if (_i_ > 2)
+      renderC(_R_PAREN);
     break;
 
   case is_GVar:
-    if (_i_ > 2) renderC(_L_PAREN);
+    if (_i_ > 2)
+      renderC(_L_PAREN);
     ppIdent(p->u.gVar_.lvar_, 0);
     renderC('|');
     ppGraph(p->u.gVar_.graph_, 1);
-    if (_i_ > 2) renderC(_R_PAREN);
+    if (_i_ > 2)
+      renderC(_R_PAREN);
     break;
 
   case is_GNil:
-    if (_i_ > 3) renderC(_L_PAREN);
+    if (_i_ > 3)
+      renderC(_L_PAREN);
     renderC('0');
-    if (_i_ > 3) renderC(_R_PAREN);
+    if (_i_ > 3)
+      renderC(_R_PAREN);
     break;
   }
 }
 
 void ppBinding(Binding p, int _i_)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_VBind:
-    if (_i_ > 0) renderC(_L_PAREN);
+    if (_i_ > 0)
+      renderC(_L_PAREN);
     renderS("let");
     ppIdent(p->u.vBind_.lvar_, 0);
     renderC('=');
     ppVertex(p->u.vBind_.vertex_, 0);
     renderS("in");
     ppGraph(p->u.vBind_.graph_, 2);
-    if (_i_ > 0) renderC(_R_PAREN);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
     break;
   }
 }
 
 void ppGraphBinding(GraphBinding p, int _i_)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_GBind:
-    if (_i_ > 0) renderC(_L_PAREN);
+    if (_i_ > 0)
+      renderC(_L_PAREN);
     renderS("let");
     ppIdent(p->u.gBind_.uvar_, 0);
     renderC('=');
     ppGraph(p->u.gBind_.graph_1, 0);
     renderS("in");
     ppGraph(p->u.gBind_.graph_2, 2);
-    if (_i_ > 0) renderC(_R_PAREN);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
     break;
   }
 }
 
 void ppVertex(Vertex p, int _i_)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_VName:
-    if (_i_ > 0) renderC(_L_PAREN);
+    if (_i_ > 0)
+      renderC(_L_PAREN);
     renderC('<');
     ppName(p->u.vName_.name_, 0);
     renderC('>');
-    if (_i_ > 0) renderC(_R_PAREN);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
     break;
   }
 }
 
 void ppName(Name p, int _i_)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_NameWildcard:
-    if (_i_ > 0) renderC(_L_PAREN);
+    if (_i_ > 0)
+      renderC(_L_PAREN);
     renderC('_');
-    if (_i_ > 0) renderC(_R_PAREN);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
     break;
 
   case is_NameVVar:
-    if (_i_ > 0) renderC(_L_PAREN);
+    if (_i_ > 0)
+      renderC(_L_PAREN);
     ppIdent(p->u.nameVVar_.lvar_, 0);
-    if (_i_ > 0) renderC(_R_PAREN);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
     break;
 
   case is_NameGVar:
-    if (_i_ > 0) renderC(_L_PAREN);
+    if (_i_ > 0)
+      renderC(_L_PAREN);
     ppIdent(p->u.nameGVar_.uvar_, 0);
-    if (_i_ > 0) renderC(_R_PAREN);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
     break;
 
   case is_NameQuoteGraph:
-    if (_i_ > 0) renderC(_L_PAREN);
+    if (_i_ > 0)
+      renderC(_L_PAREN);
     renderC('@');
     ppGraph(p->u.nameQuoteGraph_.graph_, 0);
-    if (_i_ > 0) renderC(_R_PAREN);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
     break;
 
   case is_NameQuoteVertex:
-    if (_i_ > 0) renderC(_L_PAREN);
+    if (_i_ > 0)
+      renderC(_L_PAREN);
     renderC('@');
     ppVertex(p->u.nameQuoteVertex_.vertex_, 0);
-    if (_i_ > 0) renderC(_R_PAREN);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
     break;
   }
 }
@@ -428,26 +473,15 @@ void ppString(String s, int i)
   bufAppendC('\"');
   bufAppendC(' ');
 }
-void ppIdent(String s, int i)
-{
-  renderS(s);
-}
+void ppIdent(String s, int i) { renderS(s); }
 
-void ppUVar(String s, int i)
-{
-  renderS(s);
-}
+void ppUVar(String s, int i) { renderS(s); }
 
-
-void ppLVar(String s, int i)
-{
-  renderS(s);
-}
-
+void ppLVar(String s, int i) { renderS(s); }
 
 void shGraph(Graph p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_GTensor:
     bufAppendC('(');
@@ -457,7 +491,7 @@ void shGraph(Graph p)
     bufAppendC(' ');
 
     shGraph(p->u.gTensor_.graph_1);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shGraph(p->u.gTensor_.graph_2);
 
     bufAppendC(')');
@@ -483,7 +517,7 @@ void shGraph(Graph p)
     bufAppendC(' ');
 
     shBinding(p->u.gEdgeAnon_.binding_1);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shBinding(p->u.gEdgeAnon_.binding_2);
 
     bufAppendC(')');
@@ -497,9 +531,9 @@ void shGraph(Graph p)
     bufAppendC(' ');
 
     shName(p->u.gEdgeNamed_.name_);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shBinding(p->u.gEdgeNamed_.binding_1);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shBinding(p->u.gEdgeNamed_.binding_2);
 
     bufAppendC(')');
@@ -513,7 +547,7 @@ void shGraph(Graph p)
     bufAppendC(' ');
 
     shGraph(p->u.gRuleAnon_.graph_1);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shGraph(p->u.gRuleAnon_.graph_2);
 
     bufAppendC(')');
@@ -527,9 +561,9 @@ void shGraph(Graph p)
     bufAppendC(' ');
 
     shName(p->u.gRuleNamed_.name_);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shGraph(p->u.gRuleNamed_.graph_1);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shGraph(p->u.gRuleNamed_.graph_2);
 
     bufAppendC(')');
@@ -555,7 +589,7 @@ void shGraph(Graph p)
     bufAppendC(' ');
 
     shVertex(p->u.gVertex_.vertex_);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shGraph(p->u.gVertex_.graph_);
 
     bufAppendC(')');
@@ -569,7 +603,7 @@ void shGraph(Graph p)
     bufAppendC(' ');
 
     shIdent(p->u.gVar_.lvar_);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shGraph(p->u.gVar_.graph_);
 
     bufAppendC(')');
@@ -579,16 +613,13 @@ void shGraph(Graph p)
 
     bufAppendS("GNil");
 
-
-
-
     break;
   }
 }
 
 void shBinding(Binding p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_VBind:
     bufAppendC('(');
@@ -598,9 +629,9 @@ void shBinding(Binding p)
     bufAppendC(' ');
 
     shIdent(p->u.vBind_.lvar_);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shVertex(p->u.vBind_.vertex_);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shGraph(p->u.vBind_.graph_);
 
     bufAppendC(')');
@@ -611,7 +642,7 @@ void shBinding(Binding p)
 
 void shGraphBinding(GraphBinding p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_GBind:
     bufAppendC('(');
@@ -621,9 +652,9 @@ void shGraphBinding(GraphBinding p)
     bufAppendC(' ');
 
     shIdent(p->u.gBind_.uvar_);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shGraph(p->u.gBind_.graph_1);
-  bufAppendC(' ');
+    bufAppendC(' ');
     shGraph(p->u.gBind_.graph_2);
 
     bufAppendC(')');
@@ -634,7 +665,7 @@ void shGraphBinding(GraphBinding p)
 
 void shVertex(Vertex p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_VName:
     bufAppendC('(');
@@ -653,14 +684,11 @@ void shVertex(Vertex p)
 
 void shName(Name p)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_NameWildcard:
 
     bufAppendS("NameWildcard");
-
-
-
 
     break;
   case is_NameVVar:
@@ -717,7 +745,7 @@ void shName(Name p)
 void shListName(ListName listname)
 {
   bufAppendC('[');
-  while(listname != 0)
+  while (listname != 0)
   {
     if (listname->listname_)
     {
@@ -772,7 +800,6 @@ void shUVar(String s)
   bufAppendC('\"');
 }
 
-
 void shLVar(String s)
 {
   bufAppendC('\"');
@@ -780,24 +807,42 @@ void shLVar(String s)
   bufAppendC('\"');
 }
 
-
 void bufEscapeS(const char *s)
 {
-  if (s) while (*s) bufEscapeC(*s++);
+  if (s)
+    while (*s)
+      bufEscapeC(*s++);
 }
 void bufEscapeC(const char c)
 {
-  switch(c)
+  switch (c)
   {
-    case '\f': bufAppendS("\\f" ); break;
-    case '\n': bufAppendS("\\n" ); break;
-    case '\r': bufAppendS("\\r" ); break;
-    case '\t': bufAppendS("\\t" ); break;
-    case '\v': bufAppendS("\\v" ); break;
-    case '\\': bufAppendS("\\\\"); break;
-    case '\'': bufAppendS("\\'" ); break;
-    case '\"': bufAppendS("\\\""); break;
-    default: bufAppendC(c);
+  case '\f':
+    bufAppendS("\\f");
+    break;
+  case '\n':
+    bufAppendS("\\n");
+    break;
+  case '\r':
+    bufAppendS("\\r");
+    break;
+  case '\t':
+    bufAppendS("\\t");
+    break;
+  case '\v':
+    bufAppendS("\\v");
+    break;
+  case '\\':
+    bufAppendS("\\\\");
+    break;
+  case '\'':
+    bufAppendS("\\'");
+    break;
+  case '\"':
+    bufAppendS("\\\"");
+    break;
+  default:
+    bufAppendC(c);
   }
 }
 
@@ -810,7 +855,7 @@ void bufAppendS(const char *s)
     buf_size *= 2; /* Double the buffer size */
     resizeBuffer();
   }
-  for(n = 0; n < len; n++)
+  for (n = 0; n < len; n++)
   {
     buf_[cur_ + n] = s[n];
   }
@@ -837,14 +882,15 @@ void bufReset(void)
 }
 void resizeBuffer(void)
 {
-  char *temp = (char *) malloc(buf_size);
+  char *temp = (char *)malloc(buf_size);
   if (!temp)
   {
     PANIC(__FILE__ "OOM");
   }
   if (buf_)
   {
-    strncpy(temp, buf_, buf_size); /* peteg: strlcpy is safer, but not POSIX/ISO C. */
+    strncpy(temp, buf_,
+            buf_size); /* peteg: strlcpy is safer, but not POSIX/ISO C. */
     free(buf_);
   }
   buf_ = temp;

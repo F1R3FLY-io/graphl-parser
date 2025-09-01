@@ -36,10 +36,10 @@ typedef void (*visitNameGVarCallback)(Name p, void *context);
 typedef void (*visitIsNameQuoteGraph)(Name p, void *context);
 typedef void (*visitIsNameQuoteVertex)(Name p, void *context);
 typedef void (*visitListNameCallback)(ListName listname, void *context);
-typedef void (*visitGraphCallback)(Graph g, void* context);
+typedef void (*visitGraphCallback)(Graph g, void *context);
 
-
-typedef struct {
+typedef struct
+{
   visitGraphCallback visitGraphCallback;
   visitGTensor visitIsGTensorCallback;
   visitGNominate visitIsGNominate;
@@ -71,7 +71,7 @@ typedef struct {
   visitIsNameQuoteGraph visitIsNameQuoteGraph;
   visitIsNameQuoteVertex visitIsNameQuoteVertex;
   visitListNameCallback visitListName;
-}  Visitor;
+} Visitor;
 
 void visitGraph(Graph p, Visitor *visitor, void *context);
 void visitBinding(Binding p, Visitor *visitor, void *context);
@@ -79,7 +79,7 @@ void visitGraphBinding(GraphBinding p, Visitor *visitor, void *context);
 void visitVertex(Vertex p, Visitor *visitor, void *context);
 void visitName(Name p, Visitor *visitor, void *context);
 void visitListName(ListName p, Visitor *visitor, void *context);
-void visitUVar(UVar p,Visitor *visitor, void *context);
+void visitUVar(UVar p, Visitor *visitor, void *context);
 void visitLVar(LVar p, Visitor *visitor, void *context);
 void visitIdent(Ident i, Visitor *visitor, void *context);
 void visitInteger(Integer i, Visitor *visitor, void *context);

@@ -10,10 +10,10 @@
 typedef int Integer;
 typedef char Char;
 typedef double Double;
-typedef char* String;
-typedef char* Ident;
-typedef char* UVar;
-typedef char* LVar;
+typedef char *String;
+typedef char *Ident;
+typedef char *UVar;
+typedef char *LVar;
 
 /********************   Forward Declarations    ***********************/
 struct Graph_;
@@ -38,18 +38,61 @@ typedef struct ListName_ *ListName;
 
 struct Graph_
 {
-  enum { is_GNil, is_GVertex, is_GVar, is_GNominate, is_GEdgeAnon, is_GEdgeNamed, is_GRuleAnon, is_GRuleNamed, is_GSubgraph, is_GTensor } kind;
+  enum
+  {
+    is_GNil,
+    is_GVertex,
+    is_GVar,
+    is_GNominate,
+    is_GEdgeAnon,
+    is_GEdgeNamed,
+    is_GRuleAnon,
+    is_GRuleNamed,
+    is_GSubgraph,
+    is_GTensor
+  } kind;
   union
   {
-    struct { Graph graph_; Vertex vertex_; } gVertex_;
-    struct { Graph graph_; LVar lvar_; } gVar_;
-    struct { Binding binding_; } gNominate_;
-    struct { Binding binding_1, binding_2; } gEdgeAnon_;
-    struct { Binding binding_1, binding_2; Name name_; } gEdgeNamed_;
-    struct { Graph graph_1, graph_2; } gRuleAnon_;
-    struct { Graph graph_1, graph_2; Name name_; } gRuleNamed_;
-    struct { GraphBinding graphbinding_; } gSubgraph_;
-    struct { Graph graph_1, graph_2; } gTensor_;
+    struct
+    {
+      Graph graph_;
+      Vertex vertex_;
+    } gVertex_;
+    struct
+    {
+      Graph graph_;
+      LVar lvar_;
+    } gVar_;
+    struct
+    {
+      Binding binding_;
+    } gNominate_;
+    struct
+    {
+      Binding binding_1, binding_2;
+    } gEdgeAnon_;
+    struct
+    {
+      Binding binding_1, binding_2;
+      Name name_;
+    } gEdgeNamed_;
+    struct
+    {
+      Graph graph_1, graph_2;
+    } gRuleAnon_;
+    struct
+    {
+      Graph graph_1, graph_2;
+      Name name_;
+    } gRuleNamed_;
+    struct
+    {
+      GraphBinding graphbinding_;
+    } gSubgraph_;
+    struct
+    {
+      Graph graph_1, graph_2;
+    } gTensor_;
   } u;
 };
 
@@ -66,10 +109,18 @@ Graph make_GTensor(Graph p0, Graph p1);
 
 struct Binding_
 {
-  enum { is_VBind } kind;
+  enum
+  {
+    is_VBind
+  } kind;
   union
   {
-    struct { Graph graph_; LVar lvar_; Vertex vertex_; } vBind_;
+    struct
+    {
+      Graph graph_;
+      LVar lvar_;
+      Vertex vertex_;
+    } vBind_;
   } u;
 };
 
@@ -77,10 +128,17 @@ Binding make_VBind(LVar p0, Vertex p1, Graph p2);
 
 struct GraphBinding_
 {
-  enum { is_GBind } kind;
+  enum
+  {
+    is_GBind
+  } kind;
   union
   {
-    struct { Graph graph_1, graph_2; UVar uvar_; } gBind_;
+    struct
+    {
+      Graph graph_1, graph_2;
+      UVar uvar_;
+    } gBind_;
   } u;
 };
 
@@ -88,10 +146,16 @@ GraphBinding make_GBind(UVar p0, Graph p1, Graph p2);
 
 struct Vertex_
 {
-  enum { is_VName } kind;
+  enum
+  {
+    is_VName
+  } kind;
   union
   {
-    struct { Name name_; } vName_;
+    struct
+    {
+      Name name_;
+    } vName_;
   } u;
 };
 
@@ -99,13 +163,32 @@ Vertex make_VName(Name p0);
 
 struct Name_
 {
-  enum { is_NameWildcard, is_NameVVar, is_NameGVar, is_NameQuoteGraph, is_NameQuoteVertex } kind;
+  enum
+  {
+    is_NameWildcard,
+    is_NameVVar,
+    is_NameGVar,
+    is_NameQuoteGraph,
+    is_NameQuoteVertex
+  } kind;
   union
   {
-    struct { LVar lvar_; } nameVVar_;
-    struct { UVar uvar_; } nameGVar_;
-    struct { Graph graph_; } nameQuoteGraph_;
-    struct { Vertex vertex_; } nameQuoteVertex_;
+    struct
+    {
+      LVar lvar_;
+    } nameVVar_;
+    struct
+    {
+      UVar uvar_;
+    } nameGVar_;
+    struct
+    {
+      Graph graph_;
+    } nameQuoteGraph_;
+    struct
+    {
+      Vertex vertex_;
+    } nameQuoteVertex_;
   } u;
 };
 
@@ -148,6 +231,5 @@ void free_GraphBinding(GraphBinding p);
 void free_Vertex(Vertex p);
 void free_Name(Name p);
 void free_ListName(ListName p);
-
 
 #endif
