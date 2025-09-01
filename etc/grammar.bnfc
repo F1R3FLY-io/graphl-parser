@@ -24,7 +24,15 @@ VBind .               Binding ::= "let" LVar "=" Vertex "in" Graph2        ;
 GBind .          GraphBinding ::= "let" UVar "=" Graph "in" Graph2         ;
 
 -- Vertices
-VName .                Vertex ::= "<" Name ">"                             ;
+AttributeValue.   AttrVal ::= "\"" LVar "\""                   ;
+AttributeName.   AttrName ::= LVar                                               ;
+AttributePair.       Attr ::= AttrName "=" AttrVal                                    ;
+
+EmptyAttrList.  ListAttr ::= ;
+AttrList.  ListAttr ::= Attr " " ListAttr ;
+
+VName .                Vertex ::= "<" Name ListAttr ">"                   ;
+
 
 -- Names
 NameWildcard .           Name ::= "_"                                      ;

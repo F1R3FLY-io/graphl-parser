@@ -1,0 +1,12 @@
+[
+    {
+        "label": "test",
+        "command": "make test",
+        "allow_concurrent_runs": false
+    },
+    {
+        "label": "Execute GraphL playground",
+        "command": "cat playground.txt | parser/Testgrammar",
+        "allow_concurrent_runs": false
+    }
+]

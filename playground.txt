@@ -1,1 +1,16 @@
-<a> | <b> | (let x = <a> in <a> | <b> | 0, let y = <b> in <a> | <b> | 0)
+/*(
+  let xc = <c> in {
+      let xa2 = <a> in {
+        (
+    (
+          let xa1 = <a> in <a> | 0 ,
+          let xb = <b> in <b> | 0
+        )
+      } ,
+      let xc2 = <c> in <c> | 0
+    )
+  },
+  let xa3 = <a> in 0
+)*/
+
+<a foo="bar" baz="foo" open=true> | 0

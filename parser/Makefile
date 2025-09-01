@@ -9,7 +9,7 @@ FLEX_OPTS = -Pgrammar_
 BISON = bison
 BISON_OPTS = -t -pgrammar_
 
-OBJS = Absyn.o Buffer.o Lexer.o Parser.o Printer.o Skeleton.o
+OBJS = Absyn.o Buffer.o Lexer.o Parser.o Printer.o
 
 .PHONY : clean distclean
 
@@ -50,6 +50,3 @@ Printer.o : Printer.c Printer.h Absyn.h
 
 Test.o : Test.c Parser.h Printer.h Absyn.h
 	${CC} ${CCFLAGS} -c Test.c
-
-Skeleton.o: Skeleton.c Skeleton.h Absyn.h
-	${CC} ${CCFLAGS} -c Skeleton.c

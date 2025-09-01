@@ -387,6 +387,10 @@ pub type LVar = *mut ::std::os::raw::c_char;
 pub type Graph = *mut Graph_;
 pub type Binding = *mut Binding_;
 pub type GraphBinding = *mut GraphBinding_;
+pub type AttrVal = *mut AttrVal_;
+pub type AttrName = *mut AttrName_;
+pub type Attr = *mut Attr_;
+pub type ListAttr = *mut ListAttr_;
 pub type Vertex = *mut Vertex_;
 pub type Name = *mut Name_;
 pub type ListName = *mut ListName_;
@@ -892,6 +896,303 @@ unsafe extern "C" {
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
+pub struct AttrVal_ {
+    pub kind: AttrVal___bindgen_ty_1,
+    pub u: AttrVal___bindgen_ty_2,
+}
+pub const AttrVal__is_AttributeValue: AttrVal___bindgen_ty_1 = 0;
+pub type AttrVal___bindgen_ty_1 = ::std::os::raw::c_uint;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union AttrVal___bindgen_ty_2 {
+    pub attributeValue_: AttrVal___bindgen_ty_2__bindgen_ty_1,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct AttrVal___bindgen_ty_2__bindgen_ty_1 {
+    pub lvar_: LVar,
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of AttrVal___bindgen_ty_2__bindgen_ty_1"]
+        [::std::mem::size_of::<AttrVal___bindgen_ty_2__bindgen_ty_1>() - 8usize];
+    ["Alignment of AttrVal___bindgen_ty_2__bindgen_ty_1"]
+        [::std::mem::align_of::<AttrVal___bindgen_ty_2__bindgen_ty_1>() - 8usize];
+    ["Offset of field: AttrVal___bindgen_ty_2__bindgen_ty_1::lvar_"]
+        [::std::mem::offset_of!(AttrVal___bindgen_ty_2__bindgen_ty_1, lvar_) - 0usize];
+};
+impl Default for AttrVal___bindgen_ty_2__bindgen_ty_1 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of AttrVal___bindgen_ty_2"][::std::mem::size_of::<AttrVal___bindgen_ty_2>() - 8usize];
+    ["Alignment of AttrVal___bindgen_ty_2"]
+        [::std::mem::align_of::<AttrVal___bindgen_ty_2>() - 8usize];
+    ["Offset of field: AttrVal___bindgen_ty_2::attributeValue_"]
+        [::std::mem::offset_of!(AttrVal___bindgen_ty_2, attributeValue_) - 0usize];
+};
+impl Default for AttrVal___bindgen_ty_2 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of AttrVal_"][::std::mem::size_of::<AttrVal_>() - 16usize];
+    ["Alignment of AttrVal_"][::std::mem::align_of::<AttrVal_>() - 8usize];
+    ["Offset of field: AttrVal_::kind"][::std::mem::offset_of!(AttrVal_, kind) - 0usize];
+    ["Offset of field: AttrVal_::u"][::std::mem::offset_of!(AttrVal_, u) - 8usize];
+};
+impl Default for AttrVal_ {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+unsafe extern "C" {
+    pub fn make_AttributeValue(p0: LVar) -> AttrVal;
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct AttrName_ {
+    pub kind: AttrName___bindgen_ty_1,
+    pub u: AttrName___bindgen_ty_2,
+}
+pub const AttrName__is_AttributeName: AttrName___bindgen_ty_1 = 0;
+pub type AttrName___bindgen_ty_1 = ::std::os::raw::c_uint;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union AttrName___bindgen_ty_2 {
+    pub attributeName_: AttrName___bindgen_ty_2__bindgen_ty_1,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct AttrName___bindgen_ty_2__bindgen_ty_1 {
+    pub lvar_: LVar,
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of AttrName___bindgen_ty_2__bindgen_ty_1"]
+        [::std::mem::size_of::<AttrName___bindgen_ty_2__bindgen_ty_1>() - 8usize];
+    ["Alignment of AttrName___bindgen_ty_2__bindgen_ty_1"]
+        [::std::mem::align_of::<AttrName___bindgen_ty_2__bindgen_ty_1>() - 8usize];
+    ["Offset of field: AttrName___bindgen_ty_2__bindgen_ty_1::lvar_"]
+        [::std::mem::offset_of!(AttrName___bindgen_ty_2__bindgen_ty_1, lvar_) - 0usize];
+};
+impl Default for AttrName___bindgen_ty_2__bindgen_ty_1 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of AttrName___bindgen_ty_2"][::std::mem::size_of::<AttrName___bindgen_ty_2>() - 8usize];
+    ["Alignment of AttrName___bindgen_ty_2"]
+        [::std::mem::align_of::<AttrName___bindgen_ty_2>() - 8usize];
+    ["Offset of field: AttrName___bindgen_ty_2::attributeName_"]
+        [::std::mem::offset_of!(AttrName___bindgen_ty_2, attributeName_) - 0usize];
+};
+impl Default for AttrName___bindgen_ty_2 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of AttrName_"][::std::mem::size_of::<AttrName_>() - 16usize];
+    ["Alignment of AttrName_"][::std::mem::align_of::<AttrName_>() - 8usize];
+    ["Offset of field: AttrName_::kind"][::std::mem::offset_of!(AttrName_, kind) - 0usize];
+    ["Offset of field: AttrName_::u"][::std::mem::offset_of!(AttrName_, u) - 8usize];
+};
+impl Default for AttrName_ {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+unsafe extern "C" {
+    pub fn make_AttributeName(p0: LVar) -> AttrName;
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct Attr_ {
+    pub kind: Attr___bindgen_ty_1,
+    pub u: Attr___bindgen_ty_2,
+}
+pub const Attr__is_AttributePair: Attr___bindgen_ty_1 = 0;
+pub type Attr___bindgen_ty_1 = ::std::os::raw::c_uint;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union Attr___bindgen_ty_2 {
+    pub attributePair_: Attr___bindgen_ty_2__bindgen_ty_1,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct Attr___bindgen_ty_2__bindgen_ty_1 {
+    pub attrname_: AttrName,
+    pub attrval_: AttrVal,
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of Attr___bindgen_ty_2__bindgen_ty_1"]
+        [::std::mem::size_of::<Attr___bindgen_ty_2__bindgen_ty_1>() - 16usize];
+    ["Alignment of Attr___bindgen_ty_2__bindgen_ty_1"]
+        [::std::mem::align_of::<Attr___bindgen_ty_2__bindgen_ty_1>() - 8usize];
+    ["Offset of field: Attr___bindgen_ty_2__bindgen_ty_1::attrname_"]
+        [::std::mem::offset_of!(Attr___bindgen_ty_2__bindgen_ty_1, attrname_) - 0usize];
+    ["Offset of field: Attr___bindgen_ty_2__bindgen_ty_1::attrval_"]
+        [::std::mem::offset_of!(Attr___bindgen_ty_2__bindgen_ty_1, attrval_) - 8usize];
+};
+impl Default for Attr___bindgen_ty_2__bindgen_ty_1 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of Attr___bindgen_ty_2"][::std::mem::size_of::<Attr___bindgen_ty_2>() - 16usize];
+    ["Alignment of Attr___bindgen_ty_2"][::std::mem::align_of::<Attr___bindgen_ty_2>() - 8usize];
+    ["Offset of field: Attr___bindgen_ty_2::attributePair_"]
+        [::std::mem::offset_of!(Attr___bindgen_ty_2, attributePair_) - 0usize];
+};
+impl Default for Attr___bindgen_ty_2 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of Attr_"][::std::mem::size_of::<Attr_>() - 24usize];
+    ["Alignment of Attr_"][::std::mem::align_of::<Attr_>() - 8usize];
+    ["Offset of field: Attr_::kind"][::std::mem::offset_of!(Attr_, kind) - 0usize];
+    ["Offset of field: Attr_::u"][::std::mem::offset_of!(Attr_, u) - 8usize];
+};
+impl Default for Attr_ {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+unsafe extern "C" {
+    pub fn make_AttributePair(p0: AttrName, p1: AttrVal) -> Attr;
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub struct ListAttr_ {
+    pub kind: ListAttr___bindgen_ty_1,
+    pub u: ListAttr___bindgen_ty_2,
+}
+pub const ListAttr__is_EmptyAttrList: ListAttr___bindgen_ty_1 = 0;
+pub const ListAttr__is_AttrList: ListAttr___bindgen_ty_1 = 1;
+pub type ListAttr___bindgen_ty_1 = ::std::os::raw::c_uint;
+#[repr(C)]
+#[derive(Copy, Clone)]
+pub union ListAttr___bindgen_ty_2 {
+    pub attrList_: ListAttr___bindgen_ty_2__bindgen_ty_1,
+}
+#[repr(C)]
+#[derive(Debug, Copy, Clone)]
+pub struct ListAttr___bindgen_ty_2__bindgen_ty_1 {
+    pub attr_: Attr,
+    pub listattr_: ListAttr,
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of ListAttr___bindgen_ty_2__bindgen_ty_1"]
+        [::std::mem::size_of::<ListAttr___bindgen_ty_2__bindgen_ty_1>() - 16usize];
+    ["Alignment of ListAttr___bindgen_ty_2__bindgen_ty_1"]
+        [::std::mem::align_of::<ListAttr___bindgen_ty_2__bindgen_ty_1>() - 8usize];
+    ["Offset of field: ListAttr___bindgen_ty_2__bindgen_ty_1::attr_"]
+        [::std::mem::offset_of!(ListAttr___bindgen_ty_2__bindgen_ty_1, attr_) - 0usize];
+    ["Offset of field: ListAttr___bindgen_ty_2__bindgen_ty_1::listattr_"]
+        [::std::mem::offset_of!(ListAttr___bindgen_ty_2__bindgen_ty_1, listattr_) - 8usize];
+};
+impl Default for ListAttr___bindgen_ty_2__bindgen_ty_1 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of ListAttr___bindgen_ty_2"][::std::mem::size_of::<ListAttr___bindgen_ty_2>() - 16usize];
+    ["Alignment of ListAttr___bindgen_ty_2"]
+        [::std::mem::align_of::<ListAttr___bindgen_ty_2>() - 8usize];
+    ["Offset of field: ListAttr___bindgen_ty_2::attrList_"]
+        [::std::mem::offset_of!(ListAttr___bindgen_ty_2, attrList_) - 0usize];
+};
+impl Default for ListAttr___bindgen_ty_2 {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+#[allow(clippy::unnecessary_operation, clippy::identity_op)]
+const _: () = {
+    ["Size of ListAttr_"][::std::mem::size_of::<ListAttr_>() - 24usize];
+    ["Alignment of ListAttr_"][::std::mem::align_of::<ListAttr_>() - 8usize];
+    ["Offset of field: ListAttr_::kind"][::std::mem::offset_of!(ListAttr_, kind) - 0usize];
+    ["Offset of field: ListAttr_::u"][::std::mem::offset_of!(ListAttr_, u) - 8usize];
+};
+impl Default for ListAttr_ {
+    fn default() -> Self {
+        let mut s = ::std::mem::MaybeUninit::<Self>::uninit();
+        unsafe {
+            ::std::ptr::write_bytes(s.as_mut_ptr(), 0, 1);
+            s.assume_init()
+        }
+    }
+}
+unsafe extern "C" {
+    pub fn make_EmptyAttrList() -> ListAttr;
+}
+unsafe extern "C" {
+    pub fn make_AttrList(p0: Attr, p1: ListAttr) -> ListAttr;
+}
+#[repr(C)]
+#[derive(Copy, Clone)]
 pub struct Vertex_ {
     pub kind: Vertex___bindgen_ty_1,
     pub u: Vertex___bindgen_ty_2,
@@ -906,16 +1207,19 @@ pub union Vertex___bindgen_ty_2 {
 #[repr(C)]
 #[derive(Debug, Copy, Clone)]
 pub struct Vertex___bindgen_ty_2__bindgen_ty_1 {
+    pub listattr_: ListAttr,
     pub name_: Name,
 }
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
     ["Size of Vertex___bindgen_ty_2__bindgen_ty_1"]
-        [::std::mem::size_of::<Vertex___bindgen_ty_2__bindgen_ty_1>() - 8usize];
+        [::std::mem::size_of::<Vertex___bindgen_ty_2__bindgen_ty_1>() - 16usize];
     ["Alignment of Vertex___bindgen_ty_2__bindgen_ty_1"]
         [::std::mem::align_of::<Vertex___bindgen_ty_2__bindgen_ty_1>() - 8usize];
+    ["Offset of field: Vertex___bindgen_ty_2__bindgen_ty_1::listattr_"]
+        [::std::mem::offset_of!(Vertex___bindgen_ty_2__bindgen_ty_1, listattr_) - 0usize];
     ["Offset of field: Vertex___bindgen_ty_2__bindgen_ty_1::name_"]
-        [::std::mem::offset_of!(Vertex___bindgen_ty_2__bindgen_ty_1, name_) - 0usize];
+        [::std::mem::offset_of!(Vertex___bindgen_ty_2__bindgen_ty_1, name_) - 8usize];
 };
 impl Default for Vertex___bindgen_ty_2__bindgen_ty_1 {
     fn default() -> Self {
@@ -928,7 +1232,7 @@ impl Default for Vertex___bindgen_ty_2__bindgen_ty_1 {
 }
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
-    ["Size of Vertex___bindgen_ty_2"][::std::mem::size_of::<Vertex___bindgen_ty_2>() - 8usize];
+    ["Size of Vertex___bindgen_ty_2"][::std::mem::size_of::<Vertex___bindgen_ty_2>() - 16usize];
     ["Alignment of Vertex___bindgen_ty_2"]
         [::std::mem::align_of::<Vertex___bindgen_ty_2>() - 8usize];
     ["Offset of field: Vertex___bindgen_ty_2::vName_"]
@@ -945,7 +1249,7 @@ impl Default for Vertex___bindgen_ty_2 {
 }
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
-    ["Size of Vertex_"][::std::mem::size_of::<Vertex_>() - 16usize];
+    ["Size of Vertex_"][::std::mem::size_of::<Vertex_>() - 24usize];
     ["Alignment of Vertex_"][::std::mem::align_of::<Vertex_>() - 8usize];
     ["Offset of field: Vertex_::kind"][::std::mem::offset_of!(Vertex_, kind) - 0usize];
     ["Offset of field: Vertex_::u"][::std::mem::offset_of!(Vertex_, u) - 8usize];
@@ -960,7 +1264,7 @@ impl Default for Vertex_ {
     }
 }
 unsafe extern "C" {
-    pub fn make_VName(p0: Name) -> Vertex;
+    pub fn make_VName(p0: Name, p1: ListAttr) -> Vertex;
 }
 #[repr(C)]
 #[derive(Copy, Clone)]
@@ -1164,6 +1468,18 @@ unsafe extern "C" {
     pub fn clone_GraphBinding(p: GraphBinding) -> GraphBinding;
 }
 unsafe extern "C" {
+    pub fn clone_AttrVal(p: AttrVal) -> AttrVal;
+}
+unsafe extern "C" {
+    pub fn clone_AttrName(p: AttrName) -> AttrName;
+}
+unsafe extern "C" {
+    pub fn clone_Attr(p: Attr) -> Attr;
+}
+unsafe extern "C" {
+    pub fn clone_ListAttr(p: ListAttr) -> ListAttr;
+}
+unsafe extern "C" {
     pub fn clone_Vertex(p: Vertex) -> Vertex;
 }
 unsafe extern "C" {
@@ -1183,6 +1499,18 @@ unsafe extern "C" {
     pub fn free_GraphBinding(p: GraphBinding);
 }
 unsafe extern "C" {
+    pub fn free_AttrVal(p: AttrVal);
+}
+unsafe extern "C" {
+    pub fn free_AttrName(p: AttrName);
+}
+unsafe extern "C" {
+    pub fn free_Attr(p: Attr);
+}
+unsafe extern "C" {
+    pub fn free_ListAttr(p: ListAttr);
+}
+unsafe extern "C" {
     pub fn free_Vertex(p: Vertex);
 }
 unsafe extern "C" {
@@ -1191,170 +1519,277 @@ unsafe extern "C" {
 unsafe extern "C" {
     pub fn free_ListName(p: ListName);
 }
-pub type visitGTensor =
-    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
-pub type visitGNominate =
-    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
-pub type visitGEdgeAnon =
-    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
-pub type visitGEdgeNamed =
-    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
-pub type visitGRuleAnon =
-    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
-pub type visitGRuleNamed =
-    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitAttrCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Attr, context: *mut ::std::os::raw::c_void)>;
+pub type visitAttrNameCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: AttrName, context: *mut ::std::os::raw::c_void)>;
+pub type visitAttrValCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: AttrVal, context: *mut ::std::os::raw::c_void)>;
 pub type visitBindingCallback =
-    ::std::option::Option<unsafe extern "C" fn(p: Binding, context: *mut ::std::os::raw::c_void)>;
-pub type visitGraphBindingCallback = ::std::option::Option<
-    unsafe extern "C" fn(p: GraphBinding, context: *mut ::std::os::raw::c_void),
->;
-pub type visitVertexCallback =
-    ::std::option::Option<unsafe extern "C" fn(p: Vertex, context: *mut ::std::os::raw::c_void)>;
-pub type visitNameCallback =
-    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
-pub type visitUVarCallback =
-    ::std::option::Option<unsafe extern "C" fn(p: UVar, context: *mut ::std::os::raw::c_void)>;
-pub type visitLVarCallback =
-    ::std::option::Option<unsafe extern "C" fn(p: LVar, context: *mut ::std::os::raw::c_void)>;
-pub type visitIdentCallback =
-    ::std::option::Option<unsafe extern "C" fn(i: Ident, context: *mut ::std::os::raw::c_void)>;
-pub type visitIntegerCallback =
-    ::std::option::Option<unsafe extern "C" fn(i: Integer, context: *mut ::std::os::raw::c_void)>;
-pub type visitDoubleCallback =
-    ::std::option::Option<unsafe extern "C" fn(d: Double, context: *mut ::std::os::raw::c_void)>;
-pub type visitCharCallback =
-    ::std::option::Option<unsafe extern "C" fn(c: Char, context: *mut ::std::os::raw::c_void)>;
-pub type visitStringCallback =
-    ::std::option::Option<unsafe extern "C" fn(s: String, context: *mut ::std::os::raw::c_void)>;
-pub type visitGSubgraph =
-    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
-pub type visitGVertexCallback =
-    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
-pub type visitGVar =
-    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
-pub type visitGNilCallback =
-    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
-pub type visitVBindCallback =
     ::std::option::Option<unsafe extern "C" fn(p: Binding, context: *mut ::std::os::raw::c_void)>;
 pub type visitGBindCallback = ::std::option::Option<
     unsafe extern "C" fn(p: GraphBinding, context: *mut ::std::os::raw::c_void),
 >;
+pub type visitGraphCallback =
+    ::std::option::Option<unsafe extern "C" fn(g: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGEdgeAnonCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGEdgeNamedCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGNilCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGNominateCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGRuleAnonCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGRuleNamedCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGSubgraphCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGTensorCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitGVertexCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitIdentCallback =
+    ::std::option::Option<unsafe extern "C" fn(i: Ident, context: *mut ::std::os::raw::c_void)>;
+pub type visitIntegerCallback =
+    ::std::option::Option<unsafe extern "C" fn(i: Integer, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsAttrListCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Attr, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsAttributeNameCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: LVar, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsAttributePairCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: AttrName, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsAttributeValueCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: LVar, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsGBindCallback = ::std::option::Option<
+    unsafe extern "C" fn(p: GraphBinding, context: *mut ::std::os::raw::c_void),
+>;
+pub type visitIsGEdgeAnonCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsGEdgeNamedCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsGNilCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsGNominateCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsGRuleAnonCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsGRuleNamedCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsGSubgraphCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsGTensorCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsGVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsGVertexCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsNameGVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(n: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsNameQuoteGraphCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsNameQuoteVertexCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsNameVVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(n: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsNameWildcardCallback =
+    ::std::option::Option<unsafe extern "C" fn(n: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsVBindCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Binding, context: *mut ::std::os::raw::c_void)>;
 pub type visitIsVNameCallback =
     ::std::option::Option<unsafe extern "C" fn(p: Vertex, context: *mut ::std::os::raw::c_void)>;
-pub type visitNameWildcardCallback =
-    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
-pub type visitNameVVarCallback =
-    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
-pub type visitNameGVarCallback =
-    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
-pub type visitIsNameQuoteGraph =
-    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
-pub type visitIsNameQuoteVertex =
-    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitIsEmptyAttrListCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: ListAttr, context: *mut ::std::os::raw::c_void)>;
+pub type visitListAttrCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: ListAttr, context: *mut ::std::os::raw::c_void)>;
 pub type visitListNameCallback = ::std::option::Option<
     unsafe extern "C" fn(listname: ListName, context: *mut ::std::os::raw::c_void),
 >;
-pub type visitGraphCallback =
-    ::std::option::Option<unsafe extern "C" fn(g: Graph, context: *mut ::std::os::raw::c_void)>;
+pub type visitLVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: LVar, context: *mut ::std::os::raw::c_void)>;
+pub type visitNameCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitNameGVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitNameVVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitNameWildcardCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Name, context: *mut ::std::os::raw::c_void)>;
+pub type visitStringCallback =
+    ::std::option::Option<unsafe extern "C" fn(s: String, context: *mut ::std::os::raw::c_void)>;
+pub type visitUVarCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: UVar, context: *mut ::std::os::raw::c_void)>;
+pub type visitVBindCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Binding, context: *mut ::std::os::raw::c_void)>;
+pub type visitVertexCallback =
+    ::std::option::Option<unsafe extern "C" fn(p: Vertex, context: *mut ::std::os::raw::c_void)>;
 #[repr(C)]
 #[derive(Debug, Default, Copy, Clone)]
 pub struct Visitor {
-    pub visitGraphCallback: visitGraphCallback,
-    pub visitIsGTensorCallback: visitGTensor,
-    pub visitIsGNominate: visitGNominate,
-    pub visitIsGEdgeAnon: visitGEdgeAnon,
-    pub visitIsGEdgeNamed: visitGEdgeNamed,
-    pub visitIsGRuleAnonCallback: visitGRuleAnon,
-    pub visitIsGRuleNamedCallback: visitGRuleNamed,
+    pub visitAttrCallback: visitAttrCallback,
+    pub visitAttrNameCallback: visitAttrNameCallback,
+    pub visitAttrValCallback: visitAttrValCallback,
     pub visitBindingCallback: visitBindingCallback,
-    pub visitGraphBindingCallback: visitGraphBindingCallback,
-    pub visitVertexCallback: visitVertexCallback,
-    pub visitIsGVarCallback: visitGVar,
-    pub visitNameCallback: visitNameCallback,
-    pub visitIsGSubgraphCallback: visitGSubgraph,
-    pub visitUVar: visitUVarCallback,
-    pub visitLVar: visitLVarCallback,
-    pub visitIdent: visitIdentCallback,
+    pub visitGBindCallback: visitGBindCallback,
+    pub visitGraphCallback: visitGraphCallback,
+    pub visitGEdgeAnonCallback: visitGEdgeAnonCallback,
+    pub visitGEdgeNamedCallback: visitGEdgeNamedCallback,
+    pub visitGNilCallback: visitGNilCallback,
+    pub visitGNominateCallback: visitGNominateCallback,
+    pub visitGRuleAnonCallback: visitGRuleAnonCallback,
+    pub visitGRuleNamedCallback: visitGRuleNamedCallback,
+    pub visitGSubgraphCallback: visitGSubgraphCallback,
+    pub visitGTensorCallback: visitGTensorCallback,
+    pub visitGVarCallback: visitGVarCallback,
+    pub visitGVertexCallback: visitGVertexCallback,
+    pub visitIdentCallback: visitIdentCallback,
     pub visitIntegerCallback: visitIntegerCallback,
-    pub visitDoubleCallback: visitDoubleCallback,
-    pub visitCharCallback: visitCharCallback,
-    pub visitStringCallback: visitStringCallback,
-    pub visitIsGVertexCallback: visitGVertexCallback,
-    pub visitIsGNilCallback: visitGNilCallback,
-    pub visitIsVBindCallback: visitVBindCallback,
-    pub visitIsGBindCallback: visitGBindCallback,
+    pub visitIsAttrListCallback: visitIsAttrListCallback,
+    pub visitIsAttributeNameCallback: visitIsAttributeNameCallback,
+    pub visitIsAttributePairCallback: visitIsAttributePairCallback,
+    pub visitIsAttributeValueCallback: visitIsAttributeValueCallback,
+    pub visitIsGBindCallback: visitIsGBindCallback,
+    pub visitIsGEdgeAnonCallback: visitIsGEdgeAnonCallback,
+    pub visitIsGEdgeNamedCallback: visitIsGEdgeNamedCallback,
+    pub visitIsGNilCallback: visitIsGNilCallback,
+    pub visitIsGNominateCallback: visitIsGNominateCallback,
+    pub visitIsGRuleAnonCallback: visitIsGRuleAnonCallback,
+    pub visitIsGRuleNamedCallback: visitIsGRuleNamedCallback,
+    pub visitIsGSubgraphCallback: visitIsGSubgraphCallback,
+    pub visitIsGTensorCallback: visitIsGTensorCallback,
+    pub visitIsGVarCallback: visitIsGVarCallback,
+    pub visitIsGVertexCallback: visitIsGVertexCallback,
+    pub visitIsNameGVarCallback: visitIsNameGVarCallback,
+    pub visitIsNameQuoteGraphCallback: visitIsNameQuoteGraphCallback,
+    pub visitIsNameQuoteVertexCallback: visitIsNameQuoteVertexCallback,
+    pub visitIsNameVVarCallback: visitIsNameVVarCallback,
+    pub visitIsNameWildcardCallback: visitIsNameWildcardCallback,
+    pub visitIsVBindCallback: visitIsVBindCallback,
     pub visitIsVNameCallback: visitIsVNameCallback,
-    pub visitNameWildcardCallback: visitNameWildcardCallback,
-    pub visitNameVVarCallback: visitNameVVarCallback,
+    pub visitIsEmptyAttrListCallback: visitIsEmptyAttrListCallback,
+    pub visitListAttrCallback: visitListAttrCallback,
+    pub visitListNameCallback: visitListNameCallback,
+    pub visitLVarCallback: visitLVarCallback,
+    pub visitNameCallback: visitNameCallback,
     pub visitNameGVarCallback: visitNameGVarCallback,
-    pub visitIsNameQuoteGraph: visitIsNameQuoteGraph,
-    pub visitIsNameQuoteVertex: visitIsNameQuoteVertex,
-    pub visitListName: visitListNameCallback,
+    pub visitNameVVarCallback: visitNameVVarCallback,
+    pub visitNameWildcardCallback: visitNameWildcardCallback,
+    pub visitStringCallback: visitStringCallback,
+    pub visitUVarCallback: visitUVarCallback,
+    pub visitVBindCallback: visitVBindCallback,
+    pub visitVertexCallback: visitVertexCallback,
 }
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
-    ["Size of Visitor"][::std::mem::size_of::<Visitor>() - 248usize];
+    ["Size of Visitor"][::std::mem::size_of::<Visitor>() - 416usize];
     ["Alignment of Visitor"][::std::mem::align_of::<Visitor>() - 8usize];
-    ["Offset of field: Visitor::visitGraphCallback"]
-        [::std::mem::offset_of!(Visitor, visitGraphCallback) - 0usize];
-    ["Offset of field: Visitor::visitIsGTensorCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGTensorCallback) - 8usize];
-    ["Offset of field: Visitor::visitIsGNominate"]
-        [::std::mem::offset_of!(Visitor, visitIsGNominate) - 16usize];
-    ["Offset of field: Visitor::visitIsGEdgeAnon"]
-        [::std::mem::offset_of!(Visitor, visitIsGEdgeAnon) - 24usize];
-    ["Offset of field: Visitor::visitIsGEdgeNamed"]
-        [::std::mem::offset_of!(Visitor, visitIsGEdgeNamed) - 32usize];
-    ["Offset of field: Visitor::visitIsGRuleAnonCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGRuleAnonCallback) - 40usize];
-    ["Offset of field: Visitor::visitIsGRuleNamedCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGRuleNamedCallback) - 48usize];
+    ["Offset of field: Visitor::visitAttrCallback"]
+        [::std::mem::offset_of!(Visitor, visitAttrCallback) - 0usize];
+    ["Offset of field: Visitor::visitAttrNameCallback"]
+        [::std::mem::offset_of!(Visitor, visitAttrNameCallback) - 8usize];
+    ["Offset of field: Visitor::visitAttrValCallback"]
+        [::std::mem::offset_of!(Visitor, visitAttrValCallback) - 16usize];
     ["Offset of field: Visitor::visitBindingCallback"]
-        [::std::mem::offset_of!(Visitor, visitBindingCallback) - 56usize];
-    ["Offset of field: Visitor::visitGraphBindingCallback"]
-        [::std::mem::offset_of!(Visitor, visitGraphBindingCallback) - 64usize];
-    ["Offset of field: Visitor::visitVertexCallback"]
-        [::std::mem::offset_of!(Visitor, visitVertexCallback) - 72usize];
-    ["Offset of field: Visitor::visitIsGVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGVarCallback) - 80usize];
-    ["Offset of field: Visitor::visitNameCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameCallback) - 88usize];
-    ["Offset of field: Visitor::visitIsGSubgraphCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGSubgraphCallback) - 96usize];
-    ["Offset of field: Visitor::visitUVar"][::std::mem::offset_of!(Visitor, visitUVar) - 104usize];
-    ["Offset of field: Visitor::visitLVar"][::std::mem::offset_of!(Visitor, visitLVar) - 112usize];
-    ["Offset of field: Visitor::visitIdent"]
-        [::std::mem::offset_of!(Visitor, visitIdent) - 120usize];
+        [::std::mem::offset_of!(Visitor, visitBindingCallback) - 24usize];
+    ["Offset of field: Visitor::visitGBindCallback"]
+        [::std::mem::offset_of!(Visitor, visitGBindCallback) - 32usize];
+    ["Offset of field: Visitor::visitGraphCallback"]
+        [::std::mem::offset_of!(Visitor, visitGraphCallback) - 40usize];
+    ["Offset of field: Visitor::visitGEdgeAnonCallback"]
+        [::std::mem::offset_of!(Visitor, visitGEdgeAnonCallback) - 48usize];
+    ["Offset of field: Visitor::visitGEdgeNamedCallback"]
+        [::std::mem::offset_of!(Visitor, visitGEdgeNamedCallback) - 56usize];
+    ["Offset of field: Visitor::visitGNilCallback"]
+        [::std::mem::offset_of!(Visitor, visitGNilCallback) - 64usize];
+    ["Offset of field: Visitor::visitGNominateCallback"]
+        [::std::mem::offset_of!(Visitor, visitGNominateCallback) - 72usize];
+    ["Offset of field: Visitor::visitGRuleAnonCallback"]
+        [::std::mem::offset_of!(Visitor, visitGRuleAnonCallback) - 80usize];
+    ["Offset of field: Visitor::visitGRuleNamedCallback"]
+        [::std::mem::offset_of!(Visitor, visitGRuleNamedCallback) - 88usize];
+    ["Offset of field: Visitor::visitGSubgraphCallback"]
+        [::std::mem::offset_of!(Visitor, visitGSubgraphCallback) - 96usize];
+    ["Offset of field: Visitor::visitGTensorCallback"]
+        [::std::mem::offset_of!(Visitor, visitGTensorCallback) - 104usize];
+    ["Offset of field: Visitor::visitGVarCallback"]
+        [::std::mem::offset_of!(Visitor, visitGVarCallback) - 112usize];
+    ["Offset of field: Visitor::visitGVertexCallback"]
+        [::std::mem::offset_of!(Visitor, visitGVertexCallback) - 120usize];
+    ["Offset of field: Visitor::visitIdentCallback"]
+        [::std::mem::offset_of!(Visitor, visitIdentCallback) - 128usize];
     ["Offset of field: Visitor::visitIntegerCallback"]
-        [::std::mem::offset_of!(Visitor, visitIntegerCallback) - 128usize];
-    ["Offset of field: Visitor::visitDoubleCallback"]
-        [::std::mem::offset_of!(Visitor, visitDoubleCallback) - 136usize];
-    ["Offset of field: Visitor::visitCharCallback"]
-        [::std::mem::offset_of!(Visitor, visitCharCallback) - 144usize];
-    ["Offset of field: Visitor::visitStringCallback"]
-        [::std::mem::offset_of!(Visitor, visitStringCallback) - 152usize];
-    ["Offset of field: Visitor::visitIsGVertexCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGVertexCallback) - 160usize];
-    ["Offset of field: Visitor::visitIsGNilCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGNilCallback) - 168usize];
-    ["Offset of field: Visitor::visitIsVBindCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsVBindCallback) - 176usize];
+        [::std::mem::offset_of!(Visitor, visitIntegerCallback) - 136usize];
+    ["Offset of field: Visitor::visitIsAttrListCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsAttrListCallback) - 144usize];
+    ["Offset of field: Visitor::visitIsAttributeNameCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsAttributeNameCallback) - 152usize];
+    ["Offset of field: Visitor::visitIsAttributePairCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsAttributePairCallback) - 160usize];
+    ["Offset of field: Visitor::visitIsAttributeValueCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsAttributeValueCallback) - 168usize];
     ["Offset of field: Visitor::visitIsGBindCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGBindCallback) - 184usize];
+        [::std::mem::offset_of!(Visitor, visitIsGBindCallback) - 176usize];
+    ["Offset of field: Visitor::visitIsGEdgeAnonCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGEdgeAnonCallback) - 184usize];
+    ["Offset of field: Visitor::visitIsGEdgeNamedCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGEdgeNamedCallback) - 192usize];
+    ["Offset of field: Visitor::visitIsGNilCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGNilCallback) - 200usize];
+    ["Offset of field: Visitor::visitIsGNominateCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGNominateCallback) - 208usize];
+    ["Offset of field: Visitor::visitIsGRuleAnonCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGRuleAnonCallback) - 216usize];
+    ["Offset of field: Visitor::visitIsGRuleNamedCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGRuleNamedCallback) - 224usize];
+    ["Offset of field: Visitor::visitIsGSubgraphCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGSubgraphCallback) - 232usize];
+    ["Offset of field: Visitor::visitIsGTensorCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGTensorCallback) - 240usize];
+    ["Offset of field: Visitor::visitIsGVarCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGVarCallback) - 248usize];
+    ["Offset of field: Visitor::visitIsGVertexCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsGVertexCallback) - 256usize];
+    ["Offset of field: Visitor::visitIsNameGVarCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsNameGVarCallback) - 264usize];
+    ["Offset of field: Visitor::visitIsNameQuoteGraphCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsNameQuoteGraphCallback) - 272usize];
+    ["Offset of field: Visitor::visitIsNameQuoteVertexCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsNameQuoteVertexCallback) - 280usize];
+    ["Offset of field: Visitor::visitIsNameVVarCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsNameVVarCallback) - 288usize];
+    ["Offset of field: Visitor::visitIsNameWildcardCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsNameWildcardCallback) - 296usize];
+    ["Offset of field: Visitor::visitIsVBindCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsVBindCallback) - 304usize];
     ["Offset of field: Visitor::visitIsVNameCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsVNameCallback) - 192usize];
-    ["Offset of field: Visitor::visitNameWildcardCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameWildcardCallback) - 200usize];
-    ["Offset of field: Visitor::visitNameVVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameVVarCallback) - 208usize];
+        [::std::mem::offset_of!(Visitor, visitIsVNameCallback) - 312usize];
+    ["Offset of field: Visitor::visitIsEmptyAttrListCallback"]
+        [::std::mem::offset_of!(Visitor, visitIsEmptyAttrListCallback) - 320usize];
+    ["Offset of field: Visitor::visitListAttrCallback"]
+        [::std::mem::offset_of!(Visitor, visitListAttrCallback) - 328usize];
+    ["Offset of field: Visitor::visitListNameCallback"]
+        [::std::mem::offset_of!(Visitor, visitListNameCallback) - 336usize];
+    ["Offset of field: Visitor::visitLVarCallback"]
+        [::std::mem::offset_of!(Visitor, visitLVarCallback) - 344usize];
+    ["Offset of field: Visitor::visitNameCallback"]
+        [::std::mem::offset_of!(Visitor, visitNameCallback) - 352usize];
     ["Offset of field: Visitor::visitNameGVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameGVarCallback) - 216usize];
-    ["Offset of field: Visitor::visitIsNameQuoteGraph"]
-        [::std::mem::offset_of!(Visitor, visitIsNameQuoteGraph) - 224usize];
-    ["Offset of field: Visitor::visitIsNameQuoteVertex"]
-        [::std::mem::offset_of!(Visitor, visitIsNameQuoteVertex) - 232usize];
-    ["Offset of field: Visitor::visitListName"]
-        [::std::mem::offset_of!(Visitor, visitListName) - 240usize];
+        [::std::mem::offset_of!(Visitor, visitNameGVarCallback) - 360usize];
+    ["Offset of field: Visitor::visitNameVVarCallback"]
+        [::std::mem::offset_of!(Visitor, visitNameVVarCallback) - 368usize];
+    ["Offset of field: Visitor::visitNameWildcardCallback"]
+        [::std::mem::offset_of!(Visitor, visitNameWildcardCallback) - 376usize];
+    ["Offset of field: Visitor::visitStringCallback"]
+        [::std::mem::offset_of!(Visitor, visitStringCallback) - 384usize];
+    ["Offset of field: Visitor::visitUVarCallback"]
+        [::std::mem::offset_of!(Visitor, visitUVarCallback) - 392usize];
+    ["Offset of field: Visitor::visitVBindCallback"]
+        [::std::mem::offset_of!(Visitor, visitVBindCallback) - 400usize];
+    ["Offset of field: Visitor::visitVertexCallback"]
+        [::std::mem::offset_of!(Visitor, visitVertexCallback) - 408usize];
 };
 unsafe extern "C" {
     pub fn visitGraph(p: Graph, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
@@ -1398,6 +1833,18 @@ unsafe extern "C" {
 }
 unsafe extern "C" {
     pub fn visitString(s: String, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
+}
+unsafe extern "C" {
+    pub fn visitAttrVal(p: AttrVal, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
+}
+unsafe extern "C" {
+    pub fn visitAttrName(p: AttrName, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
+}
+unsafe extern "C" {
+    pub fn visitAttr(p: Attr, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
+}
+unsafe extern "C" {
+    pub fn visitListAttr(p: ListAttr, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);
 }
 pub type va_list = __builtin_va_list;
 pub type __gnuc_va_list = __builtin_va_list;
@@ -2108,6 +2555,30 @@ unsafe extern "C" {
     pub fn psGraphBinding(str_: *const ::std::os::raw::c_char) -> GraphBinding;
 }
 unsafe extern "C" {
+    pub fn pAttrVal(inp: *mut FILE) -> AttrVal;
+}
+unsafe extern "C" {
+    pub fn psAttrVal(str_: *const ::std::os::raw::c_char) -> AttrVal;
+}
+unsafe extern "C" {
+    pub fn pAttrName(inp: *mut FILE) -> AttrName;
+}
+unsafe extern "C" {
+    pub fn psAttrName(str_: *const ::std::os::raw::c_char) -> AttrName;
+}
+unsafe extern "C" {
+    pub fn pAttr(inp: *mut FILE) -> Attr;
+}
+unsafe extern "C" {
+    pub fn psAttr(str_: *const ::std::os::raw::c_char) -> Attr;
+}
+unsafe extern "C" {
+    pub fn pListAttr(inp: *mut FILE) -> ListAttr;
+}
+unsafe extern "C" {
+    pub fn psListAttr(str_: *const ::std::os::raw::c_char) -> ListAttr;
+}
+unsafe extern "C" {
     pub fn pVertex(inp: *mut FILE) -> Vertex;
 }
 unsafe extern "C" {
@@ -2156,6 +2627,18 @@ unsafe extern "C" {
     pub fn printGraphBinding(p: GraphBinding) -> *mut ::std::os::raw::c_char;
 }
 unsafe extern "C" {
+    pub fn printAttrVal(p: AttrVal) -> *mut ::std::os::raw::c_char;
+}
+unsafe extern "C" {
+    pub fn printAttrName(p: AttrName) -> *mut ::std::os::raw::c_char;
+}
+unsafe extern "C" {
+    pub fn printAttr(p: Attr) -> *mut ::std::os::raw::c_char;
+}
+unsafe extern "C" {
+    pub fn printListAttr(p: ListAttr) -> *mut ::std::os::raw::c_char;
+}
+unsafe extern "C" {
     pub fn printVertex(p: Vertex) -> *mut ::std::os::raw::c_char;
 }
 unsafe extern "C" {
@@ -2172,6 +2655,18 @@ unsafe extern "C" {
 }
 unsafe extern "C" {
     pub fn ppGraphBinding(p: GraphBinding, i: ::std::os::raw::c_int);
+}
+unsafe extern "C" {
+    pub fn ppAttrVal(p: AttrVal, i: ::std::os::raw::c_int);
+}
+unsafe extern "C" {
+    pub fn ppAttrName(p: AttrName, i: ::std::os::raw::c_int);
+}
+unsafe extern "C" {
+    pub fn ppAttr(p: Attr, i: ::std::os::raw::c_int);
+}
+unsafe extern "C" {
+    pub fn ppListAttr(p: ListAttr, i: ::std::os::raw::c_int);
 }
 unsafe extern "C" {
     pub fn ppVertex(p: Vertex, i: ::std::os::raw::c_int);
@@ -2192,6 +2687,18 @@ unsafe extern "C" {
     pub fn showGraphBinding(p: GraphBinding) -> *mut ::std::os::raw::c_char;
 }
 unsafe extern "C" {
+    pub fn showAttrVal(p: AttrVal) -> *mut ::std::os::raw::c_char;
+}
+unsafe extern "C" {
+    pub fn showAttrName(p: AttrName) -> *mut ::std::os::raw::c_char;
+}
+unsafe extern "C" {
+    pub fn showAttr(p: Attr) -> *mut ::std::os::raw::c_char;
+}
+unsafe extern "C" {
+    pub fn showListAttr(p: ListAttr) -> *mut ::std::os::raw::c_char;
+}
+unsafe extern "C" {
     pub fn showVertex(p: Vertex) -> *mut ::std::os::raw::c_char;
 }
 unsafe extern "C" {
@@ -2208,6 +2715,18 @@ unsafe extern "C" {
 }
 unsafe extern "C" {
     pub fn shGraphBinding(p: GraphBinding);
+}
+unsafe extern "C" {
+    pub fn shAttrVal(p: AttrVal);
+}
+unsafe extern "C" {
+    pub fn shAttrName(p: AttrName);
+}
+unsafe extern "C" {
+    pub fn shAttr(p: Attr);
+}
+unsafe extern "C" {
+    pub fn shListAttr(p: ListAttr);
 }
 unsafe extern "C" {
     pub fn shVertex(p: Vertex);

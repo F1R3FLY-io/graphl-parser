@@ -5,73 +5,8 @@
 /* You might want to change the above name. */
 
 #include "Absyn.h"
+#include "Visitor.h"
 
-typedef void (*visitGTensor)(Graph p, void *context);
-typedef void (*visitGNominate)(Graph p, void *context);
-typedef void (*visitGEdgeAnon)(Graph p, void *context);
-typedef void (*visitGEdgeNamed)(Graph p, void *context);
-typedef void (*visitGRuleAnon)(Graph p, void *context);
-typedef void (*visitGRuleNamed)(Graph p, void *context);
-typedef void (*visitBindingCallback)(Binding p, void *context);
-typedef void (*visitGraphBindingCallback)(GraphBinding p, void *context);
-typedef void (*visitVertexCallback)(Vertex p, void *context);
-typedef void (*visitNameCallback)(Name p, void *context);
-typedef void (*visitUVarCallback)(UVar p, void *context);
-typedef void (*visitLVarCallback)(LVar p, void *context);
-typedef void (*visitIdentCallback)(Ident i, void *context);
-typedef void (*visitIntegerCallback)(Integer i, void *context);
-typedef void (*visitDoubleCallback)(Double d, void *context);
-typedef void (*visitCharCallback)(Char c, void *context);
-typedef void (*visitStringCallback)(String s, void *context);
-typedef void (*visitGSubgraph)(Graph p, void *context);
-typedef void (*visitGVertexCallback)(Graph p, void *context);
-typedef void (*visitGVar)(Graph p, void *context);
-typedef void (*visitGNilCallback)(Graph p, void *context);
-typedef void (*visitVBindCallback)(Binding p, void *context);
-typedef void (*visitGBindCallback)(GraphBinding p, void *context);
-typedef void (*visitIsVNameCallback)(Vertex p, void *context);
-typedef void (*visitNameWildcardCallback)(Name p, void *context);
-typedef void (*visitNameVVarCallback)(Name p, void *context);
-typedef void (*visitNameGVarCallback)(Name p, void *context);
-typedef void (*visitIsNameQuoteGraph)(Name p, void *context);
-typedef void (*visitIsNameQuoteVertex)(Name p, void *context);
-typedef void (*visitListNameCallback)(ListName listname, void *context);
-typedef void (*visitGraphCallback)(Graph g, void* context);
-
-
-typedef struct {
-  visitGraphCallback visitGraphCallback;
-  visitGTensor visitIsGTensorCallback;
-  visitGNominate visitIsGNominate;
-  visitGEdgeAnon visitIsGEdgeAnon;
-  visitGEdgeNamed visitIsGEdgeNamed;
-  visitGRuleAnon visitIsGRuleAnonCallback;
-  visitGRuleNamed visitIsGRuleNamedCallback;
-  visitBindingCallback visitBindingCallback;
-  visitGraphBindingCallback visitGraphBindingCallback;
-  visitVertexCallback visitVertexCallback;
-  visitGVar visitIsGVarCallback;
-  visitNameCallback visitNameCallback;
-  visitGSubgraph visitIsGSubgraphCallback;
-  visitUVarCallback visitUVar;
-  visitLVarCallback visitLVar;
-  visitIdentCallback visitIdent;
-  visitIntegerCallback visitIntegerCallback;
-  visitDoubleCallback visitDoubleCallback;
-  visitCharCallback visitCharCallback;
-  visitStringCallback visitStringCallback;
-  visitGVertexCallback visitIsGVertexCallback;
-  visitGNilCallback visitIsGNilCallback;
-  visitVBindCallback visitIsVBindCallback;
-  visitGBindCallback visitIsGBindCallback;
-  visitIsVNameCallback visitIsVNameCallback;
-  visitNameWildcardCallback visitNameWildcardCallback;
-  visitNameVVarCallback visitNameVVarCallback;
-  visitNameGVarCallback visitNameGVarCallback;
-  visitIsNameQuoteGraph visitIsNameQuoteGraph;
-  visitIsNameQuoteVertex visitIsNameQuoteVertex;
-  visitListNameCallback visitListName;
-}  Visitor;
 
 void visitGraph(Graph p, Visitor *visitor, void *context);
 void visitBinding(Binding p, Visitor *visitor, void *context);
@@ -86,5 +21,9 @@ void visitInteger(Integer i, Visitor *visitor, void *context);
 void visitDouble(Double d, Visitor *visitor, void *context);
 void visitChar(Char c, Visitor *visitor, void *context);
 void visitString(String s, Visitor *visitor, void *context);
+void visitAttrVal(AttrVal p, Visitor *visitor, void *context);
+void visitAttrName(AttrName p, Visitor *visitor, void *context);
+void visitAttr(Attr p, Visitor *visitor, void *context);
+void visitListAttr(ListAttr p, Visitor *visitor, void *context);
 
 #endif
