@@ -1,4 +1,3 @@
-use std::mem::ManuallyDrop;
 use std::ops::{Deref, DerefMut};
 
 use crate::bindings;
@@ -20,9 +19,7 @@ where
     Self: Releasable,
 {
     fn guarded(self) -> Guard<Self> {
-        Guard {
-            value: ManuallyDrop::new(self),
-        }
+        Guard { value: self }
     }
 }
 
@@ -30,7 +27,7 @@ pub(crate) struct Guard<T>
 where
     T: Releasable,
 {
-    value: ManuallyDrop<T>,
+    value: T,
 }
 
 impl<T: Releasable> Deref for Guard<T> {
@@ -53,16 +50,6 @@ where
 {
     fn drop(&mut self) {
         self.value.release();
-    }
-}
-
-impl<T> Guard<T>
-where
-    T: Releasable,
-{
-    pub(crate) fn into_inner(self) -> T {
-        let mut this = ManuallyDrop::new(self);
-        unsafe { ManuallyDrop::take(&mut this.value) }
     }
 }
 
@@ -101,3 +88,43 @@ unsafe impl Releasable for bindings::LVar {
         unsafe { bindings::free_LVar(*self) }
     }
 }
+
+pub(crate) trait ResourceConsumer: Sized {
+    type Target;
+
+    fn consume<T>(self, f: impl FnOnce(Self::Target) -> *mut T) -> Option<Guard<*mut T>>
+    where
+        *mut T: Releasable;
+}
+
+macro_rules! impl_resource_consumer {
+    ($($ty:ident),+) => {
+        #[allow(non_snake_case)]
+        impl<$($ty),+> ResourceConsumer for ($(Guard<*mut $ty>,)+)
+        where
+            $(*mut $ty: Releasable,)+
+        {
+            type Target = ($(*mut $ty,)+);
+
+            fn consume<T>(self, f: impl FnOnce(Self::Target) -> *mut T) -> Option<Guard<*mut T>>
+            where
+                *mut T: Releasable,
+            {
+                let ($($ty,)+) = self;
+
+                let result = f(($(*$ty,)+));
+
+                if result.is_null() {
+                    None
+                } else {
+                    $(std::mem::forget($ty);)+
+                    Some(result.guarded())
+                }
+            }
+        }
+    };
+}
+
+impl_resource_consumer!(R1);
+impl_resource_consumer!(R1, R2);
+impl_resource_consumer!(R1, R2, R3);
