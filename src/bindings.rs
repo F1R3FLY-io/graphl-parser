@@ -1530,8 +1530,6 @@ pub type visitBindingCallback =
 pub type visitGBindCallback = ::std::option::Option<
     unsafe extern "C" fn(p: GraphBinding, context: *mut ::std::os::raw::c_void),
 >;
-pub type visitGraphCallback =
-    ::std::option::Option<unsafe extern "C" fn(g: Graph, context: *mut ::std::os::raw::c_void)>;
 pub type visitGEdgeAnonCallback =
     ::std::option::Option<unsafe extern "C" fn(p: Graph, context: *mut ::std::os::raw::c_void)>;
 pub type visitGEdgeNamedCallback =
@@ -1638,7 +1636,6 @@ pub struct Visitor {
     pub visitAttrValCallback: visitAttrValCallback,
     pub visitBindingCallback: visitBindingCallback,
     pub visitGBindCallback: visitGBindCallback,
-    pub visitGraphCallback: visitGraphCallback,
     pub visitGEdgeAnonCallback: visitGEdgeAnonCallback,
     pub visitGEdgeNamedCallback: visitGEdgeNamedCallback,
     pub visitGNilCallback: visitGNilCallback,
@@ -1690,7 +1687,7 @@ pub struct Visitor {
 }
 #[allow(clippy::unnecessary_operation, clippy::identity_op)]
 const _: () = {
-    ["Size of Visitor"][::std::mem::size_of::<Visitor>() - 432usize];
+    ["Size of Visitor"][::std::mem::size_of::<Visitor>() - 424usize];
     ["Alignment of Visitor"][::std::mem::align_of::<Visitor>() - 8usize];
     ["Offset of field: Visitor::visitAttrCallback"]
         [::std::mem::offset_of!(Visitor, visitAttrCallback) - 0usize];
@@ -1702,104 +1699,102 @@ const _: () = {
         [::std::mem::offset_of!(Visitor, visitBindingCallback) - 24usize];
     ["Offset of field: Visitor::visitGBindCallback"]
         [::std::mem::offset_of!(Visitor, visitGBindCallback) - 32usize];
-    ["Offset of field: Visitor::visitGraphCallback"]
-        [::std::mem::offset_of!(Visitor, visitGraphCallback) - 40usize];
     ["Offset of field: Visitor::visitGEdgeAnonCallback"]
-        [::std::mem::offset_of!(Visitor, visitGEdgeAnonCallback) - 48usize];
+        [::std::mem::offset_of!(Visitor, visitGEdgeAnonCallback) - 40usize];
     ["Offset of field: Visitor::visitGEdgeNamedCallback"]
-        [::std::mem::offset_of!(Visitor, visitGEdgeNamedCallback) - 56usize];
+        [::std::mem::offset_of!(Visitor, visitGEdgeNamedCallback) - 48usize];
     ["Offset of field: Visitor::visitGNilCallback"]
-        [::std::mem::offset_of!(Visitor, visitGNilCallback) - 64usize];
+        [::std::mem::offset_of!(Visitor, visitGNilCallback) - 56usize];
     ["Offset of field: Visitor::visitGNominateCallback"]
-        [::std::mem::offset_of!(Visitor, visitGNominateCallback) - 72usize];
+        [::std::mem::offset_of!(Visitor, visitGNominateCallback) - 64usize];
     ["Offset of field: Visitor::visitGRuleAnonCallback"]
-        [::std::mem::offset_of!(Visitor, visitGRuleAnonCallback) - 80usize];
+        [::std::mem::offset_of!(Visitor, visitGRuleAnonCallback) - 72usize];
     ["Offset of field: Visitor::visitGRuleNamedCallback"]
-        [::std::mem::offset_of!(Visitor, visitGRuleNamedCallback) - 88usize];
+        [::std::mem::offset_of!(Visitor, visitGRuleNamedCallback) - 80usize];
     ["Offset of field: Visitor::visitGSubgraphCallback"]
-        [::std::mem::offset_of!(Visitor, visitGSubgraphCallback) - 96usize];
+        [::std::mem::offset_of!(Visitor, visitGSubgraphCallback) - 88usize];
     ["Offset of field: Visitor::visitGTensorCallback"]
-        [::std::mem::offset_of!(Visitor, visitGTensorCallback) - 104usize];
+        [::std::mem::offset_of!(Visitor, visitGTensorCallback) - 96usize];
     ["Offset of field: Visitor::visitGVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitGVarCallback) - 112usize];
+        [::std::mem::offset_of!(Visitor, visitGVarCallback) - 104usize];
     ["Offset of field: Visitor::visitGVertexCallback"]
-        [::std::mem::offset_of!(Visitor, visitGVertexCallback) - 120usize];
+        [::std::mem::offset_of!(Visitor, visitGVertexCallback) - 112usize];
     ["Offset of field: Visitor::visitIdentCallback"]
-        [::std::mem::offset_of!(Visitor, visitIdentCallback) - 128usize];
+        [::std::mem::offset_of!(Visitor, visitIdentCallback) - 120usize];
     ["Offset of field: Visitor::visitIntegerCallback"]
-        [::std::mem::offset_of!(Visitor, visitIntegerCallback) - 136usize];
+        [::std::mem::offset_of!(Visitor, visitIntegerCallback) - 128usize];
     ["Offset of field: Visitor::visitIsAttrListCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsAttrListCallback) - 144usize];
+        [::std::mem::offset_of!(Visitor, visitIsAttrListCallback) - 136usize];
     ["Offset of field: Visitor::visitIsAttributeNameCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsAttributeNameCallback) - 152usize];
+        [::std::mem::offset_of!(Visitor, visitIsAttributeNameCallback) - 144usize];
     ["Offset of field: Visitor::visitIsAttributePairCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsAttributePairCallback) - 160usize];
+        [::std::mem::offset_of!(Visitor, visitIsAttributePairCallback) - 152usize];
     ["Offset of field: Visitor::visitIsAttributeValueCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsAttributeValueCallback) - 168usize];
+        [::std::mem::offset_of!(Visitor, visitIsAttributeValueCallback) - 160usize];
     ["Offset of field: Visitor::visitIsGBindCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGBindCallback) - 176usize];
+        [::std::mem::offset_of!(Visitor, visitIsGBindCallback) - 168usize];
     ["Offset of field: Visitor::visitIsGEdgeAnonCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGEdgeAnonCallback) - 184usize];
+        [::std::mem::offset_of!(Visitor, visitIsGEdgeAnonCallback) - 176usize];
     ["Offset of field: Visitor::visitIsGEdgeNamedCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGEdgeNamedCallback) - 192usize];
+        [::std::mem::offset_of!(Visitor, visitIsGEdgeNamedCallback) - 184usize];
     ["Offset of field: Visitor::visitIsGNilCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGNilCallback) - 200usize];
+        [::std::mem::offset_of!(Visitor, visitIsGNilCallback) - 192usize];
     ["Offset of field: Visitor::visitIsGNominateCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGNominateCallback) - 208usize];
+        [::std::mem::offset_of!(Visitor, visitIsGNominateCallback) - 200usize];
     ["Offset of field: Visitor::visitIsGRuleAnonCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGRuleAnonCallback) - 216usize];
+        [::std::mem::offset_of!(Visitor, visitIsGRuleAnonCallback) - 208usize];
     ["Offset of field: Visitor::visitIsGRuleNamedCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGRuleNamedCallback) - 224usize];
+        [::std::mem::offset_of!(Visitor, visitIsGRuleNamedCallback) - 216usize];
     ["Offset of field: Visitor::visitIsGSubgraphCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGSubgraphCallback) - 232usize];
+        [::std::mem::offset_of!(Visitor, visitIsGSubgraphCallback) - 224usize];
     ["Offset of field: Visitor::visitIsGTensorCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGTensorCallback) - 240usize];
+        [::std::mem::offset_of!(Visitor, visitIsGTensorCallback) - 232usize];
     ["Offset of field: Visitor::visitIsGVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGVarCallback) - 248usize];
+        [::std::mem::offset_of!(Visitor, visitIsGVarCallback) - 240usize];
     ["Offset of field: Visitor::visitIsGVertexCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsGVertexCallback) - 256usize];
+        [::std::mem::offset_of!(Visitor, visitIsGVertexCallback) - 248usize];
     ["Offset of field: Visitor::visitIsNameGVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsNameGVarCallback) - 264usize];
+        [::std::mem::offset_of!(Visitor, visitIsNameGVarCallback) - 256usize];
     ["Offset of field: Visitor::visitIsNameQuoteGraphCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsNameQuoteGraphCallback) - 272usize];
+        [::std::mem::offset_of!(Visitor, visitIsNameQuoteGraphCallback) - 264usize];
     ["Offset of field: Visitor::visitIsNameQuoteVertexCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsNameQuoteVertexCallback) - 280usize];
+        [::std::mem::offset_of!(Visitor, visitIsNameQuoteVertexCallback) - 272usize];
     ["Offset of field: Visitor::visitIsNameVVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsNameVVarCallback) - 288usize];
+        [::std::mem::offset_of!(Visitor, visitIsNameVVarCallback) - 280usize];
     ["Offset of field: Visitor::visitIsNameWildcardCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsNameWildcardCallback) - 296usize];
+        [::std::mem::offset_of!(Visitor, visitIsNameWildcardCallback) - 288usize];
     ["Offset of field: Visitor::visitIsVBindCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsVBindCallback) - 304usize];
+        [::std::mem::offset_of!(Visitor, visitIsVBindCallback) - 296usize];
     ["Offset of field: Visitor::visitIsVNameCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsVNameCallback) - 312usize];
+        [::std::mem::offset_of!(Visitor, visitIsVNameCallback) - 304usize];
     ["Offset of field: Visitor::visitIsEmptyAttrListCallback"]
-        [::std::mem::offset_of!(Visitor, visitIsEmptyAttrListCallback) - 320usize];
+        [::std::mem::offset_of!(Visitor, visitIsEmptyAttrListCallback) - 312usize];
     ["Offset of field: Visitor::visitListAttrCallback"]
-        [::std::mem::offset_of!(Visitor, visitListAttrCallback) - 328usize];
+        [::std::mem::offset_of!(Visitor, visitListAttrCallback) - 320usize];
     ["Offset of field: Visitor::visitListNameCallback"]
-        [::std::mem::offset_of!(Visitor, visitListNameCallback) - 336usize];
+        [::std::mem::offset_of!(Visitor, visitListNameCallback) - 328usize];
     ["Offset of field: Visitor::visitLVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitLVarCallback) - 344usize];
+        [::std::mem::offset_of!(Visitor, visitLVarCallback) - 336usize];
     ["Offset of field: Visitor::visitNameCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameCallback) - 352usize];
+        [::std::mem::offset_of!(Visitor, visitNameCallback) - 344usize];
     ["Offset of field: Visitor::visitNameGVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameGVarCallback) - 360usize];
+        [::std::mem::offset_of!(Visitor, visitNameGVarCallback) - 352usize];
     ["Offset of field: Visitor::visitNameVVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameVVarCallback) - 368usize];
+        [::std::mem::offset_of!(Visitor, visitNameVVarCallback) - 360usize];
     ["Offset of field: Visitor::visitNameWildcardCallback"]
-        [::std::mem::offset_of!(Visitor, visitNameWildcardCallback) - 376usize];
+        [::std::mem::offset_of!(Visitor, visitNameWildcardCallback) - 368usize];
     ["Offset of field: Visitor::visitStringCallback"]
-        [::std::mem::offset_of!(Visitor, visitStringCallback) - 384usize];
+        [::std::mem::offset_of!(Visitor, visitStringCallback) - 376usize];
     ["Offset of field: Visitor::visitUVarCallback"]
-        [::std::mem::offset_of!(Visitor, visitUVarCallback) - 392usize];
+        [::std::mem::offset_of!(Visitor, visitUVarCallback) - 384usize];
     ["Offset of field: Visitor::visitVBindCallback"]
-        [::std::mem::offset_of!(Visitor, visitVBindCallback) - 400usize];
+        [::std::mem::offset_of!(Visitor, visitVBindCallback) - 392usize];
     ["Offset of field: Visitor::visitVertexCallback"]
-        [::std::mem::offset_of!(Visitor, visitVertexCallback) - 408usize];
+        [::std::mem::offset_of!(Visitor, visitVertexCallback) - 400usize];
     ["Offset of field: Visitor::visitDoubleCallback"]
-        [::std::mem::offset_of!(Visitor, visitDoubleCallback) - 416usize];
+        [::std::mem::offset_of!(Visitor, visitDoubleCallback) - 408usize];
     ["Offset of field: Visitor::visitCharCallback"]
-        [::std::mem::offset_of!(Visitor, visitCharCallback) - 424usize];
+        [::std::mem::offset_of!(Visitor, visitCharCallback) - 416usize];
 };
 unsafe extern "C" {
     pub fn visitGraph(p: Graph, visitor: *mut Visitor, context: *mut ::std::os::raw::c_void);

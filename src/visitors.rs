@@ -103,14 +103,6 @@ visitor_callback!(visitNameGVarCallback, Name, |_p, _context| format!(
     "visitNameGVarCallback{{ {} }}",
     INNER_PLACEHOLDER
 ));
-visitor_callback!(
-    visitGraphCallback,
-    Graph,
-    |p, _context: &'static mut String| {
-        dbg!(p);
-        format!("Graph {{ {} }}", INNER_PLACEHOLDER)
-    }
-);
 
 visitor_callback!(
     visitAttrCallback,

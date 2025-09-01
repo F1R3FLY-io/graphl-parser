@@ -5,7 +5,6 @@ typedef void (*visitAttrNameCallback)(AttrName p, void *context);
 typedef void (*visitAttrValCallback)(AttrVal p, void *context);
 typedef void (*visitBindingCallback)(Binding p, void *context);
 typedef void (*visitGBindCallback)(GraphBinding p, void *context);
-typedef void (*visitGraphCallback)(Graph g, void* context);
 typedef void (*visitGEdgeAnonCallback)(Graph p, void *context);
 typedef void (*visitGEdgeNamedCallback)(Graph p, void *context);
 typedef void (*visitGNilCallback)(Graph p, void *context);
@@ -61,7 +60,6 @@ typedef struct {
   visitAttrValCallback visitAttrValCallback;
   visitBindingCallback visitBindingCallback;
   visitGBindCallback visitGBindCallback;
-  visitGraphCallback visitGraphCallback;
   visitGEdgeAnonCallback visitGEdgeAnonCallback;
   visitGEdgeNamedCallback visitGEdgeNamedCallback;
   visitGNilCallback visitGNilCallback;

@@ -12,7 +12,6 @@
 #include "Skeleton.h"
 
 void visitGraph(Graph p, Visitor *visitor, void *context) {
-  visitor->visitGraphCallback(p, context);
 
   switch (p->kind) {
   case is_GTensor:

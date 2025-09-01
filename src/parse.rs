@@ -28,7 +28,6 @@ pub fn parse(document: String) -> std::result::Result<String, String> {
         visitNameWildcardCallback: Some(visitNameWildcardCallback),
         visitNameVVarCallback: Some(visitNameVVarCallback),
         visitNameGVarCallback: Some(visitNameGVarCallback),
-        visitGraphCallback: Some(visitGraphCallback),
         visitAttrCallback: Some(visitAttrCallback),
         visitAttrNameCallback: Some(visitAttrNameCallback),
         visitAttrValCallback: Some(visitAttrValCallback),
@@ -76,7 +75,8 @@ pub fn parse(document: String) -> std::result::Result<String, String> {
         let graph = psGraph(ptr);
         if graph.is_null() {
             return Err("psGraph returned null".to_string());
-        }
+        };
+
         visitGraph(
             graph,
             &mut visitor,
@@ -101,6 +101,9 @@ mod tests {
         let statement = String::from_str("0").unwrap();
         let result = parse(statement).unwrap();
 
-        assert_eq!(result, "visitGraph");
+        assert_eq!(
+            result,
+            "{ visitAttrCallback { visitIsGBindCallback{ %inner } } }"
+        );
     }
 }

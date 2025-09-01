@@ -26,5 +26,5 @@ archive:
 build: build_obj archive
 	@echo "Done"
 
-test:
+test: build
 	cargo test -- --no-capture --test-threads=1
