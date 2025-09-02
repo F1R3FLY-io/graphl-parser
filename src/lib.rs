@@ -37,10 +37,6 @@ pub fn ast_to_graphl(ast: ast::Graph) -> Result<String, ast::Error> {
         return Err(ast::Error::InvalidGraphL);
     }
 
-    if graph.is_null() {
-        return Err(ast::Error::InvalidGraphL);
-    }
-
     scopeguard::defer!({
         unsafe { bindings::bufReset() };
     });
