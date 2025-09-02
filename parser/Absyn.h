@@ -197,6 +197,9 @@ Name make_NameGVar(UVar p0);
 Name make_NameQuoteGraph(Graph p0);
 Name make_NameQuoteVertex(Vertex p0);
 
+LVar make_LVar(const char *p0);
+UVar make_UVar(const char *p0);
+
 struct ListName_
 {
   Name name_;
@@ -212,6 +215,8 @@ Binding clone_Binding(Binding p);
 GraphBinding clone_GraphBinding(GraphBinding p);
 Vertex clone_Vertex(Vertex p);
 Name clone_Name(Name p);
+LVar clone_LVar(LVar p0);
+UVar clone_UVar(UVar p0);
 ListName clone_ListName(ListName p);
 
 /********************   Recursive Destructors    **********************/
@@ -229,4 +234,6 @@ void free_Binding(Binding p);
 void free_GraphBinding(GraphBinding p);
 void free_Vertex(Vertex p);
 void free_Name(Name p);
+void free_LVar(LVar p0);
+void free_UVar(UVar p0);
 void free_ListName(ListName p);

@@ -5,6 +5,7 @@ use serde::{Deserialize, Serialize};
 use tsify::Tsify;
 
 use crate::bindings;
+use crate::guard::{Guard, Guarded, ResourceConsumer};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type")]
@@ -54,6 +55,21 @@ impl TryFrom<bindings::Binding> for Binding {
     }
 }
 
+impl TryFrom<Binding> for Guard<bindings::Binding> {
+    type Error = Error;
+
+    fn try_from(value: Binding) -> Result<Self, Self::Error> {
+        let graph = (*value.graph).try_into()?;
+        let var = to_c_string(value.var)?;
+        let vertex = value.vertex.try_into()?;
+        (var, vertex, graph)
+            .consume(|(var, vertex, graph)| unsafe { bindings::make_VBind(var, vertex, graph) })
+            .ok_or_else(|| Self::Error::NullPointer {
+                context: "make_VBind returned null".into(),
+            })
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi, from_wasm_abi))]
@@ -94,6 +110,23 @@ impl TryFrom<bindings::GraphBinding> for GraphBinding {
     }
 }
 
+impl TryFrom<GraphBinding> for Guard<bindings::GraphBinding> {
+    type Error = Error;
+
+    fn try_from(value: GraphBinding) -> Result<Self, Self::Error> {
+        let graph_1 = (*value.graph_1).try_into()?;
+        let graph_2 = (*value.graph_2).try_into()?;
+        let var = to_c_string(value.var)?;
+        (var, graph_1, graph_2)
+            .consume(|(var, graph_1, graph_2)| unsafe {
+                bindings::make_GBind(var, graph_1, graph_2)
+            })
+            .ok_or_else(|| Self::Error::NullPointer {
+                context: "make_GBind returned null".into(),
+            })
+    }
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize)]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi, from_wasm_abi))]
@@ -121,6 +154,19 @@ impl TryFrom<bindings::Vertex> for Vertex {
                 }),
             }
         }
+    }
+}
+
+impl TryFrom<Vertex> for Guard<bindings::Vertex> {
+    type Error = Error;
+
+    fn try_from(value: Vertex) -> Result<Self, Self::Error> {
+        let name = value.name.try_into()?;
+        (name,)
+            .consume(|(name,)| unsafe { bindings::make_VName(name) })
+            .ok_or_else(|| Self::Error::NullPointer {
+                context: "make_VName returned null".into(),
+            })
     }
 }
 
@@ -170,6 +216,58 @@ impl TryFrom<bindings::Name> for Name {
                 _ => Err(Self::Error::InvalidVariant {
                     context: "Name".into(),
                 }),
+            }
+        }
+    }
+}
+
+impl TryFrom<Name> for Guard<bindings::Name> {
+    type Error = Error;
+
+    fn try_from(value: Name) -> Result<Self, Self::Error> {
+        match value {
+            Name::Wildcard => {
+                let var = unsafe { bindings::make_NameWildcard() };
+
+                if var.is_null() {
+                    return Err(Error::NullPointer {
+                        context: "make_NameWildcard returned null".into(),
+                    });
+                }
+
+                Ok(var.guarded())
+            }
+            Name::VVar { value } => {
+                let value = to_c_string(value)?;
+                (value,)
+                    .consume(|(value,)| unsafe { bindings::make_NameVVar(value) })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_NameVVar returned null".into(),
+                    })
+            }
+            Name::GVar { value } => {
+                let value = to_c_string(value)?;
+                (value,)
+                    .consume(|(value,)| unsafe { bindings::make_NameGVar(value) })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_NameGVar returned null".into(),
+                    })
+            }
+            Name::QuoteGraph(graph) => {
+                let graph = (*graph).try_into()?;
+                (graph,)
+                    .consume(|(graph,)| unsafe { bindings::make_NameQuoteGraph(graph) })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_NameQuoteGraph returned null".into(),
+                    })
+            }
+            Name::QuoteVertex(vertex) => {
+                let vertex = (*vertex).try_into()?;
+                (vertex,)
+                    .consume(|(vertex,)| unsafe { bindings::make_NameQuoteVertex(vertex) })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_NameQuoteVertex returned null".into(),
+                    })
             }
         }
     }
@@ -336,9 +434,137 @@ impl TryFrom<bindings::Graph> for Graph {
     }
 }
 
-fn to_string(chars: *mut ::std::os::raw::c_char) -> Result<String, Error> {
+impl TryFrom<Graph> for Guard<bindings::Graph> {
+    type Error = Error;
+
+    fn try_from(value: Graph) -> Result<Self, Self::Error> {
+        match value {
+            Graph::Nil => {
+                let var = unsafe { bindings::make_GNil() };
+
+                if var.is_null() {
+                    return Err(Error::NullPointer {
+                        context: "make_GNil returned null".into(),
+                    });
+                }
+
+                Ok(var.guarded())
+            }
+            Graph::Vertex(gvertex) => {
+                let graph = (*gvertex.graph).try_into()?;
+                let vertex = gvertex.vertex.try_into()?;
+                (vertex, graph)
+                    .consume(|(vertex, graph)| unsafe { bindings::make_GVertex(vertex, graph) })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_GVertex returned null".into(),
+                    })
+            }
+            Graph::Var(gvar) => {
+                let graph = (*gvar.graph).try_into()?;
+                let var = to_c_string(gvar.var)?;
+                (var, graph)
+                    .consume(|(var, graph)| unsafe { bindings::make_GVar(var, graph) })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_GVar returned null".into(),
+                    })
+            }
+            Graph::Nominate(binding) => {
+                let binding = binding.try_into()?;
+                (binding,)
+                    .consume(|(binding,)| unsafe { bindings::make_GNominate(binding) })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_GNominate returned null".into(),
+                    })
+            }
+            Graph::EdgeAnon(gedge_anon) => {
+                let binding_1 = gedge_anon.binding_1.try_into()?;
+                let binding_2 = gedge_anon.binding_2.try_into()?;
+                (binding_1, binding_2)
+                    .consume(|(binding_1, binding_2)| unsafe {
+                        bindings::make_GEdgeAnon(binding_1, binding_2)
+                    })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_GEdgeAnon returned null".into(),
+                    })
+            }
+            Graph::EdgeNamed(gedge_named) => {
+                let binding_1 = gedge_named.binding_1.try_into()?;
+                let binding_2 = gedge_named.binding_2.try_into()?;
+                let name = gedge_named.name.try_into()?;
+                (name, binding_1, binding_2)
+                    .consume(|(name, binding_1, binding_2)| unsafe {
+                        bindings::make_GEdgeNamed(name, binding_1, binding_2)
+                    })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_GEdgeNamed returned null".into(),
+                    })
+            }
+            Graph::RuleAnon(grule_anon) => {
+                let graph_1 = (*grule_anon.graph_1).try_into()?;
+                let graph_2 = (*grule_anon.graph_2).try_into()?;
+                (graph_1, graph_2)
+                    .consume(|(graph_1, graph_2)| unsafe {
+                        bindings::make_GRuleAnon(graph_1, graph_2)
+                    })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_GRuleAnon returned null".into(),
+                    })
+            }
+            Graph::RuleNamed(grule_named) => {
+                let graph_1 = (*grule_named.graph_1).try_into()?;
+                let graph_2 = (*grule_named.graph_2).try_into()?;
+                let name = grule_named.name.try_into()?;
+                (name, graph_1, graph_2)
+                    .consume(|(name, graph_1, graph_2)| unsafe {
+                        bindings::make_GRuleNamed(name, graph_1, graph_2)
+                    })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_GRuleNamed returned null".into(),
+                    })
+            }
+            Graph::Subgraph(graph_binding) => {
+                let graph_binding = graph_binding.try_into()?;
+                (graph_binding,)
+                    .consume(|(graph_binding,)| unsafe { bindings::make_GSubgraph(graph_binding) })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_GSubgraph returned null".into(),
+                    })
+            }
+            Graph::Tensor(gtensor) => {
+                let graph_1 = (*gtensor.graph_1).try_into()?;
+                let graph_2 = (*gtensor.graph_2).try_into()?;
+                (graph_1, graph_2)
+                    .consume(|(graph_1, graph_2)| unsafe {
+                        bindings::make_GTensor(graph_1, graph_2)
+                    })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_GTensor returned null".into(),
+                    })
+            }
+        }
+    }
+}
+
+fn to_string(chars: *mut std::os::raw::c_char) -> Result<String, Error> {
     unsafe { std::ffi::CStr::from_ptr(chars) }
         .to_str()
         .map_err(|_| Error::InvalidUtf8String)
         .map(ToOwned::to_owned)
+}
+
+fn to_c_string(str: String) -> Result<Guard<*mut std::os::raw::c_char>, Error> {
+    let c_str = std::ffi::CString::new(str).map_err(|err| Error::InvalidCString {
+        position: err.nul_position(),
+    })?;
+
+    // we need to reallocate with malloc
+    let var = unsafe { bindings::make_LVar(c_str.as_ptr()) };
+
+    if var.is_null() {
+        return Err(Error::NullPointer {
+            context: "make_LVar returned null".into(),
+        });
+    }
+
+    Ok(var.guarded())
 }

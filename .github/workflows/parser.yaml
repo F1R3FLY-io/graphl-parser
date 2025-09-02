@@ -20,7 +20,7 @@ jobs:
         id: setup-rust
         uses: actions-rust-lang/setup-rust-toolchain@v1
         with:
-          toolchain: stable, nightly
+          toolchain: nightly, stable
           components: rustfmt, clippy
           cache: true
 
@@ -121,7 +121,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: rholang-tree-sitter
+        working-directory: js-package/src
 
     steps:
       - name: Checkout code
