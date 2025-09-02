@@ -1,6 +1,6 @@
 {
   "name": "@f1r3fly-io/graphl-parser",
-  "version": "1.0.0",
+  "version": "1.0.16",
   "description": "Parser for GraphL",
   "repository": {
     "type": "git",
@@ -10,14 +10,15 @@
     "registry": "https://npm.pkg.github.com"
   },
   "type": "module",
-  "main": "dist/graphl-parser.js",
-  "module": "dist/graphl-parser.es.js",
-  "browser": "dist/graphl-parser.umd.js",
-  "types": "dist/graphl-parser.d.ts",
+  "main": "./dist/graphl-parser.cjs.js",
+  "module": "./dist/graphl-parser.es.js",
+  "types": "./dist/graph_to_rholang_parser.d.ts",
   "exports": {
-    "types": "./dist/index.d.ts",
-    "import": "./dist/graphl-parser.es.js",
-    "require": "./dist/graphl-parser.cjs.js"
+    ".": {
+      "require": "./dist/graphl-parser.cjs.js",
+      "types": "./dist/graph_to_rholang_parser.d.ts",
+      "import": "./dist/graphl-parser.es.js"
+    }
   },
   "files": [
     "dist"

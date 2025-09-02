@@ -1,25 +1,22 @@
 import path from "path";
 import { defineConfig } from "vite";
-import wasm from "vite-plugin-wasm";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
+  esbuild: { target: "esnext" },
   plugins: [
-    wasm(),
     viteStaticCopy({
       targets: [
-        {
-          src: ["src/*.wasm", "src/*.d.ts"],
-          dest: "",
-        },
+        { src: ["src/*.d.ts"], dest: "" },
       ],
     }),
   ],
   build: {
+    target: "esnext",
     lib: {
-      entry: path.resolve(__dirname, "src/graph_to_rholang_parser.js"),
+      entry: path.resolve(__dirname, "js-wrapper/index.js"),
       fileName: (format) => `graphl-parser.${format}.js`,
-      formats: ["es"],
+      formats: ["es", "cjs"],
       name: "GraphlParser",
     },
   },

@@ -42,7 +42,7 @@ args = [
     "js-package/src",
     "--typescript",
     "--target",
-    "bundler",
+    "web",
 ]
 command = "wasm-bindgen"
 install_crate = "wasm-bindgen-cli"
