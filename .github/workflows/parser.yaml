@@ -182,6 +182,5 @@ jobs:
       - name: Create Tag
         uses: anothrNick/github-tag-action@v1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
           tag_prefix: ""
           release_branches: "main"
