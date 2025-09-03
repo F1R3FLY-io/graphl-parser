@@ -14,9 +14,9 @@
 #include "Absyn.h"
 #include "Parser.h"
 #include "Printer.h"
+#include "Absyn.h"
 
-void usage(void)
-{
+void usage(void) {
   printf("usage: Call with one of the following argument combinations:\n");
   printf("\t--help\t\tDisplay this help message.\n");
   printf("\t(no arguments)\tParse stdin verbosely.\n");
@@ -24,51 +24,40 @@ void usage(void)
   printf("\t-s (files)\tSilent mode. Parse content of files silently.\n");
 }
 
-int main(int argc, char **argv)
+int main(int argc, char ** argv)
 {
   FILE *input;
   Graph parse_tree;
   int quiet = 0;
   char *filename = NULL;
 
-  if (argc > 1)
-  {
-    if (strcmp(argv[1], "-s") == 0)
-    {
+  if (argc > 1) {
+    if (strcmp(argv[1], "-s") == 0) {
       quiet = 1;
-      if (argc > 2)
-      {
+      if (argc > 2) {
         filename = argv[2];
-      }
-      else
-      {
+      } else {
         input = stdin;
       }
-    }
-    else
-    {
+    } else {
       filename = argv[1];
     }
   }
 
-  if (filename)
-  {
+  if (filename) {
     input = fopen(filename, "r");
-    if (!input)
-    {
+    if (!input) {
       usage();
       exit(1);
     }
   }
-  else
-    input = stdin;
+  else input = stdin;
   /* The default entry point is used. For other options see Parser.h */
   parse_tree = pGraph(input);
   if (parse_tree)
   {
     printf("\nParse Successful!\n");
-    if (!quiet)
-    {
+    if (!quiet) {
       printf("\n[Abstract Syntax]\n");
       printf("%s\n\n", showGraph(parse_tree));
       printf("[Linearized Tree]\n");

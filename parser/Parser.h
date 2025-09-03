@@ -2,14 +2,32 @@
 
 #pragma once
 
+#include <stdio.h>
 #include "Absyn.h"
 
+Graph  pGraph(FILE *inp);
 Graph psGraph(const char *str);
+Graph  pGraph1(FILE *inp);
 Graph psGraph1(const char *str);
+Graph  pGraph2(FILE *inp);
 Graph psGraph2(const char *str);
+Graph  pGraph3(FILE *inp);
 Graph psGraph3(const char *str);
+Binding  pBinding(FILE *inp);
 Binding psBinding(const char *str);
+GraphBinding  pGraphBinding(FILE *inp);
 GraphBinding psGraphBinding(const char *str);
+AttrVal  pAttrVal(FILE *inp);
+AttrVal psAttrVal(const char *str);
+AttrName  pAttrName(FILE *inp);
+AttrName psAttrName(const char *str);
+Attr  pAttr(FILE *inp);
+Attr psAttr(const char *str);
+ListAttr  pListAttr(FILE *inp);
+ListAttr psListAttr(const char *str);
+Vertex  pVertex(FILE *inp);
 Vertex psVertex(const char *str);
+Name  pName(FILE *inp);
 Name psName(const char *str);
+ListName  pListName(FILE *inp);
 ListName psListName(const char *str);
