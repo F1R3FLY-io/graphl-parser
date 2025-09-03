@@ -168,19 +168,16 @@ jobs:
 
     permissions:
       contents: write
-      packages: write
-
-    env:
-      DEFAULT_BUMP: patch
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
         with:
           fetch-depth: "0"
 
       - name: Create Tag
         uses: anothrNick/github-tag-action@v1
-        with:
-          tag_prefix: ""
-          release_branches: "main"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG_PREFIX: ""
+          DEFAULT_BUMP: patch
