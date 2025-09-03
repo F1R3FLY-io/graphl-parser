@@ -5,7 +5,7 @@ indent_string     = "    "
 reorder_keys      = true
 
 [[rule]]
-exclude = ["**/Makefile.toml"]
+exclude = ["**/Makefile.toml", ".cargo/config.toml"]
 include = ["**/*.toml"]
 
 [rule.formatting]
