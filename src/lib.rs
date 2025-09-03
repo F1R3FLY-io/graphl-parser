@@ -13,7 +13,7 @@ mod bindings;
 mod guard;
 mod parse;
 
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen(js_name = parseToAst))]
 pub fn parse_to_ast(code: String) -> Result<ast::Graph, ast::Error> {
     let c_code = CString::new(code).map_err(|err| ast::Error::InvalidCString {
         position: err.nul_position(),
@@ -27,7 +27,7 @@ pub fn parse_to_ast(code: String) -> Result<ast::Graph, ast::Error> {
     (*graph).try_into()
 }
 
-#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen(js_name = astToGraphl))]
 pub fn ast_to_graphl(ast: ast::Graph) -> Result<String, ast::Error> {
     let ast: Guard<_> = ast.try_into()?;
 
