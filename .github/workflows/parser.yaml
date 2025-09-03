@@ -121,7 +121,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: js-package/src
+        working-directory: js-package
 
     steps:
       - name: Checkout code
