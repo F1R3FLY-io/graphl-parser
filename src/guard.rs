@@ -85,7 +85,7 @@ unsafe impl Releasable for bindings::Graph {
 
 unsafe impl Releasable for bindings::LVar {
     fn release(&mut self) {
-        unsafe {}
+        unsafe { bindings::free_LVar(*self) }
     }
 }
 
