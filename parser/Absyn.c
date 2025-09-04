@@ -13,7 +13,7 @@
 
 /********************   GNil    ********************/
 
-Graph make_GNil(void)
+Graph make_GNil()
 {
   Graph tmp = (Graph)malloc(sizeof(*tmp));
   if (!tmp)
@@ -191,6 +191,78 @@ GraphBinding make_GBind(UVar p1, Graph p2, Graph p3)
   return tmp;
 }
 
+/********************   AttributeValue    ********************/
+
+AttrVal make_AttributeValue(LVar p1)
+{
+  AttrVal tmp = (AttrVal)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_AttributeValue;
+  tmp->u.attributeValue_.lvar_ = p1;
+  return tmp;
+}
+
+/********************   AttributeName    ********************/
+
+AttrName make_AttributeName(LVar p1)
+{
+  AttrName tmp = (AttrName)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_AttributeName;
+  tmp->u.attributeName_.lvar_ = p1;
+  return tmp;
+}
+
+/********************   AttributePair    ********************/
+
+Attr make_AttributePair(AttrName p1, AttrVal p2)
+{
+  Attr tmp = (Attr)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_AttributePair;
+  tmp->u.attributePair_.attrname_ = p1;
+  tmp->u.attributePair_.attrval_ = p2;
+  return tmp;
+}
+
+/********************   EmptyAttrList    ********************/
+
+ListAttr make_EmptyAttrList()
+{
+  ListAttr tmp = (ListAttr)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_EmptyAttrList;
+  return tmp;
+}
+
+/********************   AttrList    ********************/
+
+ListAttr make_AttrList(Attr p1, ListAttr p2)
+{
+  ListAttr tmp = (ListAttr)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_AttrList;
+  tmp->u.attrList_.attr_ = p1;
+  tmp->u.attrList_.listattr_ = p2;
+
+  return tmp;
+}
+
 /********************   VName    ********************/
 
 Vertex make_VName(Name p1)
@@ -207,7 +279,7 @@ Vertex make_VName(Name p1)
 
 /********************   NameWildcard    ********************/
 
-Name make_NameWildcard(void)
+Name make_NameWildcard()
 {
   Name tmp = (Name)malloc(sizeof(*tmp));
   if (!tmp)
@@ -302,6 +374,12 @@ ListName make_ListName(Name p1, ListName p2)
 
 Graph clone_Graph(Graph p)
 {
+
+  if (!p)
+  {
+    return NULL;
+  }
+
   switch (p->kind)
   {
   case is_GNil:
@@ -349,13 +427,17 @@ Graph clone_Graph(Graph p)
 
 Binding clone_Binding(Binding p)
 {
+  if (!p)
+  {
+    return NULL;
+  }
+
   switch (p->kind)
   {
   case is_VBind:
     return make_VBind(strdup(p->u.vBind_.lvar_),
                       clone_Vertex(p->u.vBind_.vertex_),
                       clone_Graph(p->u.vBind_.graph_));
-
   default:
     return NULL;
   }
@@ -363,13 +445,91 @@ Binding clone_Binding(Binding p)
 
 GraphBinding clone_GraphBinding(GraphBinding p)
 {
+
+  if (!p)
+  {
+    return NULL;
+  }
+
   switch (p->kind)
   {
   case is_GBind:
     return make_GBind(strdup(p->u.gBind_.uvar_),
                       clone_Graph(p->u.gBind_.graph_1),
                       clone_Graph(p->u.gBind_.graph_2));
+  default:
+    return NULL;
+  }
+}
 
+AttrVal clone_AttrVal(AttrVal p)
+{
+
+  if (!p)
+  {
+    return NULL;
+  }
+
+  switch (p->kind)
+  {
+  case is_AttributeValue:
+    return make_AttributeValue(strdup(p->u.attributeValue_.lvar_));
+  default:
+    return NULL;
+  }
+}
+
+AttrName clone_AttrName(AttrName p)
+{
+
+  if (!p)
+  {
+    return NULL;
+  }
+
+  switch (p->kind)
+  {
+  case is_AttributeName:
+    return make_AttributeName(strdup(p->u.attributeName_.lvar_));
+  default:
+    return NULL;
+  }
+}
+
+Attr clone_Attr(Attr p)
+{
+
+  if (!p)
+  {
+    return NULL;
+  }
+
+  switch (p->kind)
+  {
+  case is_AttributePair:
+    return make_AttributePair(clone_AttrName(p->u.attributePair_.attrname_),
+                              clone_AttrVal(p->u.attributePair_.attrval_));
+  default:
+    return NULL;
+  }
+}
+
+ListAttr clone_ListAttr(ListAttr p)
+{
+
+  if (!p)
+  {
+    return NULL;
+  }
+
+  switch (p->kind)
+  {
+  case is_EmptyAttrList:
+    return make_EmptyAttrList();
+
+  case is_AttrList:
+    return make_AttrList(clone_Attr(p->u.attrList_.attr_),
+                         clone_ListAttr(p->u.attrList_.listattr_));
   default:
     return NULL;
   }
@@ -377,11 +537,16 @@ GraphBinding clone_GraphBinding(GraphBinding p)
 
 Vertex clone_Vertex(Vertex p)
 {
+
+  if (!p)
+  {
+    return NULL;
+  }
+
   switch (p->kind)
   {
   case is_VName:
     return make_VName(clone_Name(p->u.vName_.name_));
-
   default:
     return NULL;
   }
@@ -389,6 +554,12 @@ Vertex clone_Vertex(Vertex p)
 
 Name clone_Name(Name p)
 {
+
+  if (!p)
+  {
+    return NULL;
+  }
+
   switch (p->kind)
   {
   case is_NameWildcard:
@@ -405,7 +576,6 @@ Name clone_Name(Name p)
 
   case is_NameQuoteVertex:
     return make_NameQuoteVertex(clone_Vertex(p->u.nameQuoteVertex_.vertex_));
-
   default:
     return NULL;
   }
@@ -445,6 +615,12 @@ ListName clone_ListName(ListName listname)
 
 void free_Graph(Graph p)
 {
+
+  if (!p)
+  {
+    return;
+  }
+
   switch (p->kind)
   {
   case is_GNil:
@@ -494,12 +670,20 @@ void free_Graph(Graph p)
     free_Graph(p->u.gTensor_.graph_1);
     free_Graph(p->u.gTensor_.graph_2);
     break;
+  default:
+    return;
   }
   free(p);
 }
 
 void free_Binding(Binding p)
 {
+
+  if (!p)
+  {
+    return;
+  }
+
   switch (p->kind)
   {
   case is_VBind:
@@ -507,12 +691,20 @@ void free_Binding(Binding p)
     free_Vertex(p->u.vBind_.vertex_);
     free_Graph(p->u.vBind_.graph_);
     break;
+  default:
+    return;
   }
   free(p);
 }
 
 void free_GraphBinding(GraphBinding p)
 {
+
+  if (!p)
+  {
+    return;
+  }
+
   switch (p->kind)
   {
   case is_GBind:
@@ -520,12 +712,93 @@ void free_GraphBinding(GraphBinding p)
     free_Graph(p->u.gBind_.graph_1);
     free_Graph(p->u.gBind_.graph_2);
     break;
+  default:
+    return;
+  }
+  free(p);
+}
+
+void free_AttrVal(AttrVal p)
+{
+
+  if (!p)
+  {
+    return;
+  }
+
+  switch (p->kind)
+  {
+  case is_AttributeValue:
+    free(p->u.attributeValue_.lvar_);
+    break;
+  }
+  free(p);
+}
+
+void free_AttrName(AttrName p)
+{
+
+  if (!p)
+  {
+    return;
+  }
+
+  switch (p->kind)
+  {
+  case is_AttributeName:
+    free(p->u.attributeName_.lvar_);
+    break;
+  }
+  free(p);
+}
+
+void free_Attr(Attr p)
+{
+
+  if (!p)
+  {
+    return;
+  }
+
+  switch (p->kind)
+  {
+  case is_AttributePair:
+    free_AttrName(p->u.attributePair_.attrname_);
+    free_AttrVal(p->u.attributePair_.attrval_);
+    break;
+  }
+  free(p);
+}
+
+void free_ListAttr(ListAttr p)
+{
+
+  if (!p)
+  {
+    return;
+  }
+
+  switch (p->kind)
+  {
+  case is_EmptyAttrList:
+    break;
+
+  case is_AttrList:
+    free_Attr(p->u.attrList_.attr_);
+    free_ListAttr(p->u.attrList_.listattr_);
+    break;
   }
   free(p);
 }
 
 void free_Vertex(Vertex p)
 {
+
+  if (!p)
+  {
+    return;
+  }
+
   switch (p->kind)
   {
   case is_VName:
@@ -537,6 +810,12 @@ void free_Vertex(Vertex p)
 
 void free_Name(Name p)
 {
+
+  if (!p)
+  {
+    return;
+  }
+
   switch (p->kind)
   {
   case is_NameWildcard:

@@ -59,8 +59,8 @@ impl TryFrom<Binding> for Guard<bindings::Binding> {
     type Error = Error;
 
     fn try_from(value: Binding) -> Result<Self, Self::Error> {
+        let var = value.var.try_into()?;
         let graph = (*value.graph).try_into()?;
-        let var = to_c_string(value.var)?;
         let vertex = value.vertex.try_into()?;
         (var, vertex, graph)
             .consume(|(var, vertex, graph)| unsafe { bindings::make_VBind(var, vertex, graph) })
@@ -114,9 +114,9 @@ impl TryFrom<GraphBinding> for Guard<bindings::GraphBinding> {
     type Error = Error;
 
     fn try_from(value: GraphBinding) -> Result<Self, Self::Error> {
+        let var = (value.var).try_into()?;
         let graph_1 = (*value.graph_1).try_into()?;
         let graph_2 = (*value.graph_2).try_into()?;
-        let var = to_c_string(value.var)?;
         (var, graph_1, graph_2)
             .consume(|(var, graph_1, graph_2)| unsafe {
                 bindings::make_GBind(var, graph_1, graph_2)
@@ -567,4 +567,38 @@ fn to_c_string(str: String) -> Result<Guard<*mut std::os::raw::c_char>, Error> {
     }
 
     Ok(var.guarded())
+}
+
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
+pub fn parse_to_ast(code: String) -> Result<ast::Graph, ast::Error> {
+    let c_code = CString::new(code).map_err(|err| ast::Error::InvalidCString {
+        position: err.nul_position(),
+    })?;
+    let graph = unsafe { bindings::psGraph(c_code.as_ptr()) }.guarded();
+
+    if graph.is_null() {
+        return Err(ast::Error::InvalidGraphL);
+    }
+
+    (*graph).try_into()
+}
+
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen)]
+pub fn ast_to_graphl(ast: ast::Graph) -> Result<String, ast::Error> {
+    let ast: Guard<_> = ast.try_into()?;
+
+    let graphl = unsafe { bindings::printGraph(*ast) };
+
+    if graphl.is_null() {
+        return Err(ast::Error::InvalidGraphL);
+    }
+
+    scopeguard::defer!({
+        unsafe { bindings::bufReset() };
+    });
+
+    unsafe { CStr::from_ptr(graphl) }
+        .to_str()
+        .map(ToOwned::to_owned)
+        .map_err(|_| ast::Error::InvalidUtf8String)
 }

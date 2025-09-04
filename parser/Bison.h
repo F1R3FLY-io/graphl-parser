@@ -35,9 +35,12 @@
    especially those whose name start with YY_ or yy_.  They are
    private implementation details that can be changed or removed.  */
 
-#pragma once
-
+#ifndef YY_GRAMMAR_BISON_H_INCLUDED
+#define YY_GRAMMAR_BISON_H_INCLUDED
 /* Debug traces.  */
+#ifndef YYDEBUG
+#define YYDEBUG 1
+#endif
 #if YYDEBUG
 extern int grammar_debug;
 #endif
@@ -52,25 +55,26 @@ enum yytokentype
   YYerror = 256,     /* error  */
   YYUNDEF = 257,     /* "invalid token"  */
   _ERROR_ = 258,     /* _ERROR_  */
-  _LPAREN = 259,     /* _LPAREN  */
-  _RPAREN = 260,     /* _RPAREN  */
-  _STAR = 261,       /* _STAR  */
-  _COMMA = 262,      /* _COMMA  */
-  _SYMB_2 = 263,     /* _SYMB_2  */
-  _LT = 264,         /* _LT  */
-  _EQ = 265,         /* _EQ  */
-  _GT = 266,         /* _GT  */
-  _AT = 267,         /* _AT  */
-  _LBRACK = 268,     /* _LBRACK  */
-  _RBRACK = 269,     /* _RBRACK  */
-  _UNDERSCORE = 270, /* _UNDERSCORE  */
-  _KW_in = 271,      /* _KW_in  */
-  _KW_let = 272,     /* _KW_let  */
-  _LBRACE = 273,     /* _LBRACE  */
-  _BAR = 274,        /* _BAR  */
-  _RBRACE = 275,     /* _RBRACE  */
-  T_LVar = 276,      /* T_LVar  */
-  T_UVar = 277       /* T_UVar  */
+  _SYMB_11 = 259,    /* _SYMB_11  */
+  _LPAREN = 260,     /* _LPAREN  */
+  _RPAREN = 261,     /* _RPAREN  */
+  _STAR = 262,       /* _STAR  */
+  _COMMA = 263,      /* _COMMA  */
+  _SYMB_2 = 264,     /* _SYMB_2  */
+  _LT = 265,         /* _LT  */
+  _EQ = 266,         /* _EQ  */
+  _GT = 267,         /* _GT  */
+  _AT = 268,         /* _AT  */
+  _LBRACK = 269,     /* _LBRACK  */
+  _RBRACK = 270,     /* _RBRACK  */
+  _UNDERSCORE = 271, /* _UNDERSCORE  */
+  _KW_in = 272,      /* _KW_in  */
+  _KW_let = 273,     /* _KW_let  */
+  _LBRACE = 274,     /* _LBRACE  */
+  _BAR = 275,        /* _BAR  */
+  _RBRACE = 276,     /* _RBRACE  */
+  T_LVar = 277,      /* T_LVar  */
+  T_UVar = 278       /* T_UVar  */
 };
 typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -79,6 +83,8 @@ typedef enum yytokentype yytoken_kind_t;
 #if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
+#line 64 "grammar.y"
+
   int _int;
   char _char;
   double _double;
@@ -86,9 +92,15 @@ union YYSTYPE
   Graph graph_;
   Binding binding_;
   GraphBinding graphbinding_;
+  AttrVal attrval_;
+  AttrName attrname_;
+  Attr attr_;
+  ListAttr listattr_;
   Vertex vertex_;
   Name name_;
   ListName listname_;
+
+#line 104 "Bison.h"
 };
 typedef union YYSTYPE YYSTYPE;
 #define YYSTYPE_IS_TRIVIAL 1
@@ -110,3 +122,5 @@ struct YYLTYPE
 #endif
 
 int grammar_parse(yyscan_t scanner, YYSTYPE *result);
+
+#endif /* !YY_GRAMMAR_BISON_H_INCLUDED  */

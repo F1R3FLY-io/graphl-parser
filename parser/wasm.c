@@ -1,5 +1,5 @@
-#include <stddef.h>
 #include <limits.h>
+#include <stddef.h>
 
 #define NANOPRINTF_IMPLEMENTATION
 #include "nanoprintf.h"
@@ -44,9 +44,13 @@ char *strncpy(char *restrict dest, const char *restrict src, size_t count)
   return dest;
 }
 
-extern void __attribute__((noreturn)) rust_panic(const char *prefix, const char *s);
+extern void __attribute__((noreturn)) rust_panic(const char *prefix,
+                                                 const char *s);
 
-void __attribute__((noreturn)) panic(const char *prefix, const char *s) { rust_panic(prefix, s); }
+void __attribute__((noreturn)) panic(const char *prefix, const char *s)
+{
+  rust_panic(prefix, s);
+}
 
 int isspace(int c)
 {

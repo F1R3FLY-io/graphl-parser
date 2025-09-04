@@ -24,6 +24,18 @@ typedef struct Binding_ *Binding;
 struct GraphBinding_;
 typedef struct GraphBinding_ *GraphBinding;
 
+struct AttrVal_;
+typedef struct AttrVal_ *AttrVal;
+
+struct AttrName_;
+typedef struct AttrName_ *AttrName;
+
+struct Attr_;
+typedef struct Attr_ *Attr;
+
+struct ListAttr_;
+typedef struct ListAttr_ *ListAttr;
+
 struct Vertex_;
 typedef struct Vertex_ *Vertex;
 
@@ -143,6 +155,78 @@ struct GraphBinding_
 
 GraphBinding make_GBind(UVar p0, Graph p1, Graph p2);
 
+struct AttrVal_
+{
+  enum
+  {
+    is_AttributeValue
+  } kind;
+  union
+  {
+    struct
+    {
+      LVar lvar_;
+    } attributeValue_;
+  } u;
+};
+
+AttrVal make_AttributeValue(LVar p0);
+
+struct AttrName_
+{
+  enum
+  {
+    is_AttributeName
+  } kind;
+  union
+  {
+    struct
+    {
+      LVar lvar_;
+    } attributeName_;
+  } u;
+};
+
+AttrName make_AttributeName(LVar p0);
+
+struct Attr_
+{
+  enum
+  {
+    is_AttributePair
+  } kind;
+  union
+  {
+    struct
+    {
+      AttrName attrname_;
+      AttrVal attrval_;
+    } attributePair_;
+  } u;
+};
+
+Attr make_AttributePair(AttrName p0, AttrVal p1);
+
+struct ListAttr_
+{
+  enum
+  {
+    is_EmptyAttrList,
+    is_AttrList
+  } kind;
+  union
+  {
+    struct
+    {
+      Attr attr_;
+      ListAttr listattr_;
+    } attrList_;
+  } u;
+};
+
+ListAttr make_EmptyAttrList(void);
+ListAttr make_AttrList(Attr p0, ListAttr p1);
+
 struct Vertex_
 {
   enum
@@ -213,6 +297,10 @@ ListName make_ListName(Name p1, ListName p2);
 Graph clone_Graph(Graph p);
 Binding clone_Binding(Binding p);
 GraphBinding clone_GraphBinding(GraphBinding p);
+AttrVal clone_AttrVal(AttrVal p);
+AttrName clone_AttrName(AttrName p);
+Attr clone_Attr(Attr p);
+ListAttr clone_ListAttr(ListAttr p);
 Vertex clone_Vertex(Vertex p);
 Name clone_Name(Name p);
 LVar clone_LVar(LVar p0);
@@ -232,6 +320,10 @@ ListName clone_ListName(ListName p);
 void free_Graph(Graph p);
 void free_Binding(Binding p);
 void free_GraphBinding(GraphBinding p);
+void free_AttrVal(AttrVal p);
+void free_AttrName(AttrName p);
+void free_Attr(Attr p);
+void free_ListAttr(ListAttr p);
 void free_Vertex(Vertex p);
 void free_Name(Name p);
 void free_LVar(LVar p0);

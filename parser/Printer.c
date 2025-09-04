@@ -112,21 +112,21 @@ void backup(void)
     buf_[--cur_] = 0;
 }
 
-void removeTrailingSpaces(void)
+void removeTrailingSpaces()
 {
   while (cur_ && buf_[cur_ - 1] == ' ')
     --cur_;
   buf_[cur_] = 0;
 }
 
-void removeTrailingWhitespace(void)
+void removeTrailingWhitespace()
 {
   while (cur_ && (buf_[cur_ - 1] == ' ' || buf_[cur_ - 1] == '\n'))
     --cur_;
   buf_[cur_] = 0;
 }
 
-void onEmptyLine(void)
+void onEmptyLine()
 {
   removeTrailingSpaces();
   if (cur_ && buf_[cur_ - 1] != '\n')
@@ -154,6 +154,34 @@ char *printGraphBinding(GraphBinding p)
   ppGraphBinding(p, 0);
   return buf_;
 }
+char *printAttrVal(AttrVal p)
+{
+  _n_ = 0;
+  bufReset();
+  ppAttrVal(p, 0);
+  return buf_;
+}
+char *printAttrName(AttrName p)
+{
+  _n_ = 0;
+  bufReset();
+  ppAttrName(p, 0);
+  return buf_;
+}
+char *printAttr(Attr p)
+{
+  _n_ = 0;
+  bufReset();
+  ppAttr(p, 0);
+  return buf_;
+}
+char *printListAttr(ListAttr p)
+{
+  _n_ = 0;
+  bufReset();
+  ppListAttr(p, 0);
+  return buf_;
+}
 char *printVertex(Vertex p)
 {
   _n_ = 0;
@@ -172,7 +200,7 @@ char *printListName(ListName p)
 {
   _n_ = 0;
   bufReset();
-  ppListName(p);
+  ppListName(p, 0);
   return buf_;
 }
 char *showGraph(Graph p)
@@ -194,6 +222,34 @@ char *showGraphBinding(GraphBinding p)
   _n_ = 0;
   bufReset();
   shGraphBinding(p);
+  return buf_;
+}
+char *showAttrVal(AttrVal p)
+{
+  _n_ = 0;
+  bufReset();
+  shAttrVal(p);
+  return buf_;
+}
+char *showAttrName(AttrName p)
+{
+  _n_ = 0;
+  bufReset();
+  shAttrName(p);
+  return buf_;
+}
+char *showAttr(Attr p)
+{
+  _n_ = 0;
+  bufReset();
+  shAttr(p);
+  return buf_;
+}
+char *showListAttr(ListAttr p)
+{
+  _n_ = 0;
+  bufReset();
+  shListAttr(p);
   return buf_;
 }
 char *showVertex(Vertex p)
@@ -310,7 +366,7 @@ void ppGraph(Graph p, int _i_)
   case is_GVar:
     if (_i_ > 2)
       renderC(_L_PAREN);
-    ppIdent(p->u.gVar_.lvar_);
+    ppIdent(p->u.gVar_.lvar_, 0);
     renderC('|');
     ppGraph(p->u.gVar_.graph_, 1);
     if (_i_ > 2)
@@ -324,6 +380,9 @@ void ppGraph(Graph p, int _i_)
     if (_i_ > 3)
       renderC(_R_PAREN);
     break;
+
+  default:
+    return;
   }
 }
 
@@ -335,7 +394,7 @@ void ppBinding(Binding p, int _i_)
     if (_i_ > 0)
       renderC(_L_PAREN);
     renderS("let");
-    ppIdent(p->u.vBind_.lvar_);
+    ppIdent(p->u.vBind_.lvar_, 0);
     renderC('=');
     ppVertex(p->u.vBind_.vertex_, 0);
     renderS("in");
@@ -343,6 +402,9 @@ void ppBinding(Binding p, int _i_)
     if (_i_ > 0)
       renderC(_R_PAREN);
     break;
+
+  default:
+    return;
   }
 }
 
@@ -354,7 +416,7 @@ void ppGraphBinding(GraphBinding p, int _i_)
     if (_i_ > 0)
       renderC(_L_PAREN);
     renderS("let");
-    ppIdent(p->u.gBind_.uvar_);
+    ppIdent(p->u.gBind_.uvar_, 0);
     renderC('=');
     ppGraph(p->u.gBind_.graph_1, 0);
     renderS("in");
@@ -362,6 +424,89 @@ void ppGraphBinding(GraphBinding p, int _i_)
     if (_i_ > 0)
       renderC(_R_PAREN);
     break;
+
+  default:
+    return;
+  }
+}
+
+void ppAttrVal(AttrVal p, int _i_)
+{
+  switch (p->kind)
+  {
+  case is_AttributeValue:
+    if (_i_ > 0)
+      renderC(_L_PAREN);
+    renderC('"');
+    ppIdent(p->u.attributeValue_.lvar_, 0);
+    renderC('"');
+    if (_i_ > 0)
+      renderC(_R_PAREN);
+    break;
+
+  default:
+    return;
+  }
+}
+
+void ppAttrName(AttrName p, int _i_)
+{
+  switch (p->kind)
+  {
+  case is_AttributeName:
+    if (_i_ > 0)
+      renderC(_L_PAREN);
+    ppIdent(p->u.attributeName_.lvar_, 0);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
+    break;
+
+  default:
+    return;
+  }
+}
+
+void ppAttr(Attr p, int _i_)
+{
+  switch (p->kind)
+  {
+  case is_AttributePair:
+    if (_i_ > 0)
+      renderC(_L_PAREN);
+    ppAttrName(p->u.attributePair_.attrname_, 0);
+    renderC('=');
+    ppAttrVal(p->u.attributePair_.attrval_, 0);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
+    break;
+
+  default:
+    return;
+  }
+}
+
+void ppListAttr(ListAttr p, int _i_)
+{
+  switch (p->kind)
+  {
+  case is_EmptyAttrList:
+    if (_i_ > 0)
+      renderC(_L_PAREN);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
+    break;
+
+  case is_AttrList:
+    if (_i_ > 0)
+      renderC(_L_PAREN);
+    ppAttr(p->u.attrList_.attr_, 0);
+    ppListAttr(p->u.attrList_.listattr_, 0);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
+    break;
+
+  default:
+    return;
   }
 }
 
@@ -378,6 +523,9 @@ void ppVertex(Vertex p, int _i_)
     if (_i_ > 0)
       renderC(_R_PAREN);
     break;
+
+  default:
+    return;
   }
 }
 
@@ -396,7 +544,7 @@ void ppName(Name p, int _i_)
   case is_NameVVar:
     if (_i_ > 0)
       renderC(_L_PAREN);
-    ppIdent(p->u.nameVVar_.lvar_);
+    ppIdent(p->u.nameVVar_.lvar_, 0);
     if (_i_ > 0)
       renderC(_R_PAREN);
     break;
@@ -404,7 +552,7 @@ void ppName(Name p, int _i_)
   case is_NameGVar:
     if (_i_ > 0)
       renderC(_L_PAREN);
-    ppIdent(p->u.nameGVar_.uvar_);
+    ppIdent(p->u.nameGVar_.uvar_, 0);
     if (_i_ > 0)
       renderC(_R_PAREN);
     break;
@@ -426,10 +574,13 @@ void ppName(Name p, int _i_)
     if (_i_ > 0)
       renderC(_R_PAREN);
     break;
+
+  default:
+    return;
   }
 }
 
-void ppListName(ListName listname)
+void ppListName(ListName listname, int i)
 {
   if (listname == 0)
   { /* nil */
@@ -442,41 +593,41 @@ void ppListName(ListName listname)
   { /* cons */
     ppName(listname->name_, 0);
     renderC(',');
-    ppListName(listname->listname_);
+    ppListName(listname->listname_, 0);
   }
 }
 
-void ppInteger(Integer n)
+void ppInteger(Integer n, int i)
 {
   char tmp[20];
-  snprintf(tmp, 20, "%d", n);
+  sprintf(tmp, "%d", n);
   renderS(tmp);
 }
-void ppDouble(Double d)
+void ppDouble(Double d, int i)
 {
   char tmp[24];
-  snprintf(tmp, 24, "%.15g", d);
+  sprintf(tmp, "%.15g", d);
   renderS(tmp);
 }
-void ppChar(Char c)
+void ppChar(Char c, int i)
 {
   bufAppendC('\'');
   bufEscapeC(c);
   bufAppendC('\'');
   bufAppendC(' ');
 }
-void ppString(String s)
+void ppString(String s, int i)
 {
   bufAppendC('\"');
   bufEscapeS(s);
   bufAppendC('\"');
   bufAppendC(' ');
 }
-void ppIdent(String s) { renderS(s); }
+void ppIdent(String s, int i) { renderS(s); }
 
-void ppUVar(String s) { renderS(s); }
+void ppUVar(String s, int i) { renderS(s); }
 
-void ppLVar(String s) { renderS(s); }
+void ppLVar(String s, int i) { renderS(s); }
 
 void shGraph(Graph p)
 {
@@ -613,6 +764,9 @@ void shGraph(Graph p)
     bufAppendS("GNil");
 
     break;
+
+  default:
+    return;
   }
 }
 
@@ -636,6 +790,9 @@ void shBinding(Binding p)
     bufAppendC(')');
 
     break;
+
+  default:
+    return;
   }
 }
 
@@ -659,6 +816,106 @@ void shGraphBinding(GraphBinding p)
     bufAppendC(')');
 
     break;
+
+  default:
+    return;
+  }
+}
+
+void shAttrVal(AttrVal p)
+{
+  switch (p->kind)
+  {
+  case is_AttributeValue:
+    bufAppendC('(');
+
+    bufAppendS("AttributeValue");
+
+    bufAppendC(' ');
+
+    shIdent(p->u.attributeValue_.lvar_);
+
+    bufAppendC(')');
+
+    break;
+
+  default:
+    return;
+  }
+}
+
+void shAttrName(AttrName p)
+{
+  switch (p->kind)
+  {
+  case is_AttributeName:
+    bufAppendC('(');
+
+    bufAppendS("AttributeName");
+
+    bufAppendC(' ');
+
+    shIdent(p->u.attributeName_.lvar_);
+
+    bufAppendC(')');
+
+    break;
+
+  default:
+    return;
+  }
+}
+
+void shAttr(Attr p)
+{
+  switch (p->kind)
+  {
+  case is_AttributePair:
+    bufAppendC('(');
+
+    bufAppendS("AttributePair");
+
+    bufAppendC(' ');
+
+    shAttrName(p->u.attributePair_.attrname_);
+    bufAppendC(' ');
+    shAttrVal(p->u.attributePair_.attrval_);
+
+    bufAppendC(')');
+
+    break;
+
+  default:
+    return;
+  }
+}
+
+void shListAttr(ListAttr p)
+{
+  switch (p->kind)
+  {
+  case is_EmptyAttrList:
+
+    bufAppendS("EmptyAttrList");
+
+    break;
+  case is_AttrList:
+    bufAppendC('(');
+
+    bufAppendS("AttrList");
+
+    bufAppendC(' ');
+
+    shAttr(p->u.attrList_.attr_);
+    bufAppendC(' ');
+    shListAttr(p->u.attrList_.listattr_);
+
+    bufAppendC(')');
+
+    break;
+
+  default:
+    return;
   }
 }
 
@@ -678,6 +935,9 @@ void shVertex(Vertex p)
     bufAppendC(')');
 
     break;
+
+  default:
+    return;
   }
 }
 
@@ -738,6 +998,9 @@ void shName(Name p)
     bufAppendC(')');
 
     break;
+
+  default:
+    return;
   }
 }
 
@@ -764,13 +1027,13 @@ void shListName(ListName listname)
 void shInteger(Integer i)
 {
   char tmp[20];
-  snprintf(tmp, 20, "%d", i);
+  sprintf(tmp, "%d", i);
   bufAppendS(tmp);
 }
 void shDouble(Double d)
 {
   char tmp[24];
-  snprintf(tmp, 24, "%.15g", d);
+  sprintf(tmp, "%.15g", d);
   bufAppendS(tmp);
 }
 void shChar(Char c)
@@ -884,7 +1147,7 @@ void resizeBuffer(void)
   char *temp = (char *)malloc(buf_size);
   if (!temp)
   {
-    PANIC(__FILE__ "OOM");
+    return;
   }
   if (buf_)
   {
