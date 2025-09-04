@@ -54,7 +54,8 @@ typedef void (*visitVertexCallback)(Vertex p, void *context);
 typedef void (*visitDoubleCallback)(Double p, void *context);
 typedef void (*visitCharCallback)(Char p, void *context);
 
-typedef struct {
+typedef struct
+{
   visitAttrCallback visitAttrCallback;
   visitAttrNameCallback visitAttrNameCallback;
   visitAttrValCallback visitAttrValCallback;

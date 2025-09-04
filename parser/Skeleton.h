@@ -6,21 +6,20 @@
 #include "Absyn.h"
 #include "Visitor.h"
 
-
-void visitGraph(Graph p, Visitor *visitor, void* context);
-void visitBinding(Binding p, Visitor *visitor, void* context);
-void visitGraphBinding(GraphBinding p, Visitor *visitor, void* context);
-void visitAttrVal(AttrVal p, Visitor *visitor, void* context);
-void visitAttrName(AttrName p, Visitor *visitor, void* context);
-void visitAttr(Attr p, Visitor *visitor, void* context);
-void visitListAttr(ListAttr p, Visitor *visitor, void* context);
-void visitVertex(Vertex p, Visitor *visitor, void* context);
-void visitName(Name p, Visitor *visitor, void* context);
-void visitListName(ListName p, Visitor *visitor, void* context);
-void visitUVar(UVar p, Visitor *visitor, void* context);
-void visitLVar(LVar p, Visitor *visitor, void* context);
-void visitIdent(Ident i, Visitor *visitor, void* context);
-void visitInteger(Integer i, Visitor *visitor, void* context);
-void visitDouble(Double d, Visitor *visitor, void* context);
-void visitChar(Char c, Visitor *visitor, void* context);
-void visitString(String s, Visitor *visitor, void* context);
+void visitGraph(Graph p, Visitor *visitor, void *context);
+void visitBinding(Binding p, Visitor *visitor, void *context);
+void visitGraphBinding(GraphBinding p, Visitor *visitor, void *context);
+void visitAttrVal(AttrVal p, Visitor *visitor, void *context);
+void visitAttrName(AttrName p, Visitor *visitor, void *context);
+void visitAttr(Attr p, Visitor *visitor, void *context);
+void visitListAttr(ListAttr p, Visitor *visitor, void *context);
+void visitVertex(Vertex p, Visitor *visitor, void *context);
+void visitName(Name p, Visitor *visitor, void *context);
+void visitListName(ListName p, Visitor *visitor, void *context);
+void visitUVar(UVar p, Visitor *visitor, void *context);
+void visitLVar(LVar p, Visitor *visitor, void *context);
+void visitIdent(Ident i, Visitor *visitor, void *context);
+void visitInteger(Integer i, Visitor *visitor, void *context);
+void visitDouble(Double d, Visitor *visitor, void *context);
+void visitChar(Char c, Visitor *visitor, void *context);
+void visitString(String s, Visitor *visitor, void *context);

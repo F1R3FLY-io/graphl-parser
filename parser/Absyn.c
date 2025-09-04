@@ -13,9 +13,11 @@
 
 /********************   GNil    ********************/
 
-Graph make_GNil() {
+Graph make_GNil()
+{
   Graph tmp = (Graph)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_GNil;
@@ -24,9 +26,11 @@ Graph make_GNil() {
 
 /********************   GVertex    ********************/
 
-Graph make_GVertex(Vertex p1, Graph p2) {
+Graph make_GVertex(Vertex p1, Graph p2)
+{
   Graph tmp = (Graph)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_GVertex;
@@ -37,9 +41,11 @@ Graph make_GVertex(Vertex p1, Graph p2) {
 
 /********************   GVar    ********************/
 
-Graph make_GVar(LVar p1, Graph p2) {
+Graph make_GVar(LVar p1, Graph p2)
+{
   Graph tmp = (Graph)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_GVar;
@@ -50,9 +56,11 @@ Graph make_GVar(LVar p1, Graph p2) {
 
 /********************   GNominate    ********************/
 
-Graph make_GNominate(Binding p1) {
+Graph make_GNominate(Binding p1)
+{
   Graph tmp = (Graph)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_GNominate;
@@ -62,9 +70,11 @@ Graph make_GNominate(Binding p1) {
 
 /********************   GEdgeAnon    ********************/
 
-Graph make_GEdgeAnon(Binding p1, Binding p2) {
+Graph make_GEdgeAnon(Binding p1, Binding p2)
+{
   Graph tmp = (Graph)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_GEdgeAnon;
@@ -75,9 +85,11 @@ Graph make_GEdgeAnon(Binding p1, Binding p2) {
 
 /********************   GEdgeNamed    ********************/
 
-Graph make_GEdgeNamed(Name p1, Binding p2, Binding p3) {
+Graph make_GEdgeNamed(Name p1, Binding p2, Binding p3)
+{
   Graph tmp = (Graph)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_GEdgeNamed;
@@ -89,9 +101,11 @@ Graph make_GEdgeNamed(Name p1, Binding p2, Binding p3) {
 
 /********************   GRuleAnon    ********************/
 
-Graph make_GRuleAnon(Graph p1, Graph p2) {
+Graph make_GRuleAnon(Graph p1, Graph p2)
+{
   Graph tmp = (Graph)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_GRuleAnon;
@@ -102,9 +116,11 @@ Graph make_GRuleAnon(Graph p1, Graph p2) {
 
 /********************   GRuleNamed    ********************/
 
-Graph make_GRuleNamed(Name p1, Graph p2, Graph p3) {
+Graph make_GRuleNamed(Name p1, Graph p2, Graph p3)
+{
   Graph tmp = (Graph)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_GRuleNamed;
@@ -116,9 +132,11 @@ Graph make_GRuleNamed(Name p1, Graph p2, Graph p3) {
 
 /********************   GSubgraph    ********************/
 
-Graph make_GSubgraph(GraphBinding p1) {
+Graph make_GSubgraph(GraphBinding p1)
+{
   Graph tmp = (Graph)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_GSubgraph;
@@ -128,9 +146,11 @@ Graph make_GSubgraph(GraphBinding p1) {
 
 /********************   GTensor    ********************/
 
-Graph make_GTensor(Graph p1, Graph p2) {
+Graph make_GTensor(Graph p1, Graph p2)
+{
   Graph tmp = (Graph)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_GTensor;
@@ -141,9 +161,11 @@ Graph make_GTensor(Graph p1, Graph p2) {
 
 /********************   VBind    ********************/
 
-Binding make_VBind(LVar p1, Vertex p2, Graph p3) {
+Binding make_VBind(LVar p1, Vertex p2, Graph p3)
+{
   Binding tmp = (Binding)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_VBind;
@@ -155,9 +177,11 @@ Binding make_VBind(LVar p1, Vertex p2, Graph p3) {
 
 /********************   GBind    ********************/
 
-GraphBinding make_GBind(UVar p1, Graph p2, Graph p3) {
+GraphBinding make_GBind(UVar p1, Graph p2, Graph p3)
+{
   GraphBinding tmp = (GraphBinding)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_GBind;
@@ -169,9 +193,11 @@ GraphBinding make_GBind(UVar p1, Graph p2, Graph p3) {
 
 /********************   AttributeValue    ********************/
 
-AttrVal make_AttributeValue(LVar p1) {
+AttrVal make_AttributeValue(LVar p1)
+{
   AttrVal tmp = (AttrVal)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_AttributeValue;
@@ -181,9 +207,11 @@ AttrVal make_AttributeValue(LVar p1) {
 
 /********************   AttributeName    ********************/
 
-AttrName make_AttributeName(LVar p1) {
+AttrName make_AttributeName(LVar p1)
+{
   AttrName tmp = (AttrName)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_AttributeName;
@@ -193,9 +221,11 @@ AttrName make_AttributeName(LVar p1) {
 
 /********************   AttributePair    ********************/
 
-Attr make_AttributePair(AttrName p1, AttrVal p2) {
+Attr make_AttributePair(AttrName p1, AttrVal p2)
+{
   Attr tmp = (Attr)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_AttributePair;
@@ -206,9 +236,11 @@ Attr make_AttributePair(AttrName p1, AttrVal p2) {
 
 /********************   EmptyAttrList    ********************/
 
-ListAttr make_EmptyAttrList() {
+ListAttr make_EmptyAttrList()
+{
   ListAttr tmp = (ListAttr)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_EmptyAttrList;
@@ -217,9 +249,11 @@ ListAttr make_EmptyAttrList() {
 
 /********************   AttrList    ********************/
 
-ListAttr make_AttrList(Attr p1, ListAttr p2) {
+ListAttr make_AttrList(Attr p1, ListAttr p2)
+{
   ListAttr tmp = (ListAttr)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_AttrList;
@@ -231,9 +265,11 @@ ListAttr make_AttrList(Attr p1, ListAttr p2) {
 
 /********************   VName    ********************/
 
-Vertex make_VName(Name p1) {
+Vertex make_VName(Name p1)
+{
   Vertex tmp = (Vertex)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_VName;
@@ -243,9 +279,11 @@ Vertex make_VName(Name p1) {
 
 /********************   NameWildcard    ********************/
 
-Name make_NameWildcard() {
+Name make_NameWildcard()
+{
   Name tmp = (Name)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_NameWildcard;
@@ -254,9 +292,11 @@ Name make_NameWildcard() {
 
 /********************   NameVVar    ********************/
 
-Name make_NameVVar(LVar p1) {
+Name make_NameVVar(LVar p1)
+{
   Name tmp = (Name)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_NameVVar;
@@ -266,9 +306,11 @@ Name make_NameVVar(LVar p1) {
 
 /********************   NameGVar    ********************/
 
-Name make_NameGVar(UVar p1) {
+Name make_NameGVar(UVar p1)
+{
   Name tmp = (Name)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_NameGVar;
@@ -278,9 +320,11 @@ Name make_NameGVar(UVar p1) {
 
 /********************   NameQuoteGraph    ********************/
 
-Name make_NameQuoteGraph(Graph p1) {
+Name make_NameQuoteGraph(Graph p1)
+{
   Name tmp = (Name)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_NameQuoteGraph;
@@ -290,9 +334,11 @@ Name make_NameQuoteGraph(Graph p1) {
 
 /********************   NameQuoteVertex    ********************/
 
-Name make_NameQuoteVertex(Vertex p1) {
+Name make_NameQuoteVertex(Vertex p1)
+{
   Name tmp = (Name)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->kind = is_NameQuoteVertex;
@@ -302,9 +348,11 @@ Name make_NameQuoteVertex(Vertex p1) {
 
 /********************   ListName    ********************/
 
-ListName make_ListName(Name p1, ListName p2) {
+ListName make_ListName(Name p1, ListName p2)
+{
   ListName tmp = (ListName)malloc(sizeof(*tmp));
-  if (!tmp) {
+  if (!tmp)
+  {
     return NULL;
   }
   tmp->name_ = p1;
@@ -314,13 +362,16 @@ ListName make_ListName(Name p1, ListName p2) {
 
 /***************************   Cloning   ******************************/
 
-Graph clone_Graph(Graph p) {
+Graph clone_Graph(Graph p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return NULL;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_GNil:
     return make_GNil();
 
@@ -364,12 +415,15 @@ Graph clone_Graph(Graph p) {
   }
 }
 
-Binding clone_Binding(Binding p) {
-  if (!p) {
+Binding clone_Binding(Binding p)
+{
+  if (!p)
+  {
     return NULL;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_VBind:
     return make_VBind(strdup(p->u.vBind_.lvar_),
                       clone_Vertex(p->u.vBind_.vertex_),
@@ -379,13 +433,16 @@ Binding clone_Binding(Binding p) {
   }
 }
 
-GraphBinding clone_GraphBinding(GraphBinding p) {
+GraphBinding clone_GraphBinding(GraphBinding p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return NULL;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_GBind:
     return make_GBind(strdup(p->u.gBind_.uvar_),
                       clone_Graph(p->u.gBind_.graph_1),
@@ -395,13 +452,16 @@ GraphBinding clone_GraphBinding(GraphBinding p) {
   }
 }
 
-AttrVal clone_AttrVal(AttrVal p) {
+AttrVal clone_AttrVal(AttrVal p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return NULL;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_AttributeValue:
     return make_AttributeValue(strdup(p->u.attributeValue_.lvar_));
   default:
@@ -409,13 +469,16 @@ AttrVal clone_AttrVal(AttrVal p) {
   }
 }
 
-AttrName clone_AttrName(AttrName p) {
+AttrName clone_AttrName(AttrName p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return NULL;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_AttributeName:
     return make_AttributeName(strdup(p->u.attributeName_.lvar_));
   default:
@@ -423,13 +486,16 @@ AttrName clone_AttrName(AttrName p) {
   }
 }
 
-Attr clone_Attr(Attr p) {
+Attr clone_Attr(Attr p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return NULL;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_AttributePair:
     return make_AttributePair(clone_AttrName(p->u.attributePair_.attrname_),
                               clone_AttrVal(p->u.attributePair_.attrval_));
@@ -438,13 +504,16 @@ Attr clone_Attr(Attr p) {
   }
 }
 
-ListAttr clone_ListAttr(ListAttr p) {
+ListAttr clone_ListAttr(ListAttr p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return NULL;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_EmptyAttrList:
     return make_EmptyAttrList();
 
@@ -456,13 +525,16 @@ ListAttr clone_ListAttr(ListAttr p) {
   }
 }
 
-Vertex clone_Vertex(Vertex p) {
+Vertex clone_Vertex(Vertex p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return NULL;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_VName:
     return make_VName(clone_Name(p->u.vName_.name_));
   default:
@@ -470,13 +542,16 @@ Vertex clone_Vertex(Vertex p) {
   }
 }
 
-Name clone_Name(Name p) {
+Name clone_Name(Name p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return NULL;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_NameWildcard:
     return make_NameWildcard();
 
@@ -496,12 +571,15 @@ Name clone_Name(Name p) {
   }
 }
 
-ListName clone_ListName(ListName listname) {
-  if (listname) {
+ListName clone_ListName(ListName listname)
+{
+  if (listname)
+  {
     /* clone of non-empty list */
     return make_ListName(clone_Name(listname->name_),
                          clone_ListName(listname->listname_));
-  } else
+  }
+  else
     return NULL; /* clone of empty list */
 }
 
@@ -515,13 +593,16 @@ ListName clone_ListName(ListName listname) {
  * it will attempt to free the same memory twice.
  */
 
-void free_Graph(Graph p) {
+void free_Graph(Graph p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_GNil:
     break;
 
@@ -575,13 +656,16 @@ void free_Graph(Graph p) {
   free(p);
 }
 
-void free_Binding(Binding p) {
+void free_Binding(Binding p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_VBind:
     free(p->u.vBind_.lvar_);
     free_Vertex(p->u.vBind_.vertex_);
@@ -593,13 +677,16 @@ void free_Binding(Binding p) {
   free(p);
 }
 
-void free_GraphBinding(GraphBinding p) {
+void free_GraphBinding(GraphBinding p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_GBind:
     free(p->u.gBind_.uvar_);
     free_Graph(p->u.gBind_.graph_1);
@@ -611,13 +698,16 @@ void free_GraphBinding(GraphBinding p) {
   free(p);
 }
 
-void free_AttrVal(AttrVal p) {
+void free_AttrVal(AttrVal p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_AttributeValue:
     free(p->u.attributeValue_.lvar_);
     break;
@@ -625,13 +715,16 @@ void free_AttrVal(AttrVal p) {
   free(p);
 }
 
-void free_AttrName(AttrName p) {
+void free_AttrName(AttrName p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_AttributeName:
     free(p->u.attributeName_.lvar_);
     break;
@@ -639,13 +732,16 @@ void free_AttrName(AttrName p) {
   free(p);
 }
 
-void free_Attr(Attr p) {
+void free_Attr(Attr p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_AttributePair:
     free_AttrName(p->u.attributePair_.attrname_);
     free_AttrVal(p->u.attributePair_.attrval_);
@@ -654,13 +750,16 @@ void free_Attr(Attr p) {
   free(p);
 }
 
-void free_ListAttr(ListAttr p) {
+void free_ListAttr(ListAttr p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_EmptyAttrList:
     break;
 
@@ -672,13 +771,16 @@ void free_ListAttr(ListAttr p) {
   free(p);
 }
 
-void free_Vertex(Vertex p) {
+void free_Vertex(Vertex p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_VName:
     free_Name(p->u.vName_.name_);
     break;
@@ -686,13 +788,16 @@ void free_Vertex(Vertex p) {
   free(p);
 }
 
-void free_Name(Name p) {
+void free_Name(Name p)
+{
 
-  if (!p) {
+  if (!p)
+  {
     return;
   }
 
-  switch (p->kind) {
+  switch (p->kind)
+  {
   case is_NameWildcard:
     break;
 
@@ -715,8 +820,10 @@ void free_Name(Name p) {
   free(p);
 }
 
-void free_ListName(ListName listname) {
-  if (listname) {
+void free_ListName(ListName listname)
+{
+  if (listname)
+  {
     free_Name(listname->name_);
     free_ListName(listname->listname_);
     free(listname);

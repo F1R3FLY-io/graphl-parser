@@ -36,10 +36,10 @@
    private implementation details that can be changed or removed.  */
 
 #ifndef YY_GRAMMAR_BISON_H_INCLUDED
-# define YY_GRAMMAR_BISON_H_INCLUDED
+#define YY_GRAMMAR_BISON_H_INCLUDED
 /* Debug traces.  */
 #ifndef YYDEBUG
-# define YYDEBUG 1
+#define YYDEBUG 1
 #endif
 #if YYDEBUG
 extern int grammar_debug;
@@ -47,48 +47,48 @@ extern int grammar_debug;
 
 /* Token kinds.  */
 #ifndef YYTOKENTYPE
-# define YYTOKENTYPE
-  enum yytokentype
-  {
-    YYEMPTY = -2,
-    YYEOF = 0,                     /* "end of file"  */
-    YYerror = 256,                 /* error  */
-    YYUNDEF = 257,                 /* "invalid token"  */
-    _ERROR_ = 258,                 /* _ERROR_  */
-    _SYMB_11 = 259,                /* _SYMB_11  */
-    _LPAREN = 260,                 /* _LPAREN  */
-    _RPAREN = 261,                 /* _RPAREN  */
-    _STAR = 262,                   /* _STAR  */
-    _COMMA = 263,                  /* _COMMA  */
-    _SYMB_2 = 264,                 /* _SYMB_2  */
-    _LT = 265,                     /* _LT  */
-    _EQ = 266,                     /* _EQ  */
-    _GT = 267,                     /* _GT  */
-    _AT = 268,                     /* _AT  */
-    _LBRACK = 269,                 /* _LBRACK  */
-    _RBRACK = 270,                 /* _RBRACK  */
-    _UNDERSCORE = 271,             /* _UNDERSCORE  */
-    _KW_in = 272,                  /* _KW_in  */
-    _KW_let = 273,                 /* _KW_let  */
-    _LBRACE = 274,                 /* _LBRACE  */
-    _BAR = 275,                    /* _BAR  */
-    _RBRACE = 276,                 /* _RBRACE  */
-    T_LVar = 277,                  /* T_LVar  */
-    T_UVar = 278                   /* T_UVar  */
-  };
-  typedef enum yytokentype yytoken_kind_t;
+#define YYTOKENTYPE
+enum yytokentype
+{
+  YYEMPTY = -2,
+  YYEOF = 0,         /* "end of file"  */
+  YYerror = 256,     /* error  */
+  YYUNDEF = 257,     /* "invalid token"  */
+  _ERROR_ = 258,     /* _ERROR_  */
+  _SYMB_11 = 259,    /* _SYMB_11  */
+  _LPAREN = 260,     /* _LPAREN  */
+  _RPAREN = 261,     /* _RPAREN  */
+  _STAR = 262,       /* _STAR  */
+  _COMMA = 263,      /* _COMMA  */
+  _SYMB_2 = 264,     /* _SYMB_2  */
+  _LT = 265,         /* _LT  */
+  _EQ = 266,         /* _EQ  */
+  _GT = 267,         /* _GT  */
+  _AT = 268,         /* _AT  */
+  _LBRACK = 269,     /* _LBRACK  */
+  _RBRACK = 270,     /* _RBRACK  */
+  _UNDERSCORE = 271, /* _UNDERSCORE  */
+  _KW_in = 272,      /* _KW_in  */
+  _KW_let = 273,     /* _KW_let  */
+  _LBRACE = 274,     /* _LBRACE  */
+  _BAR = 275,        /* _BAR  */
+  _RBRACE = 276,     /* _RBRACE  */
+  T_LVar = 277,      /* T_LVar  */
+  T_UVar = 278       /* T_UVar  */
+};
+typedef enum yytokentype yytoken_kind_t;
 #endif
 
 /* Value type.  */
-#if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
+#if !defined YYSTYPE && !defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
 #line 64 "grammar.y"
 
-  int    _int;
-  char   _char;
+  int _int;
+  char _char;
   double _double;
-  char*  _string;
+  char *_string;
   Graph graph_;
   Binding binding_;
   GraphBinding graphbinding_;
@@ -101,15 +101,14 @@ union YYSTYPE
   ListName listname_;
 
 #line 104 "Bison.h"
-
 };
 typedef union YYSTYPE YYSTYPE;
-# define YYSTYPE_IS_TRIVIAL 1
-# define YYSTYPE_IS_DECLARED 1
+#define YYSTYPE_IS_TRIVIAL 1
+#define YYSTYPE_IS_DECLARED 1
 #endif
 
 /* Location type.  */
-#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
+#if !defined YYLTYPE && !defined YYLTYPE_IS_DECLARED
 typedef struct YYLTYPE YYLTYPE;
 struct YYLTYPE
 {
@@ -118,14 +117,10 @@ struct YYLTYPE
   int last_line;
   int last_column;
 };
-# define YYLTYPE_IS_DECLARED 1
-# define YYLTYPE_IS_TRIVIAL 1
+#define YYLTYPE_IS_DECLARED 1
+#define YYLTYPE_IS_TRIVIAL 1
 #endif
 
-
-
-
-int grammar_parse (yyscan_t scanner, YYSTYPE *result);
-
+int grammar_parse(yyscan_t scanner, YYSTYPE *result);
 
 #endif /* !YY_GRAMMAR_BISON_H_INCLUDED  */

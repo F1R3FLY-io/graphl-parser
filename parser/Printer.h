@@ -20,7 +20,6 @@ void onEmptyLine(void);
 void removeTrailingSpaces(void);
 void removeTrailingWhitespace(void);
 
-
 char *printGraph(Graph p);
 char *printBinding(Binding p);
 char *printGraphBinding(GraphBinding p);

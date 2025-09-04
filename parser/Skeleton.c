@@ -70,7 +70,7 @@ void visitGraph(Graph p, Visitor *visitor, void *context)
 
 void visitBinding(Binding p, Visitor *visitor, void *context)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_VBind:
     visitor->visitIsVBindCallback(p, context);
@@ -86,13 +86,13 @@ void visitBinding(Binding p, Visitor *visitor, void *context)
 
 void visitGraphBinding(GraphBinding p, Visitor *visitor, void *context)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_GBind:
     visitor->visitIsGBindCallback(p, context);
     visitUVar(p->u.gBind_.uvar_, visitor, context);
-    visitGraph(p->u.gBind_.graph_1,visitor, context);
-    visitGraph(p->u.gBind_.graph_2,visitor, context);
+    visitGraph(p->u.gBind_.graph_1, visitor, context);
+    visitGraph(p->u.gBind_.graph_2, visitor, context);
     break;
 
   default:
@@ -102,11 +102,11 @@ void visitGraphBinding(GraphBinding p, Visitor *visitor, void *context)
 
 void visitAttrVal(AttrVal p, Visitor *visitor, void *context)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_AttributeValue:
     visitor->visitIsAttributeValueCallback(p, context);
-    visitLVar(p->u.attributeValue_.lvar_,visitor, context);
+    visitLVar(p->u.attributeValue_.lvar_, visitor, context);
     break;
 
   default:
@@ -116,11 +116,11 @@ void visitAttrVal(AttrVal p, Visitor *visitor, void *context)
 
 void visitAttrName(AttrName p, Visitor *visitor, void *context)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_AttributeName:
     visitor->visitIsAttributeNameCallback(p, context);
-    visitLVar(p->u.attributeName_.lvar_,visitor, context);
+    visitLVar(p->u.attributeName_.lvar_, visitor, context);
     break;
 
   default:
@@ -130,7 +130,7 @@ void visitAttrName(AttrName p, Visitor *visitor, void *context)
 
 void visitAttr(Attr p, Visitor *visitor, void *context)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_AttributePair:
     visitor->visitIsAttributePairCallback(p, context);
@@ -145,13 +145,14 @@ void visitAttr(Attr p, Visitor *visitor, void *context)
 
 void visitListAttr(ListAttr p, Visitor *visitor, void *context)
 {
-  if(!p){
+  if (!p)
+  {
     return;
   }
 
   visitor->visitListAttrCallback(p, context);
 
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_EmptyAttrList:
     visitor->visitIsEmptyAttrListCallback(p, context);
@@ -169,7 +170,7 @@ void visitListAttr(ListAttr p, Visitor *visitor, void *context)
 
 void visitVertex(Vertex p, Visitor *visitor, void *context)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_VName:
     visitor->visitIsVNameCallback(p, context);
@@ -183,7 +184,7 @@ void visitVertex(Vertex p, Visitor *visitor, void *context)
 
 void visitName(Name p, Visitor *visitor, void *context)
 {
-  switch(p->kind)
+  switch (p->kind)
   {
   case is_NameWildcard:
     visitor->visitNameWildcardCallback(p, context);
@@ -212,7 +213,7 @@ void visitName(Name p, Visitor *visitor, void *context)
 
 void visitListName(ListName listname, Visitor *visitor, void *context)
 {
-  while(listname != 0)
+  while (listname != 0)
   {
     visitor->visitListNameCallback(listname, context);
     visitName(listname->name_, visitor, context);

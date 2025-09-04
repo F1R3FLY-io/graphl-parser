@@ -4,32 +4,33 @@
 
 #pragma once
 
-typedef struct buffer {
-  char* chars;           /* Pointer to start of the buffer.        */
-  unsigned int size;     /* Buffer size (>= 1).                    */
-  unsigned int current;  /* Next free character position (< size). */
-} * Buffer;
+typedef struct buffer
+{
+  char *chars;          /* Pointer to start of the buffer.        */
+  unsigned int size;    /* Buffer size (>= 1).                    */
+  unsigned int current; /* Next free character position (< size). */
+} *Buffer;
 
 /* External interface. */
 /************************************************************************/
 
 /* Create a new buffer of the given size. */
-Buffer newBuffer (const unsigned int size);
+Buffer newBuffer(const unsigned int size);
 
 /* Deallocate the buffer. */
-void freeBuffer (Buffer buffer);
+void freeBuffer(Buffer buffer);
 
 /* Deallocate the buffer, but return its content as string. */
-char* releaseBuffer (Buffer buffer);
+char *releaseBuffer(Buffer buffer);
 
 /* Clear contents of buffer. */
-void resetBuffer (Buffer buffer);
+void resetBuffer(Buffer buffer);
 
 /* Append string at the end of the buffer. */
-void bufferAppendString (Buffer buffer, const char *s);
+void bufferAppendString(Buffer buffer, const char *s);
 
 /* Append single character at the end of the buffer. */
-void bufferAppendChar (Buffer buffer, const char c);
+void bufferAppendChar(Buffer buffer, const char c);
 
 /* Give read-only access to the buffer content. */
 const char *bufferContent(Buffer buffer);
