@@ -5,10 +5,16 @@ use std::str::FromStr;
 
 use crate::bindings::{
     Binding,
+    Char,
+    Double,
     Graph,
     GraphBinding,
+    Ident,
+    Integer,
+    LVar,
     ListName,
     Name,
+    UVar,
     Vertex,
     Visitor,
     free_Graph,
@@ -82,27 +88,25 @@ visitor_callback!(visitNameCallback, Name, |p, context| format!(
 visitor_callback!(visitIsGSubgraphCallback, Graph, |p, context| format!(
     "{context}visitIsGSubgraphCallback"
 ));
-visitor_callback!(visitUVar, *mut i8, |p, context| format!(
-    "{context}visitUVar"
-));
-visitor_callback!(visitLVar, *mut i8, |p, context| format!(
-    "{context}visitLVar"
-));
-visitor_callback!(visitIdent, *mut i8, |p, context| format!(
+visitor_callback!(visitUVar, UVar, |p, context| format!("{context}visitUVar"));
+visitor_callback!(visitLVar, LVar, |p, context| format!("{context}visitLVar"));
+visitor_callback!(visitIdent, Ident, |p, context| format!(
     "{context}visitIdent"
 ));
-visitor_callback!(visitIntegerCallback, i32, |p, context| format!(
+visitor_callback!(visitIntegerCallback, Integer, |p, context| format!(
     "{context}visitIntegerCallback"
 ));
-visitor_callback!(visitDoubleCallback, f64, |p, context| format!(
+visitor_callback!(visitDoubleCallback, Double, |p, context| format!(
     "{context}visitDoubleCallback"
 ));
-visitor_callback!(visitCharCallback, i8, |p, context| format!(
+visitor_callback!(visitCharCallback, Char, |p, context| format!(
     "{context}visitCharCallback"
 ));
-visitor_callback!(visitStringCallback, *mut i8, |p, context| format!(
-    "{context}visitStringCallback"
-));
+visitor_callback!(
+    visitStringCallback,
+    crate::bindings::String,
+    |p, context| format!("{context}visitStringCallback")
+);
 visitor_callback!(visitIsGVertexCallback, Graph, |p, context| format!(
     "{context}visitIsGVertexCallback"
 ));
