@@ -22,7 +22,7 @@ jobs:
         with:
           toolchain: nightly, stable
           components: rustfmt, clippy
-          target: stable-x86_64-unknown-linux-gnu,aarch64-unknown-linux-gnu
+          target: x86_64-unknown-linux-gnu,aarch64-unknown-linux-gnu
           cache: true
 
       - name: Cache cargo tools
