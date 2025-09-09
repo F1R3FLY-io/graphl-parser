@@ -49,10 +49,15 @@ jobs:
       - name: Run clippy
         run: cargo make clippy
 
-      - name: Build
+      - name: Build x64
         run: cargo make build
 
-      - name: Build arms
+      - name: Install ARM64 cross toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-aarch64-linux-gnu g++-aarch64-linux-gnu
+
+      - name: Build arm
         run: cargo make build-arm
 
   build-wasm:
