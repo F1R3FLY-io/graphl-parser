@@ -22,6 +22,7 @@ jobs:
         with:
           toolchain: nightly, stable
           components: rustfmt, clippy
+          target: stable-x86_64-unknown-linux-gnu,aarch64-unknown-linux-gnu
           cache: true
 
       - name: Cache cargo tools
@@ -50,6 +51,9 @@ jobs:
 
       - name: Build
         run: cargo make build
+
+      - name: Build arms
+        run: cargo make build-arm
 
   build-wasm:
     runs-on: ubuntu-latest
@@ -109,7 +113,7 @@ jobs:
 
   publish-wasm:
     runs-on: ubuntu-latest
-    needs: build-wasm
+    needs: [build, build-wasm]
     if: github.ref == 'refs/heads/main'
 
     permissions:
