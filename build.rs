@@ -58,9 +58,10 @@ fn compile_in_parser(target: &str) {
     .flags([
         "-Wall",
         "-Wextra",
-        "-Werror=implicit-function-declaration",
+        "-Wimplicit-function-declaration",
         "-Wstrict-prototypes",
         "-Wno-unused-but-set-variable",
+        "-Werror",
     ])
     .include(INCLUDE_DIR);
 
