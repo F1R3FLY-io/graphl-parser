@@ -173,7 +173,7 @@ void visitVertex(Vertex p, Visitor *visitor, void *context)
   switch (p->kind)
   {
   case is_VName:
-    visitor->visitIsVNameCallback(p, context);
+    // visitor->visitIsVNameCallback(p, context);
     visitName(p->u.vName_.name_, visitor, context);
     break;
 
@@ -190,7 +190,7 @@ void visitName(Name p, Visitor *visitor, void *context)
     visitor->visitNameWildcardCallback(p, context);
     break;
   case is_NameVVar:
-    visitor->visitNameVVarCallback(p, context);
+    // visitor->visitNameVVarCallback(p, context);
     visitLVar(p->u.nameVVar_.lvar_, visitor, context);
     break;
   case is_NameGVar:

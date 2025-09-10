@@ -36,206 +36,206 @@ fn save_context(context: *mut String, content: String) {
 }
 
 visitor_callback!(visitIsGTensorCallback, Graph, |p, context| format!(
-    "{context}Gnil Called"
+    "{context} visitIsGTensorCallback"
 ));
 
 visitor_callback!(visitIsGNominate, Graph, |p, context| format!(
-    "{context}visitIsGNominate"
+    "{context} visitIsGNominate"
 ));
 visitor_callback!(visitIsGEdgeAnon, Graph, |p, context| format!(
-    "{context}visitIsGEdgeAnon"
+    "{context} visitIsGEdgeAnon"
 ));
 visitor_callback!(visitIsGEdgeNamed, Graph, |p, context| format!(
-    "{context}visitIsGEdgeNamed"
+    "{context} visitIsGEdgeNamed"
 ));
 visitor_callback!(visitIsGRuleAnonCallback, Graph, |p, context| format!(
-    "{context}visitIsGRuleAnonCallback"
+    "{context} visitIsGRuleAnonCallback"
 ));
 visitor_callback!(visitIsGRuleNamedCallback, Graph, |p, context| format!(
-    "{context}visitIsGRuleNamedCallback"
+    "{context} visitIsGRuleNamedCallback"
 ));
 visitor_callback!(visitBindingCallback, Binding, |p, context| format!(
-    "{context}visitBindingCallback"
+    "{context} visitBindingCallback"
 ));
 visitor_callback!(visitGBindCallback, GraphBinding, |p, context| format!(
-    "{context}visitGraphBindingCallback"
+    "{context} visitGraphBindingCallback"
 ));
 visitor_callback!(visitVertexCallback, Vertex, |p, context| format!(
-    "{context}visitVertexCallback"
+    "{context} visitVertexCallback"
 ));
 visitor_callback!(visitIsGVarCallback, Graph, |p, context| format!(
-    "{context}visitIsGVarCallback"
+    "{context} visitIsGVarCallback"
 ));
 visitor_callback!(visitNameCallback, Name, |p, context| format!(
-    "{context}visitNameCallback"
+    "{context} visitNameCallback"
 ));
 visitor_callback!(visitIsGSubgraphCallback, Graph, |p, context| format!(
-    "{context}visitIsGSubgraphCallback"
+    "{context} visitIsGSubgraphCallback"
 ));
 visitor_callback!(visitUVar, *mut i8, |p, context| format!(
-    "{context}visitUVar"
+    "{context} visitUVar"
 ));
 visitor_callback!(visitLVar, *mut i8, |p, context| format!(
-    "{context}visitLVar"
+    "{context} visitLVar"
 ));
 visitor_callback!(visitIdent, *mut i8, |p, context| format!(
-    "{context}visitIdent"
+    "{context} visitIdent"
 ));
 visitor_callback!(visitIntegerCallback, i32, |p, context| format!(
-    "{context}visitIntegerCallback"
+    "{context} visitIntegerCallback"
 ));
 visitor_callback!(visitDoubleCallback, f64, |p, context| format!(
-    "{context}visitDoubleCallback"
+    "{context} visitDoubleCallback"
 ));
 visitor_callback!(visitCharCallback, i8, |p, context| format!(
-    "{context}visitCharCallback"
+    "{context} visitCharCallback"
 ));
 visitor_callback!(visitStringCallback, *mut i8, |p, context| format!(
-    "{context}visitStringCallback"
+    "{context} visitStringCallback"
 ));
 visitor_callback!(visitIsGVertexCallback, Graph, |p, context| format!(
-    "{context}visitIsGVertexCallback"
+    "{context} visitIsGVertexCallback"
 ));
 visitor_callback!(visitIsGNilCallback, Graph, |p, context| format!(
-    "{context}visitIsGNilCallback"
+    "{context}"
 ));
 visitor_callback!(visitIsVBindCallback, Binding, |p, context| format!(
-    "{context}visitIsVBindCallback"
+    "{context} visitIsVBindCallback"
 ));
 visitor_callback!(visitIsGBindCallback, GraphBinding, |p, context| format!(
-    "{context}visitIsGBindCallback"
+    "{context} visitIsGBindCallback"
 ));
 visitor_callback!(visitIsVNameCallback, Vertex, |p, context| format!(
-    "{context}visitIsVNameCallback"
+    "{context} visitIsVNameCallback"
 ));
 visitor_callback!(visitNameWildcardCallback, Name, |p, context| format!(
-    "{context}visitNameWildcardCallback"
+    "{context} visitNameWildcardCallback"
 ));
 visitor_callback!(visitNameVVarCallback, Name, |p, context| format!(
-    "{context}visitNameVVarCallback"
+    "{context} visitNameVVarCallback"
 ));
 visitor_callback!(visitNameGVarCallback, Name, |p, context| format!(
-    "{context}visitNameGVarCallback"
+    "{context} visitNameGVarCallback"
 ));
 visitor_callback!(visitIsNameQuoteGraph, Name, |p, context| format!(
-    "{context}visitIsNameQuoteGraph"
+    "{context} visitIsNameQuoteGraph"
 ));
 visitor_callback!(visitIsNameQuoteVertex, Name, |p, context| format!(
-    "{context}visitIsNameQuoteVertex"
+    "{context} visitIsNameQuoteVertex"
 ));
 visitor_callback!(visitListName, ListName, |p, context| format!(
-    "{context}visitListName"
+    "{context} visitListName"
 ));
 visitor_callback!(visitListNameCallback, ListName, |p, context| format!(
-    "{context}visitListNameCallback"
+    "{context} visitListNameCallback"
 ));
 visitor_callback!(visitIdentCallback, Ident, |p, context| {
-    format!("{context}visitIdentCallback")
+    format!("{context} visitIdentCallback")
 });
 visitor_callback!(visitUVarCallback, UVar, |p, context| format!(
-    "{context}visitUVarCallback"
+    "{context} visitUVarCallback"
 ));
 
 visitor_callback!(visitIsGEdgeNamedCallback, Graph, |p, context| format!(
-    "{context}visitIsGEdgeNamedCallback"
+    "{context} visitIsGEdgeNamedCallback"
 ));
 
 visitor_callback!(visitIsGEdgeAnonCallback, Graph, |p, context| {
-    format!("{context}visitIsGEdgeAnonCallback")
+    format!("{context} visitIsGEdgeAnonCallback")
 });
 
 visitor_callback!(visitIsGNominateCallback, Graph, |p, context| format!(
-    "{context}visitIsGNominateCallback"
+    "{context} visitIsGNominateCallback"
 ));
 
 visitor_callback!(visitLVarCallback, LVar, |p, context| {
-    format!("{context}visitLVarCallback")
+    format!("{context} visitLVarCallback")
 });
 
 visitor_callback!(visitAttrCallback, Attr, |p, context| {
-    format!("{context}visitAttrCallback")
+    format!("{context} visitAttrCallback")
 });
 
 visitor_callback!(visitAttrNameCallback, AttrName, |p, context| {
-    format!("{context}visitAttrNameCallback")
+    format!("{context} visitAttrNameCallback")
 });
 
 visitor_callback!(visitAttrValCallback, AttrVal, |p, context| {
-    format!("{context}visitAttrValCallback")
+    format!("{context} visitAttrValCallback")
 });
 
 visitor_callback!(visitGEdgeNamedCallback, Graph, |p, context| format!(
-    "{context}visitGEdgeNamedCallback"
+    "{context} visitGEdgeNamedCallback"
 ));
-visitor_callback!(visitGNilCallback, Graph, |p, context| format!(
-    "{context}visitGNilCallback"
-));
+visitor_callback!(visitGNilCallback, Graph, |p, context| {
+    format!("{context} Nil")
+});
 visitor_callback!(visitGNominateCallback, Graph, |p, context| format!(
-    "{context}visitGNominateCallback"
+    "{context} visitGNominateCallback"
 ));
 visitor_callback!(visitGRuleAnonCallback, Graph, |p, context| format!(
-    "{context}visitGRuleAnonCallback"
+    "{context} visitGRuleAnonCallback"
 ));
 visitor_callback!(visitGRuleNamedCallback, Graph, |p, context| format!(
-    "{context}visitGRuleNamedCallback"
+    "{context} visitGRuleNamedCallback"
 ));
 visitor_callback!(visitGSubgraphCallback, Graph, |p, context| format!(
-    "{context}visitGSubgraphCallback"
+    "{context} visitGSubgraphCallback"
 ));
 visitor_callback!(visitGTensorCallback, Graph, |p, context| format!(
-    "{context}visitGTensorCallback"
+    "{context} visitGTensorCallback"
 ));
 visitor_callback!(visitGVarCallback, Graph, |p, context| format!(
-    "{context}visitGVarCallback"
+    "{context} visitGVarCallback"
 ));
 visitor_callback!(visitGVertexCallback, Graph, |p, context| format!(
-    "{context}visitGVertexCallback"
+    "{context} visitGVertexCallback"
 ));
 visitor_callback!(visitIsAttrListCallback, ListAttr, |p, context| format!(
-    "{context}visitIsAttrListCallback"
+    "{context} visitIsAttrListCallback"
 ));
 visitor_callback!(
     visitIsAttributeNameCallback,
     AttrName,
-    |p, context| format!("{context}visitIsAttributeNameCallback")
+    |p, context| format!("{context} visitIsAttributeNameCallback")
 );
 visitor_callback!(visitIsAttributePairCallback, Attr, |p, context| format!(
-    "{context}visitIsAttributePairCallback"
+    "{context} visitIsAttributePairCallback"
 ));
 visitor_callback!(
     visitIsAttributeValueCallback,
     AttrVal,
-    |p, context| format!("{context}visitIsAttributeValueCallback")
+    |p, context| format!("{context} visitIsAttributeValueCallback")
 );
 visitor_callback!(visitIsNameGVarCallback, Name, |p, context| format!(
-    "{context}visitIsNameGVarCallback"
+    "{context} visitIsNameGVarCallback"
 ));
 visitor_callback!(visitIsNameQuoteGraphCallback, Name, |p, context| format!(
-    "{context}visitIsNameQuoteGraphCallback"
+    "{context} visitIsNameQuoteGraphCallback"
 ));
 visitor_callback!(visitIsNameQuoteVertexCallback, Name, |p, context| format!(
-    "{context}visitIsNameQuoteVertexCallback"
+    "{context} visitIsNameQuoteVertexCallback"
 ));
 visitor_callback!(visitIsNameVVarCallback, Name, |p, context| format!(
-    "{context}visitIsNameVVarCallback"
+    "{context} visitIsNameVVarCallback"
 ));
 visitor_callback!(visitIsNameWildcardCallback, Name, |p, context| format!(
-    "{context}visitIsNameWildcardCallback"
+    "{context} visitIsNameWildcardCallback"
 ));
 visitor_callback!(
     visitIsEmptyAttrListCallback,
     ListAttr,
-    |p, context| format!("{context}visitIsEmptyAttrListCallback")
+    |p, context| format!("{context} visitIsEmptyAttrListCallback")
 );
 visitor_callback!(visitListAttrCallback, ListAttr, |p, context| format!(
-    "{context}visitListAttrCallback"
+    "{context} visitListAttrCallback"
 ));
 visitor_callback!(visitVBindCallback, Binding, |p, context| format!(
-    "{context}visitVBindCallback"
+    "{context} visitVBindCallback"
 ));
 
 visitor_callback!(visitGEdgeAnonCallback, Graph, |p, context| format!(
-    "{context}visitGEdgeAnonCallback"
+    "{context} visitGEdgeAnonCallback"
 ));
 
 pub fn parse(document: String) -> Result<String, String> {
@@ -298,7 +298,7 @@ pub fn parse(document: String) -> Result<String, String> {
     let document = CString::from_str(&document).map_err(|e| e.to_string())?;
     let ptr = document.as_ptr();
 
-    let contract = r#"contract %contract_name(%arguments){%body}"#;
+    let contract = r#""#;
 
     let rholang_representation = String::from_str(contract).map(Box::new).unwrap();
     let rholang_representation_ptr = Box::into_raw(rholang_representation);
@@ -334,10 +334,46 @@ mod tests {
         let statement = String::from_str("{0}").unwrap();
         let result = parse(statement).unwrap();
 
+        assert_eq!(result, "");
+    }
+
+    #[test]
+    fn test_vertex() {
+        let statement = String::from_str("<a> | 0").unwrap();
+        let result = parse(statement).unwrap();
+
         assert_eq!(
             result,
-            "contract %contract_name(%arguments){%body}visitIsGNilCallback"
+            r#"contract "my_workflow" (contract_return) = {
+          new a in {
+            a!(*contract_return)
+          }
+        }"#
         );
+    }
+
+    #[test]
+    fn test_graph() {
+        let statement = String::from_str(
+            r#"{(
+                  let xa = <a> in <a> | 0,
+                  let xb = <b> in <b> | 0
+                )}"#,
+        )
+        .unwrap();
+        let result = parse(statement).unwrap();
+
+        assert_eq!(
+            result,
+            r#"contract "test"(arg_1, arg_2, contract_return) = {
+              new a, b a_ret in {
+                a!(*arg_1, *arg_2, *a_ret) |
+                for (res <- a_ret) {
+                  b!(*res, *contract_return)
+                }
+              }
+          }"#
+        )
     }
 
     #[test]
