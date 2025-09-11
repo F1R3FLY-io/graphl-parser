@@ -1,16 +1,38 @@
-use std::str::FromStr;
+//! Rholang contract builder module for generating contract code.
 
 use super::channel::Channel;
 
+/// Placeholder string used during template rendering.
 const PLACEHOLDER: &str = "%REPLACE_ME%";
 
+/// A builder for generating Rholang contract code.
+///
+/// `ContractBuilder` allows you to construct a Rholang contract with a given name
+/// and a sequence of channels that will be chained together in the contract execution.
 #[derive(Debug)]
 pub struct ContractBuilder {
+    /// The name of the contract to be generated.
     pub contract_name: String,
+    /// The channels that will be used in the contract execution chain.
     pub channels: Vec<Channel>,
 }
 
 impl ContractBuilder {
+    /// Creates a new `ContractBuilder` with the specified contract name and channels.
+    ///
+    /// # Arguments
+    ///
+    /// * `contract_name` - A string-like type that will be converted into the contract name
+    /// * `channels` - A vector of `Channel` objects that define the execution chain
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::rholang::{channel::Channel, contract_builder::ContractBuilder};
+    ///
+    /// let channels = vec![Channel::new("a"), Channel::new("b")];
+    /// let contract = ContractBuilder::new("my_contract", channels);
+    /// ```
     pub fn new(contract_name: impl Into<String>, channels: Vec<Channel>) -> Self {
         ContractBuilder {
             contract_name: contract_name.into(),
@@ -18,6 +40,35 @@ impl ContractBuilder {
         }
     }
 
+    /// Renders the contract as Rholang code.
+    ///
+    /// This method generates a complete Rholang contract string based on the configured
+    /// contract name and channels. If no channels are provided, the contract will simply
+    /// return `Nil`. Otherwise, it creates a chain of channel calls where each channel's
+    /// result is passed to the next channel in the sequence.
+    ///
+    /// # Returns
+    ///
+    /// A `String` containing the complete Rholang contract code.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::rholang::{channel::Channel, contract_builder::ContractBuilder};
+    ///
+    /// // Empty contract
+    /// let contract = ContractBuilder::new("test_contract", vec![]);
+    /// assert_eq!(
+    ///     contract.render_rholang(),
+    ///     r#"contract test_contract (contract_result) = { contract_result!(Nil) }"#
+    /// );
+    ///
+    /// // Contract with one channel
+    /// let channels = vec![Channel::new("a")];
+    /// let contract = ContractBuilder::new("test_contract", channels);
+    /// let result = contract.render_rholang();
+    /// // Result will be a contract that calls channel 'a' and returns its result
+    /// ```
     pub fn render_rholang(&self) -> String {
         let call_stack = if self.channels.is_empty() {
             "contract_result!(Nil)".to_string()
