@@ -12,9 +12,6 @@ pub struct ContractBuilder {
 
 impl ContractBuilder {
     pub fn new(contract_name: impl Into<String>, channels: Vec<Channel>) -> Self {
-        // let mut channels = channels;
-        // channels.push(Channel::new("contract_result"));
-
         ContractBuilder {
             contract_name: contract_name.into(),
             channels,
@@ -40,12 +37,20 @@ impl ContractBuilder {
 
             let call_stack = self.channels
               .iter()
-              .fold(PLACEHOLDER.to_string(), |state, (channel)| {
-                  state.replace(
+            .enumerate()
+              .fold(PLACEHOLDER.to_string(), |state, (index,channel)| {
+                let prev_channel = if index > 0 {
+                  format!("{}_result_value", self.channels.get(index-1).unwrap_or(channel).name.clone())
+                }else{
+                    format!("{}_result", channel.name.clone())
+                };
+
+                state.replace(
                       PLACEHOLDER,
                       &format!(
-                          r#"{ch_name}!(*{ch_name}_result) | for ({ch_name}_result_value <- {ch_name}_result) {{ {PLACEHOLDER} }}"#,
-                          ch_name = channel.name
+                          r#"{ch_name}!(*{prev_channel}) | for ({ch_name}_result_value <- {ch_name}_result) {{ {PLACEHOLDER} }}"#,
+                          ch_name = channel.name,
+                          prev_channel = prev_channel
                       ),
                   )
               }).replace(
