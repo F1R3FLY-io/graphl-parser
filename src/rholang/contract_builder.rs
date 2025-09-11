@@ -12,6 +12,9 @@ pub struct ContractBuilder {
 
 impl ContractBuilder {
     pub fn new(contract_name: impl Into<String>, channels: Vec<Channel>) -> Self {
+        // let mut channels = channels;
+        // channels.push(Channel::new("contract_result"));
+
         ContractBuilder {
             contract_name: contract_name.into(),
             channels,
@@ -22,48 +25,40 @@ impl ContractBuilder {
         let call_stack = if self.channels.is_empty() {
             "contract_result!(Nil)".to_string()
         } else {
-            let init_stack = self
+            let init_variables = self
                 .channels
                 .iter()
-                .scan(PLACEHOLDER.to_string(), |state, ch| {
-                    *state = state.replace(
+                .fold(PLACEHOLDER.to_string(), |state, ch| {
+                    state.replace(
                         PLACEHOLDER,
                         &format!(
                             r#"new {ch_name}, {ch_name}_result in {{ {PLACEHOLDER} }}"#,
                             ch_name = ch.name
                         ),
-                    );
+                    )
+                });
 
-                    Some(state.to_owned())
-                })
-                .collect::<String>();
+            let call_stack = self.channels
+              .iter()
+              .fold(PLACEHOLDER.to_string(), |state, (channel)| {
+                  state.replace(
+                      PLACEHOLDER,
+                      &format!(
+                          r#"{ch_name}!(*{ch_name}_result) | for ({ch_name}_result_value <- {ch_name}_result) {{ {PLACEHOLDER} }}"#,
+                          ch_name = channel.name
+                      ),
+                  )
+              }).replace(
+                  PLACEHOLDER,
+                  &format!(
+                      "contract_result!(*{ch_name}_result_value)",
+                      ch_name = self
+                          .channels
+                          .last().unwrap().name
+                  ),
+              );
 
-            let last_channel = self
-                .channels
-                .last()
-                .expect("Something goes wrong, because here have to be last channel");
-
-            self.channels
-                .iter()
-                .scan(init_stack, |state, chanel| {
-                    *state = state.replace(
-                        PLACEHOLDER,
-                        &format!(
-                            r#"{ch_name}!(*{ch_name}_result) | for ({ch_name}_result_value <- {ch_name}_result) {{ {PLACEHOLDER} }}"#,
-                            ch_name = chanel.name
-                        ),
-                    );
-
-                    Some(state.to_owned())
-                })
-                .collect::<String>()
-                .replace(
-                    PLACEHOLDER,
-                    &format!(
-                        "contract_result!(*{last_channel_name}_result_value)",
-                        last_channel_name = last_channel.name
-                    ),
-                )
+            init_variables.replace(PLACEHOLDER, &call_stack)
         };
 
         format!(
@@ -90,7 +85,7 @@ mod tests {
     }
 
     #[test]
-    fn test_render_with_channels() {
+    fn test_render_with_one_channel() {
         let channels = vec![Channel::new("a")];
         let contract = ContractBuilder::new("test_contract", channels);
         let chain = contract.render_rholang();
@@ -98,6 +93,18 @@ mod tests {
         assert_eq!(
             chain,
             r#"contract test_contract (contract_result) = { new a, a_result in { a!(*a_result) | for (a_result_value <- a_result) { contract_result!(*a_result_value) } } }"#
+        );
+    }
+
+    #[test]
+    fn test_render_with_two_channels() {
+        let channels = vec![Channel::new("a"), Channel::new("b")];
+        let contract = ContractBuilder::new("test_contract", channels);
+        let chain = contract.render_rholang();
+
+        assert_eq!(
+            chain,
+            r#"contract test_contract (contract_result) = { new a, a_result in { new b, b_result in { a!(*a_result) | for (a_result_value <- a_result) { b!(*a_result_value) | for (b_result_value <- b_result) { contract_result!(*b_result_value) } } } } }"#
         );
     }
 }
