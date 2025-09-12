@@ -178,8 +178,8 @@ pub enum Name {
     Wildcard,
     VVar { value: String },
     GVar { value: String },
-    QuoteGraph(Box<Graph>),
-    QuoteVertex(Box<Vertex>),
+    QuoteGraph { value: Box<Graph> },
+    QuoteVertex { value: Box<Vertex> },
 }
 
 impl TryFrom<bindings::Name> for Name {
@@ -206,13 +206,13 @@ impl TryFrom<bindings::Name> for Name {
                     .nameQuoteGraph_
                     .graph_
                     .try_into()
-                    .map(|g| Self::QuoteGraph(Box::new(g))),
+                    .map(|g| Self::QuoteGraph { value: Box::new(g) }),
                 bindings::Name__is_NameQuoteVertex => (*value)
                     .u
                     .nameQuoteVertex_
                     .vertex_
                     .try_into()
-                    .map(|v| Self::QuoteVertex(Box::new(v))),
+                    .map(|v| Self::QuoteVertex { value: Box::new(v) }),
                 _ => Err(Self::Error::InvalidVariant {
                     context: "Name".into(),
                 }),
@@ -253,16 +253,16 @@ impl TryFrom<Name> for Guard<bindings::Name> {
                         context: "make_NameGVar returned null".into(),
                     })
             }
-            Name::QuoteGraph(graph) => {
-                let graph = (*graph).try_into()?;
+            Name::QuoteGraph { value } => {
+                let graph = (*value).try_into()?;
                 (graph,)
                     .consume(|(graph,)| unsafe { bindings::make_NameQuoteGraph(graph) })
                     .ok_or_else(|| Self::Error::NullPointer {
                         context: "make_NameQuoteGraph returned null".into(),
                     })
             }
-            Name::QuoteVertex(vertex) => {
-                let vertex = (*vertex).try_into()?;
+            Name::QuoteVertex { value } => {
+                let vertex = (*value).try_into()?;
                 (vertex,)
                     .consume(|(vertex,)| unsafe { bindings::make_NameQuoteVertex(vertex) })
                     .ok_or_else(|| Self::Error::NullPointer {
