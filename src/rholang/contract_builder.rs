@@ -259,6 +259,20 @@ mod tests {
     }
 
     #[test]
+    fn test_contract_with_one_argument_and_one_channel() {
+        let channels = vec![Channel::new("a")];
+        let mut builder = ContractBuilder::new("test_contract", channels);
+        builder.add_argument("input_1");
+
+        let chain = builder.render_rholang();
+
+        assert_eq!(
+            chain,
+            r#"contract test_contract (input_1, contract_result) = { new a, a_result in { a!(*input_1, *a_result) | for (a_result_value <- a_result) { contract_result!(*a_result_value) } } }"#
+        );
+    }
+
+    #[test]
     fn test_contract_with_arguments() {
         let channels = vec![Channel::new("a"), Channel::new("b")];
         let mut builder = ContractBuilder::new("test_contract", channels);
