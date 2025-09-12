@@ -1,4 +1,9 @@
 //! Rholang contract builder module for generating contract code.
+//!
+//! This module provides tools for constructing and rendering Rholang contracts
+//! with chainable channel operations. The primary component is `ContractBuilder`,
+//! which allows you to define a contract with a name, arguments, and a sequence
+//! of channels that will be executed in order.
 
 use super::channel::Channel;
 
@@ -6,18 +11,42 @@ use super::channel::Channel;
 ///
 /// `ContractBuilder` allows you to construct a Rholang contract with a given name
 /// and a sequence of channels that will be chained together in the contract execution.
+/// The builder supports adding custom arguments to the contract and generates
+/// complete Rholang code that can be deployed and executed.
+///
+/// # Examples
+///
+/// ```
+/// use crate::rholang::{channel::Channel, contract_builder::ContractBuilder};
+///
+/// // Create a simple contract with no channels
+/// let contract = ContractBuilder::new("simple_contract", vec![]);
+/// let rholang_code = contract.render_rholang();
+///
+/// // Create a contract with multiple channels
+/// let channels = vec![Channel::new("process_data"), Channel::new("validate")];
+/// let mut contract = ContractBuilder::new("data_pipeline", channels);
+/// contract.add_argument("input_data");
+/// let rholang_code = contract.render_rholang();
+/// ```
 #[derive(Debug, Default)]
 pub struct ContractBuilder {
     /// The name of the contract to be generated.
     pub contract_name: String,
     /// The channels that will be used in the contract execution chain.
+    /// Each channel will receive the output of the previous channel as input.
     pub channels: Vec<Channel>,
     /// The arguments that will be passed to the contract.
+    /// These arguments are available to the first channel in the execution chain.
     pub arguments: Vec<String>,
 }
 
 impl ContractBuilder {
     /// Creates a new `ContractBuilder` with the specified contract name and channels.
+    ///
+    /// The channels will be executed in the order they appear in the vector,
+    /// with each channel's output being passed as input to the next channel.
+    /// The contract starts with no arguments - use `add_argument` to add them.
     ///
     /// # Arguments
     ///
@@ -43,13 +72,17 @@ impl ContractBuilder {
     /// Renders the contract as Rholang code.
     ///
     /// This method generates a complete Rholang contract string based on the configured
-    /// contract name and channels. If no channels are provided, the contract will simply
-    /// return `Nil`. Otherwise, it creates a chain of channel calls where each channel's
-    /// result is passed to the next channel in the sequence.
+    /// contract name, arguments, and channels. The generated contract follows these rules:
+    ///
+    /// - If no channels are provided, the contract simply returns `Nil`
+    /// - If channels are provided, they are chained together where each channel's
+    ///   result is passed to the next channel in the sequence
+    /// - Contract arguments (if any) are passed to the first channel in the chain
+    /// - The final channel's result is returned via the `contract_result` callback
     ///
     /// # Returns
     ///
-    /// A `String` containing the complete Rholang contract code.
+    /// A `String` containing the complete Rholang contract code ready for deployment.
     ///
     /// # Examples
     ///
@@ -95,7 +128,6 @@ impl ContractBuilder {
         }
 
         // Build the call chain
-        let is_last = |index: usize| index == self.channels.len() - 1;
         for (index, channel) in self.channels.iter().enumerate() {
             match index {
                 0 => {
@@ -145,7 +177,29 @@ impl ContractBuilder {
         )
     }
 
-    fn add_argument(&mut self, name: impl Into<String>) {
+    /// Adds a new argument to the contract.
+    ///
+    /// Arguments are passed to the contract when it's invoked and are available
+    /// to the first channel in the execution chain. Arguments are added in the
+    /// order this method is called.
+    ///
+    /// # Arguments
+    ///
+    /// * `name` - A string-like type that will be converted into the argument name
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use crate::rholang::{channel::Channel, contract_builder::ContractBuilder};
+    ///
+    /// let mut contract = ContractBuilder::new("my_contract", vec![]);
+    /// contract.add_argument("input_data");
+    /// contract.add_argument("config");
+    ///
+    /// let rholang_code = contract.render_rholang();
+    /// // The contract will now accept input_data and config as parameters
+    /// ```
+    pub fn add_argument(&mut self, name: impl Into<String>) {
         self.arguments.push(name.into());
     }
 }
