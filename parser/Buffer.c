@@ -77,7 +77,7 @@ void bufferAppendString(Buffer buffer, const char *s)
     bufferAllocateChars(buffer, len);
 
     /* Append s at the end of the buffer, including terminating 0. */
-    strncpy(buffer->chars + buffer->current, s, len + 1);
+    memcpy(buffer->chars + buffer->current, s, len + 1);
     buffer->current += len;
   }
 }
