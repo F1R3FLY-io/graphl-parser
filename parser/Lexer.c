@@ -736,14 +736,6 @@ static void update_loc(YYLTYPE *loc, char *text)
 #define ESCAPED 5
 #define COMMENT 6
 
-#ifndef YY_NO_UNISTD_H
-/* Special case for "unistd.h", since it is non-ANSI. We include it way
- * down here because we want the user's section 1 to have been scanned first.
- * The user has a chance to override it with an option.
- */
-#include <unistd.h>
-#endif
-
 #define YY_EXTRA_TYPE Buffer
 
 /* Holds the entire state of the reentrant scanner. */
