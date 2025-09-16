@@ -159,6 +159,22 @@ Graph make_GTensor(Graph p1, Graph p2)
   return tmp;
 }
 
+/********************   GContext    ********************/
+
+Graph make_GContext(String p1, Name p2, Graph p3)
+{
+  Graph tmp = (Graph)malloc(sizeof(*tmp));
+  if (!tmp)
+  {
+    return NULL;
+  }
+  tmp->kind = is_GContext;
+  tmp->u.gContext_.string_ = p1;
+  tmp->u.gContext_.name_ = p2;
+  tmp->u.gContext_.graph_ = p3;
+  return tmp;
+}
+
 /********************   VBind    ********************/
 
 Binding make_VBind(LVar p1, Vertex p2, Graph p3)
@@ -274,12 +290,12 @@ Name make_NameQuoteVertex(Vertex p1)
   return tmp;
 }
 
-LVar make_LVar(const char *p0)
+LVar make_LVar(LVar p0)
 {
   return strdup(p0);
 }
 
-UVar make_UVar(const char *p0)
+UVar make_UVar(UVar p0)
 {
   return strdup(p0);
 }
@@ -341,6 +357,11 @@ Graph clone_Graph(Graph p)
   case is_GTensor:
     return make_GTensor(clone_Graph(p->u.gTensor_.graph_1),
                         clone_Graph(p->u.gTensor_.graph_2));
+
+  case is_GContext:
+    return make_GContext(strdup(p->u.gContext_.string_),
+                         clone_Name(p->u.gContext_.name_),
+                         clone_Graph(p->u.gContext_.graph_));
 
   default:
     return NULL;
@@ -493,6 +514,12 @@ void free_Graph(Graph p)
   case is_GTensor:
     free_Graph(p->u.gTensor_.graph_1);
     free_Graph(p->u.gTensor_.graph_2);
+    break;
+
+  case is_GContext:
+    free(p->u.gContext_.string_);
+    free_Name(p->u.gContext_.name_);
+    free_Graph(p->u.gContext_.graph_);
     break;
   }
   free(p);

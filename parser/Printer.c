@@ -231,6 +231,19 @@ void ppGraph(Graph p, int _i_)
       renderC(_R_PAREN);
     break;
 
+  case is_GContext:
+    if (_i_ > 0)
+      renderC(_L_PAREN);
+    renderS("context");
+    ppString(p->u.gContext_.string_);
+    renderS("for");
+    ppName(p->u.gContext_.name_, 0);
+    renderS("in");
+    ppGraph(p->u.gContext_.graph_, 0);
+    if (_i_ > 0)
+      renderC(_R_PAREN);
+    break;
+
   case is_GNominate:
     if (_i_ > 1)
       renderC(_L_PAREN);
@@ -492,6 +505,22 @@ void shGraph(Graph p)
     shGraph(p->u.gTensor_.graph_1);
     bufAppendC(' ');
     shGraph(p->u.gTensor_.graph_2);
+
+    bufAppendC(')');
+
+    break;
+  case is_GContext:
+    bufAppendC('(');
+
+    bufAppendS("GContext");
+
+    bufAppendC(' ');
+
+    shString(p->u.gContext_.string_);
+    bufAppendC(' ');
+    shName(p->u.gContext_.name_);
+    bufAppendC(' ');
+    shGraph(p->u.gContext_.graph_);
 
     bufAppendC(')');
 

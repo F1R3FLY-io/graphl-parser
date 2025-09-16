@@ -16,6 +16,7 @@ GRuleAnon .            Graph1 ::= "[" "=" Graph Graph "]"                  ;
 GRuleNamed .           Graph1 ::= Name "[" "=" Graph Graph "]"             ;
 GSubgraph .            Graph1 ::= GraphBinding                             ;
 GTensor .               Graph ::= Graph "*" Graph1                         ;
+GContext .              Graph ::= "context" String "for" Name "in" Graph   ;
 
 -- Bindings
 VBind .               Binding ::= "let" LVar "=" Vertex "in" Graph2        ;
