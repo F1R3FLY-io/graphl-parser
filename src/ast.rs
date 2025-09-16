@@ -332,6 +332,15 @@ pub struct GTensor {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[cfg_attr(target_arch = "wasm32", derive(Tsify))]
+#[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi, from_wasm_abi))]
+pub struct GContext {
+    pub graph: Box<Graph>,
+    pub name: Name,
+    pub string: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 #[serde(tag = "type")]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi, from_wasm_abi))]
@@ -346,6 +355,7 @@ pub enum Graph {
     RuleNamed(GRuleNamed),
     Subgraph(GraphBinding),
     Tensor(GTensor),
+    Context(GContext),
 }
 
 impl TryFrom<bindings::Graph> for Graph {
@@ -425,6 +435,17 @@ impl TryFrom<bindings::Graph> for Graph {
                     let graph_1 = g_tensor.graph_1.try_into().map(Box::new)?;
                     let graph_2 = g_tensor.graph_2.try_into().map(Box::new)?;
                     Ok(Self::Tensor(GTensor { graph_1, graph_2 }))
+                }
+                bindings::Graph__is_GContext => {
+                    let g_context = (*value).u.gContext_;
+                    let name = g_context.name_.try_into()?;
+                    let graph = g_context.graph_.try_into().map(Box::new)?;
+                    let string = to_string(g_context.string_)?;
+                    Ok(Self::Context(GContext {
+                        graph,
+                        name,
+                        string,
+                    }))
                 }
                 _ => Err(Self::Error::InvalidVariant {
                     context: "Graph".into(),
@@ -541,6 +562,18 @@ impl TryFrom<Graph> for Guard<bindings::Graph> {
                         context: "make_GTensor returned null".into(),
                     })
             }
+            Graph::Context(gcontext) => {
+                let graph = (*gcontext.graph).try_into()?;
+                let name = gcontext.name.try_into()?;
+                let string = to_c_string(gcontext.string)?;
+                (string, name, graph)
+                    .consume(|(string, name, graph)| unsafe {
+                        bindings::make_GContext(string, name, graph)
+                    })
+                    .ok_or_else(|| Self::Error::NullPointer {
+                        context: "make_GContext returned null".into(),
+                    })
+            }
         }
     }
 }
@@ -558,7 +591,7 @@ fn to_c_string(str: String) -> Result<Guard<*mut std::os::raw::c_char>, Error> {
     })?;
 
     // we need to reallocate with malloc
-    let var = unsafe { bindings::make_LVar(c_str.as_ptr()) };
+    let var = unsafe { bindings::make_LVar(c_str.as_ptr() as _) };
 
     if var.is_null() {
         return Err(Error::NullPointer {

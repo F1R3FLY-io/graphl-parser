@@ -56,6 +56,9 @@ visitor_callback!(visitIsGTensorCallback, Graph, |p, context| format!(
 visitor_callback!(visitIsGNominate, Graph, |p, context| format!(
     "{context}visitIsGNominate"
 ));
+visitor_callback!(visitIsGContextCallback, Graph, |p, context| format!(
+    "{context}visitIsGContextCallback"
+));
 visitor_callback!(visitIsGEdgeAnon, Graph, |p, context| format!(
     "{context}visitIsGEdgeAnon"
 ));
@@ -148,15 +151,12 @@ pub fn parse(document: String) -> Result<String, String> {
     let mut visitor = Visitor {
         visitIsGTensorCallback: Some(visitIsGTensorCallback),
         visitIsGNominate: Some(visitIsGNominate),
+        visitIsGContextCallback: Some(visitIsGContextCallback),
         visitIsGEdgeAnon: Some(visitIsGEdgeAnon),
         visitIsGEdgeNamed: Some(visitIsGEdgeNamed),
         visitIsGRuleAnonCallback: Some(visitIsGRuleAnonCallback),
         visitIsGRuleNamedCallback: Some(visitIsGRuleNamedCallback),
-        visitBindingCallback: Some(visitBindingCallback),
-        visitGraphBindingCallback: Some(visitGraphBindingCallback),
-        visitVertexCallback: Some(visitVertexCallback),
         visitIsGVarCallback: Some(visitIsGVarCallback),
-        visitNameCallback: Some(visitNameCallback),
         visitIsGSubgraphCallback: Some(visitIsGSubgraphCallback),
         visitUVar: Some(visitUVar),
         visitLVar: Some(visitLVar),
