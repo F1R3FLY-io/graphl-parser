@@ -160,25 +160,22 @@ enum yysymbol_kind_t
   YYSYMBOL__LBRACK = 13,      /* _LBRACK  */
   YYSYMBOL__RBRACK = 14,      /* _RBRACK  */
   YYSYMBOL__UNDERSCORE = 15,  /* _UNDERSCORE  */
-  YYSYMBOL__KW_context = 16,  /* _KW_context  */
-  YYSYMBOL__KW_for = 17,      /* _KW_for  */
-  YYSYMBOL__KW_in = 18,       /* _KW_in  */
-  YYSYMBOL__KW_let = 19,      /* _KW_let  */
-  YYSYMBOL__LBRACE = 20,      /* _LBRACE  */
-  YYSYMBOL__BAR = 21,         /* _BAR  */
-  YYSYMBOL__RBRACE = 22,      /* _RBRACE  */
-  YYSYMBOL_T_LVar = 23,       /* T_LVar  */
-  YYSYMBOL_T_UVar = 24,       /* T_UVar  */
-  YYSYMBOL__STRING_ = 25,     /* _STRING_  */
-  YYSYMBOL_YYACCEPT = 26,     /* $accept  */
-  YYSYMBOL_Graph = 27,        /* Graph  */
-  YYSYMBOL_Graph1 = 28,       /* Graph1  */
-  YYSYMBOL_Graph2 = 29,       /* Graph2  */
-  YYSYMBOL_Graph3 = 30,       /* Graph3  */
-  YYSYMBOL_Binding = 31,      /* Binding  */
-  YYSYMBOL_GraphBinding = 32, /* GraphBinding  */
-  YYSYMBOL_Vertex = 33,       /* Vertex  */
-  YYSYMBOL_Name = 34          /* Name  */
+  YYSYMBOL__KW_in = 16,       /* _KW_in  */
+  YYSYMBOL__KW_let = 17,      /* _KW_let  */
+  YYSYMBOL__LBRACE = 18,      /* _LBRACE  */
+  YYSYMBOL__BAR = 19,         /* _BAR  */
+  YYSYMBOL__RBRACE = 20,      /* _RBRACE  */
+  YYSYMBOL_T_LVar = 21,       /* T_LVar  */
+  YYSYMBOL_T_UVar = 22,       /* T_UVar  */
+  YYSYMBOL_YYACCEPT = 23,     /* $accept  */
+  YYSYMBOL_Graph = 24,        /* Graph  */
+  YYSYMBOL_Graph1 = 25,       /* Graph1  */
+  YYSYMBOL_Graph2 = 26,       /* Graph2  */
+  YYSYMBOL_Graph3 = 27,       /* Graph3  */
+  YYSYMBOL_Binding = 28,      /* Binding  */
+  YYSYMBOL_GraphBinding = 29, /* GraphBinding  */
+  YYSYMBOL_Vertex = 30,       /* Vertex  */
+  YYSYMBOL_Name = 31          /* Name  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -512,21 +509,21 @@ union yyalloc
 #endif /* !YYCOPY_NEEDED */
 
 /* YYFINAL -- State number of the termination state.  */
-#define YYFINAL 32
+#define YYFINAL 30
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST 94
+#define YYLAST 77
 
 /* YYNTOKENS -- Number of terminals.  */
-#define YYNTOKENS 26
+#define YYNTOKENS 23
 /* YYNNTS -- Number of nonterminals.  */
 #define YYNNTS 9
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES 24
+#define YYNRULES 23
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES 69
+#define YYNSTATES 63
 
 /* YYMAXUTOK -- Last valid token kind.  */
-#define YYMAXUTOK 280
+#define YYMAXUTOK 277
 
 /* YYTRANSLATE(TOKEN-NUM) -- Symbol number corresponding to TOKEN-NUM
    as returned by yylex, with out-of-bounds checking.  */
@@ -538,27 +535,26 @@ union yyalloc
 /* YYTRANSLATE[TOKEN-NUM] -- Symbol number corresponding to TOKEN-NUM
    as returned by yylex.  */
 static const yytype_int8 yytranslate[] = {
-    0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
-    2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-    11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25};
+    0, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 2, 3, 4,
+    5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
 
 #if YYDEBUG
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
-static const yytype_uint8 yyrline[] = {
-    0, 127, 127, 128, 129, 131, 132, 133, 134, 135, 136, 137, 139,
-    140, 141, 143, 144, 146, 148, 150, 152, 153, 154, 155, 156};
+static const yytype_uint8 yyrline[] = {0, 124, 124, 125, 127, 128, 129, 130,
+                                       131, 132, 133, 135, 136, 137, 139, 140,
+                                       142, 144, 146, 148, 149, 150, 151, 152};
 #endif
 
 /** Accessing symbol of state STATE.  */
@@ -587,8 +583,6 @@ static const char *const yytname[] = {"\"end of file\"",
                                       "_LBRACK",
                                       "_RBRACK",
                                       "_UNDERSCORE",
-                                      "_KW_context",
-                                      "_KW_for",
                                       "_KW_in",
                                       "_KW_let",
                                       "_LBRACE",
@@ -596,7 +590,6 @@ static const char *const yytname[] = {"\"end of file\"",
                                       "_RBRACE",
                                       "T_LVar",
                                       "T_UVar",
-                                      "_STRING_",
                                       "$accept",
                                       "Graph",
                                       "Graph1",
@@ -614,7 +607,7 @@ static const char *yysymbol_name(yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-6)
+#define YYPACT_NINF (-15)
 
 #define yypact_value_is_default(Yyn) ((Yyn) == YYPACT_NINF)
 
@@ -625,59 +618,59 @@ static const char *yysymbol_name(yysymbol_kind_t yysymbol)
 /* YYPACT[STATE-NUM] -- Index in YYTABLE of the portion describing
    STATE-NUM.  */
 static const yytype_int8 yypact[] = {
-    49, -1, -6, 64, 49, 11, -6, 6, 36, 49, 15, -6, 26, -6, -6, -6, -6, -6,
-    21, -2, 23, 18, -6, 44, 57, 21, 49, 12, 68, 70, 8, 62, -6, 62, 62, -1,
-    79, -1, -6, 4, 64, 58, 49, -6, -6, -6, -6, 83, 49, 86, -5, 74, 75, 34,
-    -1, 4, -6, -6, 49, 25, 25, 89, 1, 57, 15, -6, -6, -6, -6};
+    44, -14, -15, 48, 44, -4, -15, 21, 44, 5, -15, 41, -15,
+    -15, -15, -15, -15, 10, -2, -6, 24, -15, 29, 38, 10, 44,
+    40, 45, 6, 44, -15, 44, 44, -14, 54, -14, -15, 1, 49,
+    44, -15, -15, -15, -15, 47, 44, 67, 22, 59, 11, -14, 1,
+    -15, -15, 12, 12, 71, 32, 5, -15, -15, -15, -15};
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
    Performed when YYTABLE does not specify something else to do.  Zero
    means the default is an error.  */
 static const yytype_int8 yydefact[] = {
-    0, 0, 16, 0, 0, 0, 20, 0, 0, 0, 21, 22, 0, 2, 5, 12, 6, 11,
-    0, 0, 0, 0, 21, 0, 23, 24, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0,
-    0, 0, 19, 0, 0, 0, 0, 15, 14, 3, 13, 0, 0, 0, 0, 0, 0, 0,
-    0, 0, 7, 9, 0, 0, 0, 0, 0, 4, 0, 17, 18, 8, 10};
+    0, 0, 15, 0, 0, 0, 19, 0, 0, 20, 21, 0, 2, 4, 11, 5, 10, 0, 0, 0, 0,
+    20, 0, 22, 23, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 18, 0, 0, 0, 14, 13,
+    3, 12, 0, 0, 0, 0, 0, 0, 0, 0, 6, 8, 0, 0, 0, 0, 0, 16, 17, 7, 9};
 
 /* YYPGOTO[NTERM-NUM].  */
-static const yytype_int8 yypgoto[] = {-6, -4, 16, 24, -6, 2, -6, 0, 3};
+static const yytype_int8 yypgoto[] = {-15, 0, 42, 13, -15, -1, -15, -3, 74};
 
 /* YYDEFGOTO[NTERM-NUM].  */
-static const yytype_int8 yydefgoto[] = {0, 12, 13, 14, 15, 16, 17, 18, 19};
+static const yytype_int8 yydefgoto[] = {0, 11, 12, 13, 14, 15, 16, 17, 18};
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
    positive, shift that token.  If negative, reduce the rule whose
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] = {
-    24, 33, 35, 21, 25, 30, 23, 33, 1, 57, 33, 36, 2, 3, 33, 68, 4, 5, 20,
-    6, 7, 26, 39, 8, 9, 37, 32, 10, 11, 40, 43, 27, 33, 2, 3, 50, 31, 47,
-    53, 49, 33, 52, 34, 51, 55, 9, 28, 44, 64, 45, 46, 62, 60, 1, 63, 38, 61,
-    2, 3, 28, 29, 4, 5, 33, 6, 7, 1, 3, 8, 9, 2, 3, 10, 11, 4, 5,
-    4, 6, 41, 6, 42, 8, 9, 65, 66, 10, 11, 22, 11, 48, 54, 56, 58, 59, 67};
+    20, 24, 33, 19, 23, 1, 25, 31, 28, 2, 3, 34, 31, 4, 5, 26,
+    6, 31, 7, 8, 2, 3, 9, 10, 29, 37, 40, 55, 31, 32, 8, 35,
+    44, 58, 46, 48, 53, 47, 31, 49, 36, 30, 26, 27, 31, 51, 62, 31,
+    1, 56, 38, 57, 2, 3, 50, 39, 4, 5, 3, 6, 4, 7, 8, 6,
+    45, 9, 10, 59, 60, 21, 10, 41, 52, 42, 43, 54, 61, 22};
 
 static const yytype_int8 yycheck[] = {
-    4, 6, 4, 1, 4, 9, 3, 6, 4, 14, 6, 13, 8, 9, 6, 14, 12, 13, 19,
-    15, 16, 10, 26, 19, 20, 7, 0, 23, 24, 17, 22, 25, 6, 8, 9, 39, 21, 35,
-    42, 37, 6, 41, 21, 40, 48, 20, 23, 31, 23, 33, 34, 55, 18, 4, 58, 11, 54,
-    8, 9, 23, 24, 12, 13, 6, 15, 16, 4, 9, 19, 20, 8, 9, 23, 24, 12, 13,
-    12, 15, 10, 15, 10, 19, 20, 59, 60, 23, 24, 23, 24, 10, 7, 5, 18, 18, 5};
+    1, 4, 4, 17, 4, 4, 10, 6, 8, 8, 9, 13, 6, 12, 13, 21,
+    15, 6, 17, 18, 8, 9, 21, 22, 19, 25, 20, 16, 6, 19, 18, 7,
+    33, 21, 35, 38, 14, 37, 6, 39, 11, 0, 21, 22, 6, 45, 14, 6,
+    4, 50, 10, 51, 8, 9, 7, 10, 12, 13, 9, 15, 12, 17, 18, 15,
+    10, 21, 22, 54, 55, 21, 22, 29, 5, 31, 32, 16, 5, 3};
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
    state STATE-NUM.  */
 static const yytype_int8 yystos[] = {
-    0, 4, 8, 9, 12, 13, 15, 16, 19, 20, 23, 24, 27, 28, 29, 30, 31, 32,
-    33, 34, 19, 31, 23, 34, 27, 33, 10, 25, 23, 24, 27, 21, 0, 6, 21, 4,
-    13, 7, 11, 27, 17, 10, 10, 22, 28, 28, 28, 31, 10, 31, 27, 34, 33, 27,
-    7, 27, 5, 14, 18, 18, 18, 31, 27, 27, 23, 29, 29, 5, 14};
+    0, 4, 8, 9, 12, 13, 15, 17, 18, 21, 22, 24, 25, 26, 27, 28,
+    29, 30, 31, 17, 28, 21, 31, 24, 30, 10, 21, 22, 24, 19, 0, 6,
+    19, 4, 13, 7, 11, 24, 10, 10, 20, 25, 25, 25, 28, 10, 28, 24,
+    30, 24, 7, 24, 5, 14, 16, 16, 28, 24, 21, 26, 26, 5, 14};
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
-static const yytype_int8 yyr1[] = {0, 26, 27, 27, 27, 28, 28, 28, 28,
-                                   28, 28, 28, 29, 29, 29, 30, 30, 31,
-                                   32, 33, 34, 34, 34, 34, 34};
+static const yytype_int8 yyr1[] = {0, 23, 24, 24, 25, 25, 25, 25,
+                                   25, 25, 25, 26, 26, 26, 27, 27,
+                                   28, 29, 30, 31, 31, 31, 31, 31};
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.
  */
-static const yytype_int8 yyr2[] = {0, 2, 1, 3, 6, 1, 1, 5, 6, 5, 6, 1, 1,
+static const yytype_int8 yyr2[] = {0, 2, 1, 3, 1, 1, 5, 6, 5, 6, 1, 1,
                                    3, 3, 3, 1, 6, 6, 3, 1, 1, 1, 2, 2};
 
 enum
@@ -1249,36 +1242,28 @@ yyreduce:
   }
   break;
 
-  case 4: /* Graph: _KW_context _STRING_ _KW_for Name _KW_in Graph  */
-  {
-    (yyval.graph_) = make_GContext((yyvsp[-4]._string), (yyvsp[-2].name_),
-                                   (yyvsp[0].graph_));
-    result->graph_ = (yyval.graph_);
-  }
-  break;
-
-  case 5: /* Graph1: Graph2  */
+  case 4: /* Graph1: Graph2  */
   {
     (yyval.graph_) = (yyvsp[0].graph_);
     result->graph_ = (yyval.graph_);
   }
   break;
 
-  case 6: /* Graph1: Binding  */
+  case 5: /* Graph1: Binding  */
   {
     (yyval.graph_) = make_GNominate((yyvsp[0].binding_));
     result->graph_ = (yyval.graph_);
   }
   break;
 
-  case 7: /* Graph1: _LPAREN Binding _COMMA Binding _RPAREN  */
+  case 6: /* Graph1: _LPAREN Binding _COMMA Binding _RPAREN  */
   {
     (yyval.graph_) = make_GEdgeAnon((yyvsp[-3].binding_), (yyvsp[-1].binding_));
     result->graph_ = (yyval.graph_);
   }
   break;
 
-  case 8: /* Graph1: Name _LPAREN Binding _COMMA Binding _RPAREN  */
+  case 7: /* Graph1: Name _LPAREN Binding _COMMA Binding _RPAREN  */
   {
     (yyval.graph_) = make_GEdgeNamed((yyvsp[-5].name_), (yyvsp[-3].binding_),
                                      (yyvsp[-1].binding_));
@@ -1286,14 +1271,14 @@ yyreduce:
   }
   break;
 
-  case 9: /* Graph1: _LBRACK _EQ Graph Graph _RBRACK  */
+  case 8: /* Graph1: _LBRACK _EQ Graph Graph _RBRACK  */
   {
     (yyval.graph_) = make_GRuleAnon((yyvsp[-2].graph_), (yyvsp[-1].graph_));
     result->graph_ = (yyval.graph_);
   }
   break;
 
-  case 10: /* Graph1: Name _LBRACK _EQ Graph Graph _RBRACK  */
+  case 9: /* Graph1: Name _LBRACK _EQ Graph Graph _RBRACK  */
   {
     (yyval.graph_) = make_GRuleNamed((yyvsp[-5].name_), (yyvsp[-2].graph_),
                                      (yyvsp[-1].graph_));
@@ -1301,49 +1286,49 @@ yyreduce:
   }
   break;
 
-  case 11: /* Graph1: GraphBinding  */
+  case 10: /* Graph1: GraphBinding  */
   {
     (yyval.graph_) = make_GSubgraph((yyvsp[0].graphbinding_));
     result->graph_ = (yyval.graph_);
   }
   break;
 
-  case 12: /* Graph2: Graph3  */
+  case 11: /* Graph2: Graph3  */
   {
     (yyval.graph_) = (yyvsp[0].graph_);
     result->graph_ = (yyval.graph_);
   }
   break;
 
-  case 13: /* Graph2: Vertex _BAR Graph1  */
+  case 12: /* Graph2: Vertex _BAR Graph1  */
   {
     (yyval.graph_) = make_GVertex((yyvsp[-2].vertex_), (yyvsp[0].graph_));
     result->graph_ = (yyval.graph_);
   }
   break;
 
-  case 14: /* Graph2: T_LVar _BAR Graph1  */
+  case 13: /* Graph2: T_LVar _BAR Graph1  */
   {
     (yyval.graph_) = make_GVar((yyvsp[-2]._string), (yyvsp[0].graph_));
     result->graph_ = (yyval.graph_);
   }
   break;
 
-  case 15: /* Graph3: _LBRACE Graph _RBRACE  */
+  case 14: /* Graph3: _LBRACE Graph _RBRACE  */
   {
     (yyval.graph_) = (yyvsp[-1].graph_);
     result->graph_ = (yyval.graph_);
   }
   break;
 
-  case 16: /* Graph3: _SYMB_2  */
+  case 15: /* Graph3: _SYMB_2  */
   {
     (yyval.graph_) = make_GNil();
     result->graph_ = (yyval.graph_);
   }
   break;
 
-  case 17: /* Binding: _KW_let T_LVar _EQ Vertex _KW_in Graph2  */
+  case 16: /* Binding: _KW_let T_LVar _EQ Vertex _KW_in Graph2  */
   {
     (yyval.binding_) =
         make_VBind((yyvsp[-4]._string), (yyvsp[-2].vertex_), (yyvsp[0].graph_));
@@ -1351,7 +1336,7 @@ yyreduce:
   }
   break;
 
-  case 18: /* GraphBinding: _KW_let T_UVar _EQ Graph _KW_in Graph2  */
+  case 17: /* GraphBinding: _KW_let T_UVar _EQ Graph _KW_in Graph2  */
   {
     (yyval.graphbinding_) =
         make_GBind((yyvsp[-4]._string), (yyvsp[-2].graph_), (yyvsp[0].graph_));
@@ -1359,42 +1344,42 @@ yyreduce:
   }
   break;
 
-  case 19: /* Vertex: _LT Name _GT  */
+  case 18: /* Vertex: _LT Name _GT  */
   {
     (yyval.vertex_) = make_VName((yyvsp[-1].name_));
     result->vertex_ = (yyval.vertex_);
   }
   break;
 
-  case 20: /* Name: _UNDERSCORE  */
+  case 19: /* Name: _UNDERSCORE  */
   {
     (yyval.name_) = make_NameWildcard();
     result->name_ = (yyval.name_);
   }
   break;
 
-  case 21: /* Name: T_LVar  */
+  case 20: /* Name: T_LVar  */
   {
     (yyval.name_) = make_NameVVar((yyvsp[0]._string));
     result->name_ = (yyval.name_);
   }
   break;
 
-  case 22: /* Name: T_UVar  */
+  case 21: /* Name: T_UVar  */
   {
     (yyval.name_) = make_NameGVar((yyvsp[0]._string));
     result->name_ = (yyval.name_);
   }
   break;
 
-  case 23: /* Name: _AT Graph  */
+  case 22: /* Name: _AT Graph  */
   {
     (yyval.name_) = make_NameQuoteGraph((yyvsp[0].graph_));
     result->name_ = (yyval.name_);
   }
   break;
 
-  case 24: /* Name: _AT Vertex  */
+  case 23: /* Name: _AT Vertex  */
   {
     (yyval.name_) = make_NameQuoteVertex((yyvsp[0].vertex_));
     result->name_ = (yyval.name_);

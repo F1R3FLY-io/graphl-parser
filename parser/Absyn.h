@@ -48,8 +48,7 @@ struct Graph_
     is_GRuleAnon,
     is_GRuleNamed,
     is_GSubgraph,
-    is_GTensor,
-    is_GContext
+    is_GTensor
   } kind;
   union
   {
@@ -93,12 +92,6 @@ struct Graph_
     {
       Graph graph_1, graph_2;
     } gTensor_;
-    struct
-    {
-      Graph graph_;
-      Name name_;
-      String string_;
-    } gContext_;
   } u;
 };
 
@@ -112,7 +105,6 @@ Graph make_GRuleAnon(Graph p0, Graph p1);
 Graph make_GRuleNamed(Name p0, Graph p1, Graph p2);
 Graph make_GSubgraph(GraphBinding p0);
 Graph make_GTensor(Graph p0, Graph p1);
-Graph make_GContext(String p0, Name p1, Graph p2);
 
 struct Binding_
 {
@@ -205,8 +197,8 @@ Name make_NameGVar(UVar p0);
 Name make_NameQuoteGraph(Graph p0);
 Name make_NameQuoteVertex(Vertex p0);
 
-LVar make_LVar(LVar p0);
-UVar make_UVar(UVar p0);
+LVar make_LVar(const char *p0);
+UVar make_UVar(const char *p0);
 
 struct ListName_
 {

@@ -125,8 +125,5 @@ static void resizeBuffer(Buffer buffer)
   /* Resize (or, the first time allocate) the buffer. */
   buffer->chars = (char *)realloc(buffer->chars, buffer->size);
 
-  if (!buffer->chars)
-  {
-    PANIC("OOM");
-  }
+  PANIC(__FILE__ "OOM");
 }

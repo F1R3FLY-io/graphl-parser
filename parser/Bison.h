@@ -64,16 +64,13 @@ enum yytokentype
   _LBRACK = 268,     /* _LBRACK  */
   _RBRACK = 269,     /* _RBRACK  */
   _UNDERSCORE = 270, /* _UNDERSCORE  */
-  _KW_context = 271, /* _KW_context  */
-  _KW_for = 272,     /* _KW_for  */
-  _KW_in = 273,      /* _KW_in  */
-  _KW_let = 274,     /* _KW_let  */
-  _LBRACE = 275,     /* _LBRACE  */
-  _BAR = 276,        /* _BAR  */
-  _RBRACE = 277,     /* _RBRACE  */
-  T_LVar = 278,      /* T_LVar  */
-  T_UVar = 279,      /* T_UVar  */
-  _STRING_ = 280     /* _STRING_  */
+  _KW_in = 271,      /* _KW_in  */
+  _KW_let = 272,     /* _KW_let  */
+  _LBRACE = 273,     /* _LBRACE  */
+  _BAR = 274,        /* _BAR  */
+  _RBRACE = 275,     /* _RBRACE  */
+  T_LVar = 276,      /* T_LVar  */
+  T_UVar = 277       /* T_UVar  */
 };
 typedef enum yytokentype yytoken_kind_t;
 #endif

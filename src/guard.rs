@@ -55,49 +55,37 @@ where
 
 unsafe impl Releasable for bindings::Binding {
     fn release(&mut self) {
-        if !self.is_null() {
-            unsafe { bindings::free_Binding(*self) }
-        }
+        unsafe { bindings::free_Binding(*self) }
     }
 }
 
 unsafe impl Releasable for bindings::GraphBinding {
     fn release(&mut self) {
-        if !self.is_null() {
-            unsafe { bindings::free_GraphBinding(*self) }
-        }
+        unsafe { bindings::free_GraphBinding(*self) }
     }
 }
 
 unsafe impl Releasable for bindings::Vertex {
     fn release(&mut self) {
-        if !self.is_null() {
-            unsafe { bindings::free_Vertex(*self) }
-        }
+        unsafe { bindings::free_Vertex(*self) }
     }
 }
 
 unsafe impl Releasable for bindings::Name {
     fn release(&mut self) {
-        if !self.is_null() {
-            unsafe { bindings::free_Name(*self) }
-        }
+        unsafe { bindings::free_Name(*self) }
     }
 }
 
 unsafe impl Releasable for bindings::Graph {
     fn release(&mut self) {
-        if !self.is_null() {
-            unsafe { bindings::free_Graph(*self) }
-        }
+        unsafe { bindings::free_Graph(*self) }
     }
 }
 
 unsafe impl Releasable for bindings::LVar {
     fn release(&mut self) {
-        if !self.is_null() {
-            unsafe { bindings::free_LVar(*self) }
-        }
+        unsafe { bindings::free_LVar(*self) }
     }
 }
 
