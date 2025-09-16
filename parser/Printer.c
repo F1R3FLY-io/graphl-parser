@@ -913,7 +913,7 @@ void resizeBuffer(void)
   char *temp = (char *)malloc(buf_size);
   if (!temp)
   {
-    PANIC(__FILE__ "OOM");
+    PANIC("OOM");
   }
   if (buf_)
   {

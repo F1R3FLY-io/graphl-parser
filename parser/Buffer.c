@@ -127,6 +127,6 @@ static void resizeBuffer(Buffer buffer)
 
   if (!buffer->chars)
   {
-    PANIC(__FILE__ "OOM");
+    PANIC("OOM");
   }
 }
