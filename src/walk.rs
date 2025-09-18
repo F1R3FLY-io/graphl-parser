@@ -6,7 +6,6 @@
 
 #![allow(dead_code)]
 use crate::ast::Graph;
-
 use crate::visitor::Visitor;
 
 /// A graph walker that traverses AST nodes using the visitor pattern.
@@ -140,7 +139,7 @@ impl<'graph, 'visitor> Walker<'graph, 'visitor> {
     /// # Returns
     ///
     /// A new `Walker` instance ready to begin traversal.
-    fn new(graph: &'graph Graph, visitor: &'visitor  Visitor) -> Self {
+    fn new(graph: &'graph Graph, visitor: &'visitor Visitor) -> Self {
         Self {
             graph,
             visitor,
@@ -154,12 +153,10 @@ impl<'graph, 'visitor> Walker<'graph, 'visitor> {
 #[cfg(test)]
 mod tests {
 
-    use crate::{
-        ast::Graph,
-        bindings::{make_GNil, psGraph},
-        visitor::Visitor,
-        walk::Walker,
-    };
+    use crate::ast::Graph;
+    use crate::bindings::{make_GNil, psGraph};
+    use crate::visitor::Visitor;
+    use crate::walk::Walker;
 
     /// Tests walker behavior with a nil graph node.
     ///
