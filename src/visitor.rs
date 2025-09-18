@@ -9,27 +9,27 @@ pub type OpenClosePair = (String, String);
 /// returns a `String` representation of the processed node.
 pub struct Visitor {
     /// Handles nil/empty nodes
-    pub(crate) visit_nil: Box<dyn FnMut() -> OpenClosePair>,
+    pub(crate) visit_nil: Box<dyn Fn() -> OpenClosePair>,
     /// Handles vertex nodes
-    pub(crate) visit_vertex: Box<dyn FnMut(&Vertex) -> OpenClosePair>,
+    pub(crate) visit_vertex: Box<dyn Fn(&Vertex) -> OpenClosePair>,
     /// Handles variable references
-    pub(crate) visit_var: Box<dyn FnMut(&str) -> OpenClosePair>,
+    pub(crate) visit_var: Box<dyn Fn(&str) -> OpenClosePair>,
     /// Handles nomination of vertices with a name
-    pub(crate) visit_nominate: Box<dyn FnMut(&str, &Vertex) -> OpenClosePair>,
+    pub(crate) visit_nominate: Box<dyn Fn(&str, &Vertex) -> OpenClosePair>,
     /// Handles anonymous graph edges
-    pub(crate) visit_edge_anon: Box<dyn FnMut(&GEdgeAnon) -> OpenClosePair>,
+    pub(crate) visit_edge_anon: Box<dyn Fn(&GEdgeAnon) -> OpenClosePair>,
     /// Handles named graph edges
-    pub(crate) visit_edge_named: Box<dyn FnMut(&GEdgeNamed) -> OpenClosePair>,
+    pub(crate) visit_edge_named: Box<dyn Fn(&GEdgeNamed) -> OpenClosePair>,
     /// Handles anonymous graph rewrite rules (left-hand side, right-hand side)
-    pub(crate) visit_rule_anon: Box<dyn FnMut(&Graph, &Graph) -> OpenClosePair>,
+    pub(crate) visit_rule_anon: Box<dyn Fn(&Graph, &Graph) -> OpenClosePair>,
     /// Handles named graph rewrite rules with a name and left/right-hand sides
-    pub(crate) visit_rule_named: Box<dyn FnMut(&Name, &Graph, &Graph) -> OpenClosePair>,
+    pub(crate) visit_rule_named: Box<dyn Fn(&Name, &Graph, &Graph) -> OpenClosePair>,
     /// Handles subgraphs with parent graph, subgraph, and identifier
-    pub(crate) visit_subgraph: Box<dyn FnMut(&Graph, &Graph, &str) -> OpenClosePair>,
+    pub(crate) visit_subgraph: Box<dyn Fn(&Graph, &Graph, &str) -> OpenClosePair>,
     /// Handles tensor products of two graphs
-    pub(crate) visit_tensor: Box<dyn FnMut(&Graph, &Graph) -> OpenClosePair>,
+    pub(crate) visit_tensor: Box<dyn Fn(&Graph, &Graph) -> OpenClosePair>,
     /// Handles context nodes with name and context string
-    pub(crate) visit_context: Box<dyn FnMut(&Name, &str) -> OpenClosePair>,
+    pub(crate) visit_context: Box<dyn Fn(&Name, &str) -> OpenClosePair>,
 }
 
 impl Default for Visitor {

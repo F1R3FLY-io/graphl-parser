@@ -31,7 +31,7 @@ struct Walker<'graph, 'visitor> {
     /// Reference to the graph being traversed
     graph: &'graph Graph,
     /// Mutable reference to the visitor handling node callbacks
-    visitor: &'visitor mut Visitor,
+    visitor: &'visitor Visitor,
     /// Stack of graph nodes to be processed (LIFO order)
     stack: Vec<Box<Graph>>,
     /// String accumulator for collecting visitor results
@@ -140,7 +140,7 @@ impl<'graph, 'visitor> Walker<'graph, 'visitor> {
     /// # Returns
     ///
     /// A new `Walker` instance ready to begin traversal.
-    fn new(graph: &'graph Graph, visitor: &'visitor mut Visitor) -> Self {
+    fn new(graph: &'graph Graph, visitor: &'visitor  Visitor) -> Self {
         Self {
             graph,
             visitor,
@@ -168,12 +168,12 @@ mod tests {
     #[test]
     fn test_gnil_visitor() {
         let graph: Graph = unsafe { make_GNil() }.try_into().unwrap();
-        let mut visitor = Visitor {
+        let visitor = Visitor {
             visit_nil: Box::new(|| ("<nil>".into(), "</nil>".into())),
             ..Default::default()
         };
 
-        let mut walker = Walker::new(&graph, &mut visitor);
+        let mut walker = Walker::new(&graph, &visitor);
         let result = walker.visit();
 
         assert_eq!(&result, "<nil></nil>");
@@ -186,13 +186,13 @@ mod tests {
     #[test]
     fn test_vertex_visitor() {
         let graph: Graph = unsafe { psGraph(c"<a> | 0".as_ptr()) }.try_into().unwrap();
-        let mut visitor = Visitor {
+        let visitor = Visitor {
             visit_vertex: Box::new(|vertex| (format!("<vertex {:?}>", vertex), "</vertex>".into())),
             visit_nil: Box::new(|| ("<nil>".into(), "</nil>".into())),
             ..Default::default()
         };
 
-        let mut walker = Walker::new(&graph, &mut visitor);
+        let mut walker = Walker::new(&graph, &visitor);
         let result = walker.visit();
 
         assert_eq!(
@@ -284,7 +284,7 @@ mod tests {
         }
         .try_into()
         .unwrap();
-        let mut visitor = Visitor {
+        let visitor = Visitor {
             visit_edge_anon: Box::new(|_edge| ("<edge>\n".into(), "</edge>\n".into())),
             visit_nil: Box::new(|| ("<nil>\n".into(), "</nil>\n".into())),
             visit_nominate: Box::new(|var, vertex| {
@@ -316,7 +316,7 @@ mod tests {
             ..Default::default()
         };
 
-        let mut walker = Walker::new(&graph, &mut visitor);
+        let mut walker = Walker::new(&graph, &visitor);
         let result = walker.visit();
 
         assert_eq!(
