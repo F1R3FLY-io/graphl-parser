@@ -35,7 +35,8 @@ struct Walker<'graph, 'visitor> {
     /// Stack of graph nodes to be processed (LIFO order)
     stack: Vec<Box<Graph>>,
     /// String accumulator for collecting visitor results
-    accumulator: String,
+    accumulator: Vec<String>,
+    accumulator_2: Vec<String>,
 }
 
 impl<'graph, 'visitor> Walker<'graph, 'visitor> {
@@ -57,7 +58,7 @@ impl<'graph, 'visitor> Walker<'graph, 'visitor> {
     /// - For composite nodes (edges, rules, etc.), children are processed in reverse order
     fn visit(&mut self) -> String {
         while let Some(el) = self.stack.pop().map(|v| *v) {
-            self.accumulator += &match el {
+            let (open, close) = &match el {
                 Graph::Nil => (self.visitor.visit_nil)(),
                 Graph::Vertex(gvertex) => {
                     self.stack.push(gvertex.graph.clone());
@@ -112,9 +113,18 @@ impl<'graph, 'visitor> Walker<'graph, 'visitor> {
                     (self.visitor.visit_context)(&gcontext.name, &gcontext.string)
                 }
             };
+
+            self.accumulator.push(open.to_owned());
+            self.accumulator_2.push(close.to_owned());
         }
 
-        self.accumulator.clone()
+        self.accumulator_2.reverse();
+
+        format!(
+            "{}{}",
+            self.accumulator.join(""),
+            self.accumulator_2.join("")
+        )
     }
 
     /// Creates a new walker instance for traversing the given graph.
@@ -135,7 +145,8 @@ impl<'graph, 'visitor> Walker<'graph, 'visitor> {
             graph,
             visitor,
             stack: vec![Box::new(graph.clone())],
-            accumulator: String::default(),
+            accumulator: vec![],
+            accumulator_2: vec![],
         }
     }
 }
@@ -158,14 +169,14 @@ mod tests {
     fn test_gnil_visitor() {
         let graph: Graph = unsafe { make_GNil() }.try_into().unwrap();
         let mut visitor = Visitor {
-            visit_nil: Box::new(|| "this is nil".into()),
+            visit_nil: Box::new(|| ("<nil>".into(), "</nil>".into())),
             ..Default::default()
         };
 
         let mut walker = Walker::new(&graph, &mut visitor);
         let result = walker.visit();
 
-        assert_eq!(&result, "this is nil");
+        assert_eq!(&result, "<nil></nil>");
     }
 
     /// Tests walker behavior with a vertex graph node.
@@ -176,8 +187,8 @@ mod tests {
     fn test_vertex_visitor() {
         let graph: Graph = unsafe { psGraph(c"<a> | 0".as_ptr()) }.try_into().unwrap();
         let mut visitor = Visitor {
-            visit_vertex: Box::new(|vertex| format!("this is vertex {:?}", vertex)),
-            visit_nil: Box::new(|| "this is nil.".into()),
+            visit_vertex: Box::new(|vertex| (format!("<vertex {:?}>", vertex), "</vertex>".into())),
+            visit_nil: Box::new(|| ("<nil>".into(), "</nil>".into())),
             ..Default::default()
         };
 
@@ -186,7 +197,7 @@ mod tests {
 
         assert_eq!(
             &result,
-            "this is vertex Vertex { name: VVar { value: \"a\" } }this is nil."
+            "<vertex Vertex { name: VVar { value: \"a\" } }><nil></nil></vertex>"
         );
     }
 
@@ -201,16 +212,21 @@ mod tests {
                 .try_into()
                 .unwrap();
         let mut visitor = Visitor {
-            visit_edge_anon: Box::new(|_edge| "this is edge.\n".into()),
-            visit_nil: Box::new(|| "this is nil.\n".into()),
-            visit_nominate: Box::new(|var, _vertex| format!("this is nominate {}.\n", var)),
+            visit_edge_anon: Box::new(|_edge| ("<edge>\n".into(), "</edge>".into())),
+            visit_nil: Box::new(|| ("<nil>\n".into(), "</nil>\n".into())),
+            visit_nominate: Box::new(|var, _vertex| {
+                (format!("<nominate {}>\n", var), "</nominate>\n".into())
+            }),
             visit_vertex: Box::new(|vertex| {
-                format!(
-                    "this is vertex {}.\n",
-                    match &vertex.name {
-                        crate::ast::Name::VVar { value } => value,
-                        _ => unreachable!(),
-                    }
+                (
+                    format!(
+                        "<vertex {}>\n",
+                        match &vertex.name {
+                            crate::ast::Name::VVar { value } => value,
+                            _ => unreachable!(),
+                        }
+                    ),
+                    "</vertex>\n".into(),
                 )
             }),
             ..Default::default()
@@ -221,14 +237,20 @@ mod tests {
 
         assert_eq!(
             &result,
-            r#"this is edge.
-this is nominate va.
-this is vertex a.
-this is nil.
-this is nominate vb.
-this is vertex b.
-this is nil.
-"#
+            r#"<edge>
+<nominate va>
+<vertex a>
+<nil>
+<nominate vb>
+<vertex b>
+<nil>
+</nil>
+</vertex>
+</nominate>
+</nil>
+</vertex>
+</nominate>
+</edge>"#
         );
     }
 
@@ -263,26 +285,32 @@ this is nil.
         .try_into()
         .unwrap();
         let mut visitor = Visitor {
-            visit_edge_anon: Box::new(|_edge| "this is edge.\n".into()),
-            visit_nil: Box::new(|| "this is nil.\n".into()),
+            visit_edge_anon: Box::new(|_edge| ("<edge>\n".into(), "</edge>\n".into())),
+            visit_nil: Box::new(|| ("<nil>\n".into(), "</nil>\n".into())),
             visit_nominate: Box::new(|var, vertex| {
-                format!(
-                    "this is nominate {} of vertex {}.\n",
-                    var,
-                    match &vertex.name {
-                        crate::ast::Name::VVar { value } => value,
-                        _ => unreachable!(),
-                    }
+                (
+                    format!(
+                        "<nominate {} of vertex {}>\n",
+                        var,
+                        match &vertex.name {
+                            crate::ast::Name::VVar { value } => value,
+                            _ => unreachable!(),
+                        }
+                    ),
+                    "</nominate>\n".into(),
                 )
             }),
-            visit_var: Box::new(|var| format!("this is var {}.\n", var)),
+            visit_var: Box::new(|var| (format!("<var {}>\n", var), "</var>\n".into())),
             visit_vertex: Box::new(|vertex| {
-                format!(
-                    "this is vertex {}.\n",
-                    match &vertex.name {
-                        crate::ast::Name::VVar { value } => value,
-                        _ => unreachable!(),
-                    }
+                (
+                    format!(
+                        "<vertex {}>\n",
+                        match &vertex.name {
+                            crate::ast::Name::VVar { value } => value,
+                            _ => unreachable!(),
+                        }
+                    ),
+                    "</vertex>\n".into(),
                 )
             }),
             ..Default::default()
@@ -293,23 +321,40 @@ this is nil.
 
         assert_eq!(
             &result,
-            r#"this is edge.
-this is nominate n2 of vertex notification.
-this is edge.
-this is nominate e2 of vertex encryption.
-this is edge.
-this is nominate e1 of vertex encryption.
-this is vertex encryption.
-this is nil.
-this is nominate s of vertex store.
-this is vertex store.
-this is nil.
-this is nominate n1 of vertex notification.
-this is vertex notification.
-this is nil.
-this is nominate e3 of vertex encryption.
-this is var e1.
-this is nil.
+            r#"<edge>
+<nominate n2 of vertex notification>
+<edge>
+<nominate e2 of vertex encryption>
+<edge>
+<nominate e1 of vertex encryption>
+<vertex encryption>
+<nil>
+<nominate s of vertex store>
+<vertex store>
+<nil>
+<nominate n1 of vertex notification>
+<vertex notification>
+<nil>
+<nominate e3 of vertex encryption>
+<var e1>
+<nil>
+</nil>
+</var>
+</nominate>
+</nil>
+</vertex>
+</nominate>
+</nil>
+</vertex>
+</nominate>
+</nil>
+</vertex>
+</nominate>
+</edge>
+</nominate>
+</edge>
+</nominate>
+</edge>
 "#
         );
     }

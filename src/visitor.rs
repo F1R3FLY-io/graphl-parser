@@ -1,5 +1,7 @@
 use crate::ast::{GEdgeAnon, GEdgeNamed, Graph, Name, Vertex};
 
+pub type OpenClosePair = (String, String);
+
 /// A visitor pattern implementation for traversing and transforming graph AST nodes.
 ///
 /// The `Visitor` struct contains function pointers for handling different types of AST nodes,
@@ -7,27 +9,27 @@ use crate::ast::{GEdgeAnon, GEdgeNamed, Graph, Name, Vertex};
 /// returns a `String` representation of the processed node.
 pub struct Visitor {
     /// Handles nil/empty nodes
-    pub(crate) visit_nil: Box<dyn FnMut() -> String>,
+    pub(crate) visit_nil: Box<dyn FnMut() -> OpenClosePair>,
     /// Handles vertex nodes
-    pub(crate) visit_vertex: Box<dyn FnMut(&Vertex) -> String>,
+    pub(crate) visit_vertex: Box<dyn FnMut(&Vertex) -> OpenClosePair>,
     /// Handles variable references
-    pub(crate) visit_var: Box<dyn FnMut(&str) -> String>,
+    pub(crate) visit_var: Box<dyn FnMut(&str) -> OpenClosePair>,
     /// Handles nomination of vertices with a name
-    pub(crate) visit_nominate: Box<dyn FnMut(&str, &Vertex) -> String>,
+    pub(crate) visit_nominate: Box<dyn FnMut(&str, &Vertex) -> OpenClosePair>,
     /// Handles anonymous graph edges
-    pub(crate) visit_edge_anon: Box<dyn FnMut(&GEdgeAnon) -> String>,
+    pub(crate) visit_edge_anon: Box<dyn FnMut(&GEdgeAnon) -> OpenClosePair>,
     /// Handles named graph edges
-    pub(crate) visit_edge_named: Box<dyn FnMut(&GEdgeNamed) -> String>,
+    pub(crate) visit_edge_named: Box<dyn FnMut(&GEdgeNamed) -> OpenClosePair>,
     /// Handles anonymous graph rewrite rules (left-hand side, right-hand side)
-    pub(crate) visit_rule_anon: Box<dyn FnMut(&Graph, &Graph) -> String>,
+    pub(crate) visit_rule_anon: Box<dyn FnMut(&Graph, &Graph) -> OpenClosePair>,
     /// Handles named graph rewrite rules with a name and left/right-hand sides
-    pub(crate) visit_rule_named: Box<dyn FnMut(&Name, &Graph, &Graph) -> String>,
+    pub(crate) visit_rule_named: Box<dyn FnMut(&Name, &Graph, &Graph) -> OpenClosePair>,
     /// Handles subgraphs with parent graph, subgraph, and identifier
-    pub(crate) visit_subgraph: Box<dyn FnMut(&Graph, &Graph, &str) -> String>,
+    pub(crate) visit_subgraph: Box<dyn FnMut(&Graph, &Graph, &str) -> OpenClosePair>,
     /// Handles tensor products of two graphs
-    pub(crate) visit_tensor: Box<dyn FnMut(&Graph, &Graph) -> String>,
+    pub(crate) visit_tensor: Box<dyn FnMut(&Graph, &Graph) -> OpenClosePair>,
     /// Handles context nodes with name and context string
-    pub(crate) visit_context: Box<dyn FnMut(&Name, &str) -> String>,
+    pub(crate) visit_context: Box<dyn FnMut(&Name, &str) -> OpenClosePair>,
 }
 
 impl Default for Visitor {
