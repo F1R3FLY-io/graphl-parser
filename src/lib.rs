@@ -11,7 +11,7 @@ mod wasm;
 pub mod ast;
 pub mod bindings;
 mod guard;
-mod visitor;
+pub mod visitor;
 pub mod walker;
 
 // #[cfg_attr(target_arch = "wasm32", wasm_bindgen(js_name = parseToAst))]
