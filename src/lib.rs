@@ -12,7 +12,7 @@ pub mod ast;
 mod bindings;
 mod guard;
 mod visitor;
-mod walk;
+mod walker;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen(js_name = parseToAst))]
 pub fn parse_to_ast(code: String) -> Result<ast::Graph, ast::Error> {
