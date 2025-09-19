@@ -17,9 +17,11 @@ pub struct Visitor {
     /// Handles nomination of vertices with a name
     pub(crate) visit_nominate: Box<dyn Fn(&str, &Vertex) -> OpenClosePair>,
     /// Handles anonymous graph edges
-    pub(crate) visit_edge_anon: Box<dyn Fn(&GEdgeAnon) -> OpenClosePair>,
+    pub(crate) visit_edge_anon:
+        Box<dyn Fn(&GEdgeAnon, OpenClosePair, OpenClosePair) -> OpenClosePair>,
     /// Handles named graph edges
-    pub(crate) visit_edge_named: Box<dyn Fn(&GEdgeNamed) -> OpenClosePair>,
+    pub(crate) visit_edge_named:
+        Box<dyn Fn(&GEdgeNamed, OpenClosePair, OpenClosePair) -> OpenClosePair>,
     /// Handles anonymous graph rewrite rules (left-hand side, right-hand side)
     pub(crate) visit_rule_anon: Box<dyn Fn(&Graph, &Graph) -> OpenClosePair>,
     /// Handles named graph rewrite rules with a name and left/right-hand sides
@@ -43,8 +45,8 @@ impl Default for Visitor {
             visit_vertex: Box::new(|_| unimplemented!("unimplemented visit_vertex")),
             visit_var: Box::new(|_| unimplemented!("unimplemented visit_var")),
             visit_nominate: Box::new(|_, _| unimplemented!("unimplemented visit_nominate")),
-            visit_edge_anon: Box::new(|_| unimplemented!("unimplemented visit_edge_anon")),
-            visit_edge_named: Box::new(|_| unimplemented!("unimplemented visit_edge_named")),
+            visit_edge_anon: Box::new(|_, _, _| unimplemented!("unimplemented visit_edge_anon")),
+            visit_edge_named: Box::new(|_, _, _| unimplemented!("unimplemented visit_edge_named")),
             visit_rule_anon: Box::new(|_, _| unimplemented!("unimplemented visit_rule_anon")),
             visit_rule_named: Box::new(|_, _, _| unimplemented!("unimplemented visit_rule_named")),
             visit_subgraph: Box::new(|_, _, _| unimplemented!("unimplemented visit_subgraph")),
