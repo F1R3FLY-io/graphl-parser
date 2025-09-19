@@ -59,7 +59,7 @@ impl<'graph, 'visitor> Walker<'graph, 'visitor> {
         while let Some(el) = self.stack.pop() {
             let (open, close) = match el {
                 Graph::Nil => (self.visitor.visit_nil)(),
-                Graph::Vertex(gvertex) => {
+                Graph::Vertex(Vertex { graph, vertex }) => {
                     self.stack.push(&gvertex.graph);
                     (self.visitor.visit_vertex)(&gvertex.vertex)
                 }
