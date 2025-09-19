@@ -1,6 +1,6 @@
 use crate::ast::{GEdgeAnon, GEdgeNamed, Graph, Name, Vertex};
 
-pub(crate) trait Visitor<R> {
+pub trait Visitor<R> {
     fn visit_nil(&self) -> R;
     fn visit_vertex(&self, vertex: &Vertex) -> R;
     fn visit_var(&self, var: &str) -> R;
