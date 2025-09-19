@@ -172,7 +172,7 @@ impl<'graph, 'visitor> Walker<'graph, 'visitor> {
 mod tests {
 
     use crate::ast::Graph;
-    use crate::bindings::{make_GNil, psGraph};
+    use crate::bindings::{psGraph};
     use crate::visitor::Visitor;
     use crate::walk::Walker;
 
@@ -213,6 +213,15 @@ mod tests {
                     )
                 },
             ),
+            visit_context: Box::new(|name, text|{
+              (
+                format!("<context for {name} with {text}>\n",
+                  name=match name {
+                    crate::ast::Name::VVar { value } => value,
+                    _ => unreachable!()
+                  }),
+                format!("</context>\n"))
+            }),
             ..Default::default()
         }
     }
@@ -223,7 +232,7 @@ mod tests {
     /// and returns the expected string result.
     #[test]
     fn test_gnil_visitor() {
-        let graph: Graph = unsafe { make_GNil() }.try_into().unwrap();
+        let graph: Graph = unsafe { psGraph(c"{0}".as_ptr()) }.try_into().unwrap();
         let visitor = create_visitor();
         let mut walker = Walker::new(&graph, &visitor);
         let result = walker.visit();
@@ -393,5 +402,20 @@ mod tests {
 </edge>
 "#
         );
+    }
+
+    #[test]
+    fn test_vertext_context(){
+      let graph: Graph = unsafe { psGraph(c"context \"foo=bar\" for a in <a> | {0}".as_ptr()) }.try_into().unwrap();
+      let visitor = create_visitor();
+      let mut walker = Walker::new(&graph, &visitor);
+      let result = walker.visit();
+
+      assert_eq!(&result, r#"<context for a with foo=bar>
+<vertex a>
+<nil/>
+</vertex>
+</context>
+"#);
     }
 }
