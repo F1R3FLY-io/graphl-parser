@@ -81,10 +81,14 @@ where
                     binding_1,
                     binding_2,
                 }) => {
-                    let gedged_clone = GEdgeAnon {
-                        binding_1: binding_1.clone(),
-                        binding_2: binding_2.clone(),
-                    };
+                    let result = self.visitor.visit_edge_anon(
+                        self.accumulator,
+                        &GEdgeAnon {
+                            binding_1: binding_1.clone(),
+                            binding_2: binding_2.clone(),
+                        },
+                    );
+
                     self.stack.push(Graph::Nominate(Binding {
                         var: binding_2.var,
                         vertex: binding_2.vertex,
@@ -96,8 +100,7 @@ where
                         graph: binding_1.graph,
                     }));
 
-                    self.visitor
-                        .visit_edge_anon(self.accumulator, &gedged_clone)
+                    result
                 }
                 Graph::EdgeNamed(GEdgeNamed {
                     binding_1,
