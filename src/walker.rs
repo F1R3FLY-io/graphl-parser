@@ -34,11 +34,14 @@ pub struct Walker<'graph, 'visitor, T> {
     /// Stack of graph nodes to be processed (LIFO order)
     stack: Vec<&'graph Graph>,
     /// String accumulator for collecting visitor results
-    accumulator: Vec<String>,
-    accumulator_2: Vec<String>,
+    accumulator: &'graph mut dyn Accumulator<T>,
 }
 
-impl<'graph, 'visitor> Walker<'graph, 'visitor, (String, String)> {
+pub trait Accumulator<T> {
+    fn handle_visit(&mut self, value: T);
+}
+
+impl<'graph, 'visitor, T> Walker<'graph, 'visitor, T> {
     /// Performs the graph traversal, visiting each node with the configured visitor.
     ///
     /// This method processes nodes from the stack in LIFO order, calling the
@@ -55,9 +58,9 @@ impl<'graph, 'visitor> Walker<'graph, 'visitor, (String, String)> {
     /// - Nodes are processed from the stack in LIFO order
     /// - Child graphs are pushed to the stack for later processing
     /// - For composite nodes (edges, rules, etc.), children are processed in reverse order
-    pub fn visit(&mut self) -> String {
+    pub fn visit(&mut self) {
         while let Some(el) = self.stack.pop() {
-            let (open, close) = match el {
+            let result: T = match el {
                 Graph::Nil => self.visitor.visit_nil(),
                 Graph::Vertex(GVertex { graph, vertex }) => {
                     self.stack.push(graph);
@@ -131,21 +134,15 @@ impl<'graph, 'visitor> Walker<'graph, 'visitor, (String, String)> {
                 }
             };
 
-            self.accumulator.push(open.to_owned());
-            self.accumulator_2.push(close.to_owned());
+            self.accumulator.handle_visit(result);
         }
-
-        self.accumulator_2.reverse();
-
-        format!(
-            "{}{}",
-            self.accumulator.join(""),
-            self.accumulator_2.join("")
-        )
     }
 }
 
-impl<'graph, 'visitor> Walker<'graph, 'visitor, (String, String)> {
+impl<'graph, 'visitor> Walker<'graph, 'visitor, (String, String)>
+where
+    'visitor: 'graph,
+{
     /// Creates a new walker instance for traversing the given graph.
     ///
     /// The walker is initialized with the root graph node placed on the stack
@@ -159,25 +156,31 @@ impl<'graph, 'visitor> Walker<'graph, 'visitor, (String, String)> {
     /// # Returns
     ///
     /// A new `Walker` instance ready to begin traversal.
-    pub fn new(graph: &'graph Graph, visitor: &'visitor impl Visitor<(String, String)>) -> Self {
+    pub fn new(
+        graph: &'graph Graph,
+        visitor: &'visitor impl Visitor<(String, String)>,
+        accumulator: &'graph mut impl Accumulator<(String, String)>,
+    ) -> Self {
         Self {
             graph,
             visitor,
             stack: vec![graph],
-            accumulator: vec![],
-            accumulator_2: vec![],
+            accumulator,
         }
     }
 }
 
 #[cfg(test)]
 mod test {
+
+    use std::fmt::Display;
+
     use crate::{
         ast::{GEdgeAnon, GEdgeNamed, Graph, Name, Vertex},
         bindings::psGraph,
         parse_to_ast,
         visitor::Visitor,
-        walker::Walker,
+        walker::{Accumulator, Walker},
     };
 
     type OpenClosePair = (String, String);
@@ -278,6 +281,34 @@ mod test {
         MyVisitor {}
     }
 
+    #[derive(Default)]
+    pub struct MyAccumulator {
+        pub close: Vec<String>,
+        pub open: Vec<String>,
+    }
+
+    impl Display for MyAccumulator {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            let mut a2 = self.close.clone();
+            a2.reverse();
+
+            write!(f, "{}{}", self.open.join(""), a2.join(""))
+        }
+    }
+
+    impl Accumulator<(String, String)> for MyAccumulator {
+        fn handle_visit(&mut self, (open, close): (String, String)) {
+            self.open.push(open);
+            self.close.push(close);
+        }
+    }
+
+    fn create_accumulator() -> MyAccumulator {
+        MyAccumulator {
+            ..Default::default()
+        }
+    }
+
     /// Tests walker behavior with a nil graph node.
     ///
     /// Verifies that the walker correctly calls the visit_nil callback
@@ -286,22 +317,24 @@ mod test {
     fn test_gnil_visitor() {
         let graph: Graph = unsafe { psGraph(c"{0}".as_ptr()) }.try_into().unwrap();
         let visitor = create_visitor();
-        let mut walker = Walker::new(&graph, &visitor);
-        let result = walker.visit();
+        let mut accumulator = create_accumulator();
+        let mut walker = Walker::new(&graph, &visitor, &mut accumulator);
+        walker.visit();
 
-        assert_eq!(&result, "<nil/>\n");
+        assert_eq!(&accumulator.to_string(), "<nil/>\n");
     }
 
     #[test]
     fn test_nomination_visitor() {
         let graph = parse_to_ast("let a = <a> in <a> | 0".into()).unwrap();
         let visitor = create_visitor();
+        let mut accumulator = create_accumulator();
 
-        let mut walker = Walker::new(&graph, &visitor);
-        let result = walker.visit();
+        let mut walker = Walker::new(&graph, &visitor, &mut accumulator);
+        walker.visit();
 
         assert_eq!(
-            &result,
+            &accumulator.to_string(),
             "<nominate a for vertex a>\n<vertex a>\n<nil/>\n</vertex>\n</nominate>\n"
         );
     }
@@ -311,12 +344,13 @@ mod test {
         let graph: Graph =
             parse_to_ast("(let a = <a> in <a> | 0, let b = <b> in <b> | 0)".into()).unwrap();
         let visitor = create_visitor();
+        let mut accumulator = create_accumulator();
 
-        let mut walker = Walker::new(&graph, &visitor);
-        let result = walker.visit();
+        let mut walker = Walker::new(&graph, &visitor, &mut accumulator);
+        walker.visit();
 
         assert_eq!(
-            &result,
+            &accumulator.to_string(),
             r#"<edge>
 <nominate a for vertex a>
 <nominate b for vertex b>
@@ -341,11 +375,12 @@ mod test {
     fn test_vertex_visitor() {
         let graph = parse_to_ast("<a> | 0".into()).unwrap();
         let visitor = create_visitor();
+        let mut accumulator = create_accumulator();
 
-        let mut walker = Walker::new(&graph, &visitor);
-        let result = walker.visit();
+        let mut walker = Walker::new(&graph, &visitor, &mut accumulator);
+        walker.visit();
 
-        assert_eq!(&result, "<vertex a>\n<nil/>\n</vertex>\n");
+        assert_eq!(&accumulator.to_string(), "<vertex a>\n<nil/>\n</vertex>\n");
     }
 
     /// Tests walker behavior with an anonymous edge containing two bindings.
@@ -357,12 +392,13 @@ mod test {
         let graph =
             parse_to_ast("{ (let va = <a> in <a> | 0, let vb = <b> in <b> | 0) }".into()).unwrap();
         let visitor = create_visitor();
+        let mut accumulator = create_accumulator();
 
-        let mut walker = Walker::new(&graph, &visitor);
-        let result = walker.visit();
+        let mut walker = Walker::new(&graph, &visitor, &mut accumulator);
+        walker.visit();
 
         assert_eq!(
-            &result,
+            &accumulator.to_string(),
             r#"<edge>
 <nominate va for vertex a>
 <nominate vb for vertex b>
@@ -407,12 +443,13 @@ mod test {
         )
         .unwrap();
         let visitor = create_visitor();
+        let mut accumulator = create_accumulator();
 
-        let mut walker = Walker::new(&graph, &visitor);
-        let result = walker.visit();
+        let mut walker = Walker::new(&graph, &visitor, &mut accumulator);
+        walker.visit();
 
         assert_eq!(
-            &result,
+            &accumulator.to_string(),
             r#"<edge>
 <nominate n2 for vertex notification>
 <nominate e3 for vertex encryption>
@@ -451,11 +488,13 @@ mod test {
     fn test_vertext_context() {
         let graph = parse_to_ast("context \"foo=bar\" for a in <a> | {0}".into()).unwrap();
         let visitor = create_visitor();
-        let mut walker = Walker::new(&graph, &visitor);
-        let result = walker.visit();
+        let mut accumulator = create_accumulator();
+
+        let mut walker = Walker::new(&graph, &visitor, &mut accumulator);
+        walker.visit();
 
         assert_eq!(
-            &result,
+            &accumulator.to_string(),
             r#"<context for a with foo=bar>
 <vertex a>
 <nil/>
