@@ -7,16 +7,7 @@
 
 #![allow(dead_code)]
 use crate::ast::{
-    Binding,
-    GContext,
-    GEdgeAnon,
-    GEdgeNamed,
-    GRuleAnon,
-    GRuleNamed,
-    GTensor,
-    GVar,
-    GVertex,
-    Graph,
+    Binding, GContext, GEdgeAnon, GEdgeNamed, GRuleAnon, GRuleNamed, GTensor, GVar, GVertex, Graph,
     GraphBinding,
 };
 use crate::visitor::Visitor;
@@ -351,8 +342,7 @@ mod test {
         }
 
         fn visit_edge_anon(&self, acc: &TestAccumulator, _edge: &GEdgeAnon) -> TestAccumulator {
-            acc.with_left(&format!("<edge>\n"))
-                .with_right(&format!("</edge>\n"))
+            acc.with_left("<edge>\n").with_right("</edge>\n")
         }
     }
 
