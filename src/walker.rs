@@ -280,31 +280,34 @@ mod test {
     }
 
     #[derive(Default)]
-    pub struct MyAccumulator {
+    pub struct TestAccumulator {
         pub close: Vec<String>,
         pub open: Vec<String>,
     }
 
-    impl Display for MyAccumulator {
+    impl Display for TestAccumulator {
         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            let mut a2 = self.close.clone();
-            a2.reverse();
-
-            write!(f, "{}{}", self.open.join(""), a2.join(""))
+            // Write opening tags
+            for open in &self.open {
+                write!(f, "{}", open)?;
+            }
+            // Write closing tags in reverse order
+            for close in self.close.iter().rev() {
+                write!(f, "{}", close)?;
+            }
+            Ok(())
         }
     }
 
-    impl Accumulator<(String, String)> for MyAccumulator {
+    impl Accumulator<(String, String)> for TestAccumulator {
         fn handle_visit(&mut self, (open, close): (String, String)) {
             self.open.push(open);
             self.close.push(close);
         }
     }
 
-    fn create_accumulator() -> MyAccumulator {
-        MyAccumulator {
-            ..Default::default()
-        }
+    fn create_accumulator() -> TestAccumulator {
+        TestAccumulator::default()
     }
 
     /// Tests walker behavior with a nil graph node.
