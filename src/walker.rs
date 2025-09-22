@@ -5,7 +5,10 @@
 //! iteratively and accumulates results from visitor callbacks.
 
 #![allow(dead_code)]
-use crate::ast::{Binding, GVertex, Graph};
+use crate::ast::{
+    Binding, GContext, GEdgeAnon, GEdgeNamed, GRuleAnon, GRuleNamed, GTensor, GVar, GVertex, Graph,
+    GraphBinding,
+};
 use crate::visitor::Visitor;
 
 /// A graph walker that traverses AST nodes using the visitor pattern.
@@ -66,86 +69,99 @@ where
                     self.stack.push(*graph);
                     self.visitor.visit_vertex(self.accumulator, &vertex)
                 }
-                Graph::Var(gvar) => {
-                    self.stack.push(*gvar.graph);
-                    self.visitor.visit_var(self.accumulator, &gvar.var)
+                Graph::Var(GVar { graph, var }) => {
+                    self.stack.push(*graph);
+                    self.visitor.visit_var(self.accumulator, &var)
                 }
-                Graph::Nominate(binding) => {
-                    self.stack.push(*binding.graph);
-                    self.visitor
-                        .visit_nominate(self.accumulator, &binding.var, &binding.vertex)
+                Graph::Nominate(Binding { graph, var, vertex }) => {
+                    self.stack.push(*graph);
+                    self.visitor.visit_nominate(self.accumulator, &var, &vertex)
                 }
-                Graph::EdgeAnon(gedge_anon) => {
-                    let gedged_clone = gedge_anon.clone();
+                Graph::EdgeAnon(GEdgeAnon {
+                    binding_1,
+                    binding_2,
+                }) => {
+                    let gedged_clone = GEdgeAnon {
+                        binding_1: binding_1.clone(),
+                        binding_2: binding_2.clone(),
+                    };
                     self.stack.push(Graph::Nominate(Binding {
-                        var: gedge_anon.binding_2.var,
-                        vertex: gedge_anon.binding_2.vertex,
-                        graph: gedge_anon.binding_2.graph,
+                        var: binding_2.var,
+                        vertex: binding_2.vertex,
+                        graph: binding_2.graph,
                     }));
                     self.stack.push(Graph::Nominate(Binding {
-                        var: gedge_anon.binding_1.var,
-                        vertex: gedge_anon.binding_1.vertex,
-                        graph: gedge_anon.binding_1.graph,
+                        var: binding_1.var,
+                        vertex: binding_1.vertex,
+                        graph: binding_1.graph,
                     }));
 
                     self.visitor
                         .visit_edge_anon(self.accumulator, &gedged_clone)
                 }
-                Graph::EdgeNamed(gedge_named) => {
-                    let gedged_clone = gedge_named.clone();
+                Graph::EdgeNamed(GEdgeNamed {
+                    binding_1,
+                    binding_2,
+                    name,
+                }) => {
+                    let gedged_clone = GEdgeNamed {
+                        binding_1: binding_1.clone(),
+                        binding_2: binding_2.clone(),
+                        name: name.clone(),
+                    };
                     self.stack.push(Graph::Nominate(Binding {
-                        var: gedge_named.binding_2.var,
-                        vertex: gedge_named.binding_2.vertex,
-                        graph: gedge_named.binding_2.graph,
+                        var: binding_2.var,
+                        vertex: binding_2.vertex,
+                        graph: binding_2.graph,
                     }));
                     self.stack.push(Graph::Nominate(Binding {
-                        var: gedge_named.binding_1.var,
-                        vertex: gedge_named.binding_1.vertex,
-                        graph: gedge_named.binding_1.graph,
+                        var: binding_1.var,
+                        vertex: binding_1.vertex,
+                        graph: binding_1.graph,
                     }));
 
                     self.visitor
                         .visit_edge_named(self.accumulator, &gedged_clone)
                 }
-                Graph::RuleAnon(grule_anon) => {
-                    self.stack.push(*grule_anon.graph_2.clone());
-                    self.stack.push(*grule_anon.graph_1.clone());
-                    self.visitor.visit_rule_anon(
-                        self.accumulator,
-                        &grule_anon.graph_1,
-                        &grule_anon.graph_2,
-                    )
-                }
-                Graph::RuleNamed(grule_named) => {
-                    self.stack.push(*grule_named.graph_2.clone());
-                    self.stack.push(*grule_named.graph_1.clone());
-                    self.visitor.visit_rule_named(
-                        self.accumulator,
-                        &grule_named.name,
-                        &grule_named.graph_1,
-                        &grule_named.graph_2,
-                    )
-                }
-                Graph::Subgraph(graph_binding) => {
-                    self.stack.push(*graph_binding.graph_2.clone());
-                    self.stack.push(*graph_binding.graph_1.clone());
-                    self.visitor.visit_subgraph(
-                        self.accumulator,
-                        &graph_binding.graph_1,
-                        &graph_binding.graph_2,
-                        &graph_binding.var,
-                    )
-                }
-                Graph::Tensor(gtensor) => {
-                    self.stack.push(*gtensor.graph_2.clone());
-                    self.stack.push(*gtensor.graph_1.clone());
+                Graph::RuleAnon(GRuleAnon { graph_1, graph_2 }) => {
+                    self.stack.push(*graph_2.clone());
+                    self.stack.push(*graph_1.clone());
                     self.visitor
-                        .visit_tensor(self.accumulator, &gtensor.graph_1, &gtensor.graph_2)
+                        .visit_rule_anon(self.accumulator, &graph_1, &graph_2)
                 }
-                Graph::Context(gcontext) => {
-                    self.stack.push(*gcontext.graph);
+                Graph::RuleNamed(GRuleNamed {
+                    name,
+                    graph_1,
+                    graph_2,
+                }) => {
+                    self.stack.push(*graph_2.clone());
+                    self.stack.push(*graph_1.clone());
                     self.visitor
-                        .visit_context(self.accumulator, &gcontext.name, &gcontext.string)
+                        .visit_rule_named(self.accumulator, &name, &graph_1, &graph_2)
+                }
+                Graph::Subgraph(GraphBinding {
+                    graph_1,
+                    graph_2,
+                    var,
+                }) => {
+                    self.stack.push(*graph_2.clone());
+                    self.stack.push(*graph_1.clone());
+                    self.visitor
+                        .visit_subgraph(self.accumulator, &graph_1, &graph_2, &var)
+                }
+                Graph::Tensor(GTensor { graph_1, graph_2 }) => {
+                    self.stack.push(*graph_2.clone());
+                    self.stack.push(*graph_1.clone());
+                    self.visitor
+                        .visit_tensor(self.accumulator, &graph_1, &graph_2)
+                }
+                Graph::Context(GContext {
+                    graph,
+                    name,
+                    string,
+                }) => {
+                    self.stack.push(*graph);
+                    self.visitor.visit_context(self.accumulator, &name, &string)
                 }
             };
         }
