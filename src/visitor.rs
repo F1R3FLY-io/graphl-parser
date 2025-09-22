@@ -1,15 +1,15 @@
 use crate::ast::{GEdgeAnon, GEdgeNamed, Graph, Name, Vertex};
 
-pub trait Visitor<R> {
-    fn visit_nil(&self) -> R;
-    fn visit_vertex(&self, vertex: &Vertex) -> R;
-    fn visit_var(&self, var: &str) -> R;
-    fn visit_nominate(&self, name: &str, vertex: &Vertex) -> R;
-    fn visit_edge_anon(&self, edge: &GEdgeAnon, nominate_a: R, nominate_b: R) -> R;
-    fn visit_edge_named(&self, edge: &GEdgeNamed, nominate_a: R, nominate_b: R) -> R;
-    fn visit_rule_anon(&self, graph: &Graph, graph2: &Graph) -> R;
-    fn visit_rule_named(&self, name: &Name, graph: &Graph, graph2: &Graph) -> R;
-    fn visit_subgraph(&self, graph: &Graph, graph2: &Graph, identifier: &str) -> R;
-    fn visit_tensor(&self, graph: &Graph, graph2: &Graph) -> R;
-    fn visit_context(&self, name: &Name, context: &str) -> R;
+pub trait Visitor<R, A> {
+    fn visit_nil(&self, acc: A) -> A;
+    fn visit_vertex(&self, acc: A, vertex: &Vertex) -> A;
+    fn visit_var(&self, acc: A, var: &str) -> A;
+    fn visit_nominate(&self, acc: A, name: &str, vertex: &Vertex) -> A;
+    fn visit_edge_anon(&self, acc: A, edge: &GEdgeAnon, nominate_a: R, nominate_b: R) -> A;
+    fn visit_edge_named(&self, acc: A, edge: &GEdgeNamed, nominate_a: R, nominate_b: R) -> A;
+    fn visit_rule_anon(&self, acc: A, graph: &Graph, graph2: &Graph) -> A;
+    fn visit_rule_named(&self, acc: A, name: &Name, graph: &Graph, graph2: &Graph) -> A;
+    fn visit_subgraph(&self, acc: A, graph: &Graph, graph2: &Graph, identifier: &str) -> A;
+    fn visit_tensor(&self, acc: A, graph: &Graph, graph2: &Graph) -> A;
+    fn visit_context(&self, acc: A, name: &Name, context: &str) -> A;
 }

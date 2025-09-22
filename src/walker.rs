@@ -30,7 +30,7 @@ pub struct Walker<'graph, 'visitor, T> {
     /// Reference to the graph being traversed
     graph: &'graph Graph,
     /// Mutable reference to the visitor handling node callbacks
-    visitor: &'visitor dyn Visitor<T>,
+    visitor: &'visitor dyn Visitor<T, &'graph dyn Accumulator<T>>,
     /// Stack of graph nodes to be processed (LIFO order)
     stack: Vec<&'graph Graph>,
     /// String accumulator for collecting visitor results
@@ -60,54 +60,75 @@ impl<'graph, 'visitor, T> Walker<'graph, 'visitor, T> {
     /// - For composite nodes (edges, rules, etc.), children are processed in reverse order
     pub fn visit(&mut self) {
         while let Some(el) = self.stack.pop() {
-            let result: T = match el {
-                Graph::Nil => self.visitor.visit_nil(),
+            let result: A = match el {
+                Graph::Nil => self.visitor.visit_nil(self.accumulator),
                 Graph::Vertex(GVertex { graph, vertex }) => {
                     self.stack.push(graph);
-                    self.visitor.visit_vertex(vertex)
+                    self.visitor.visit_vertex(self.accumulator, vertex)
                 }
                 Graph::Var(gvar) => {
                     self.stack.push(&gvar.graph);
-                    self.visitor.visit_var(&gvar.var)
+                    self.visitor.visit_var(self.accumulator, &gvar.var)
                 }
                 Graph::Nominate(binding) => {
                     self.stack.push(&binding.graph);
-                    self.visitor.visit_nominate(&binding.var, &binding.vertex)
+                    self.visitor
+                        .visit_nominate(self.accumulator, &binding.var, &binding.vertex)
                 }
                 Graph::EdgeAnon(gedge_anon) => {
                     self.stack.push(&gedge_anon.binding_2.graph);
                     self.stack.push(&gedge_anon.binding_1.graph);
-                    let nomination_1 = self
-                        .visitor
-                        .visit_nominate(&gedge_anon.binding_1.var, &gedge_anon.binding_1.vertex);
-                    let nomination_2 = self
-                        .visitor
-                        .visit_nominate(&gedge_anon.binding_2.var, &gedge_anon.binding_2.vertex);
-                    self.visitor
-                        .visit_edge_anon(gedge_anon, nomination_1, nomination_2)
+                    let nomination_1 = self.visitor.visit_nominate(
+                        self.accumulator,
+                        &gedge_anon.binding_1.var,
+                        &gedge_anon.binding_1.vertex,
+                    );
+                    let nomination_2 = self.visitor.visit_nominate(
+                        self.accumulator,
+                        &gedge_anon.binding_2.var,
+                        &gedge_anon.binding_2.vertex,
+                    );
+                    self.visitor.visit_edge_anon(
+                        self.accumulator,
+                        gedge_anon,
+                        nomination_1,
+                        nomination_2,
+                    )
                 }
                 Graph::EdgeNamed(gedge_named) => {
                     self.stack.push(&gedge_named.binding_2.graph);
                     self.stack.push(&gedge_named.binding_1.graph);
-                    let nomination_1 = self
-                        .visitor
-                        .visit_nominate(&gedge_named.binding_1.var, &gedge_named.binding_1.vertex);
-                    let nomination_2 = self
-                        .visitor
-                        .visit_nominate(&gedge_named.binding_2.var, &gedge_named.binding_2.vertex);
-                    self.visitor
-                        .visit_edge_named(gedge_named, nomination_1, nomination_2)
+                    let nomination_1 = self.visitor.visit_nominate(
+                        self.accumulator,
+                        &gedge_named.binding_1.var,
+                        &gedge_named.binding_1.vertex,
+                    );
+                    let nomination_2 = self.visitor.visit_nominate(
+                        self.accumulator,
+                        &gedge_named.binding_2.var,
+                        &gedge_named.binding_2.vertex,
+                    );
+                    self.visitor.visit_edge_named(
+                        self.accumulator,
+                        gedge_named,
+                        nomination_1,
+                        nomination_2,
+                    )
                 }
                 Graph::RuleAnon(grule_anon) => {
                     self.stack.push(&grule_anon.graph_2);
                     self.stack.push(&grule_anon.graph_1);
-                    self.visitor
-                        .visit_rule_anon(&grule_anon.graph_1, &grule_anon.graph_2)
+                    self.visitor.visit_rule_anon(
+                        self.accumulator,
+                        &grule_anon.graph_1,
+                        &grule_anon.graph_2,
+                    )
                 }
                 Graph::RuleNamed(grule_named) => {
                     self.stack.push(&grule_named.graph_2);
                     self.stack.push(&grule_named.graph_1);
                     self.visitor.visit_rule_named(
+                        self.accumulator,
                         &grule_named.name,
                         &grule_named.graph_1,
                         &grule_named.graph_2,
@@ -117,6 +138,7 @@ impl<'graph, 'visitor, T> Walker<'graph, 'visitor, T> {
                     self.stack.push(&graph_binding.graph_2);
                     self.stack.push(&graph_binding.graph_1);
                     self.visitor.visit_subgraph(
+                        self.accumulator,
                         &graph_binding.graph_1,
                         &graph_binding.graph_2,
                         &graph_binding.var,
@@ -126,11 +148,12 @@ impl<'graph, 'visitor, T> Walker<'graph, 'visitor, T> {
                     self.stack.push(&gtensor.graph_2);
                     self.stack.push(&gtensor.graph_1);
                     self.visitor
-                        .visit_tensor(&gtensor.graph_1, &gtensor.graph_2)
+                        .visit_tensor(self.accumulator, &gtensor.graph_1, &gtensor.graph_2)
                 }
                 Graph::Context(gcontext) => {
                     self.stack.push(&gcontext.graph);
-                    self.visitor.visit_context(&gcontext.name, &gcontext.string)
+                    self.visitor
+                        .visit_context(self.accumulator, &gcontext.name, &gcontext.string)
                 }
             };
 
@@ -158,7 +181,7 @@ where
     /// A new `Walker` instance ready to begin traversal.
     pub fn new(
         graph: &'graph Graph,
-        visitor: &'visitor impl Visitor<(String, String)>,
+        visitor: &'visitor impl Visitor<impl Accumulator<(String, String)>>,
         accumulator: &'graph mut impl Accumulator<(String, String)>,
     ) -> Self {
         Self {
