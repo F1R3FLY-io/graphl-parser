@@ -258,7 +258,7 @@ mod test {
                         _ => unreachable!(),
                     }
                 ),
-                format!("</context>\n"),
+                "</context>\n".to_string(),
             )
         }
 
