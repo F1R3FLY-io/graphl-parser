@@ -7,7 +7,16 @@
 
 #![allow(dead_code)]
 use crate::ast::{
-    Binding, GContext, GEdgeAnon, GEdgeNamed, GRuleAnon, GRuleNamed, GTensor, GVar, GVertex, Graph,
+    Binding,
+    GContext,
+    GEdgeAnon,
+    GEdgeNamed,
+    GRuleAnon,
+    GRuleNamed,
+    GTensor,
+    GVar,
+    GVertex,
+    Graph,
     GraphBinding,
 };
 use crate::visitor::Visitor;
@@ -33,19 +42,19 @@ use crate::visitor::Visitor;
 /// walker.visit();
 /// // accumulator now contains the traversal results
 /// ```
-pub struct Walker<'graph, 'visitor, A>
+pub struct Walker<'graph, A>
 where
     A: Clone,
 {
     /// Reference to the visitor handling node callbacks
-    visitor: &'visitor dyn Visitor<A>,
+    visitor: &'graph dyn Visitor<A>,
     /// Stack of graph nodes to be processed (LIFO order)
     stack: Vec<Graph>,
     /// Mutable reference to the accumulator for collecting visitor results
     accumulator: &'graph mut A,
 }
 
-impl<'graph, 'visitor, A> Walker<'graph, 'visitor, A>
+impl<'a, A> Walker<'a, A>
 where
     A: Clone,
 {
@@ -177,9 +186,8 @@ where
     }
 }
 
-impl<'graph, 'visitor, A> Walker<'graph, 'visitor, A>
+impl<'a, A> Walker<'a, A>
 where
-    'visitor: 'graph,
     A: Clone,
 {
     /// Creates a new walker instance for traversing the given graph.
@@ -196,11 +204,7 @@ where
     /// # Returns
     ///
     /// A new `Walker` instance ready to begin traversal.
-    pub fn new(
-        graph: &'graph Graph,
-        visitor: &'visitor impl Visitor<A>,
-        accumulator: &'graph mut A,
-    ) -> Self {
+    pub fn new(graph: &'a Graph, visitor: &'a impl Visitor<A>, accumulator: &'a mut A) -> Self {
         Self {
             visitor,
             stack: vec![graph.clone()],
