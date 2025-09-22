@@ -1,8 +1,9 @@
-//! Graph traversal module providing iterator-based walking of AST graphs.
+//! Graph traversal module providing stack-based walking of AST graphs.
 //!
 //! This module implements a depth-first traversal mechanism for graph structures
 //! using the visitor pattern. The walker maintains a stack to process nodes
-//! iteratively and accumulates results from visitor callbacks.
+//! iteratively and delegates result accumulation to visitor callbacks that work
+//! with a generic accumulator type.
 
 #![allow(dead_code)]
 use crate::ast::{
@@ -14,30 +15,33 @@ use crate::visitor::Visitor;
 /// A graph walker that traverses AST nodes using the visitor pattern.
 ///
 /// The walker performs a depth-first traversal of the graph structure,
-/// maintaining a stack of nodes to visit and accumulating string results
-/// from visitor method calls.
+/// maintaining a stack of nodes to visit and using a mutable accumulator
+/// that gets updated by visitor method calls.
 ///
 /// # Type Parameters
 ///
-/// * `'graph` - Lifetime of the graph being traversed
+/// * `'graph` - Lifetime of the graph being traversed and the accumulator
 /// * `'visitor` - Lifetime of the visitor instance
+/// * `A` - The type of the accumulator that collects results from visitor callbacks
 ///
 /// # Examples
 ///
-/// ```
-/// let mut visitor = Visitor::default();
-/// let mut walker = Walker::new(&graph, &mut visitor);
-/// let result = walker.visit();
+/// ```rust,ignore
+/// let mut accumulator = MyAccumulator::new();
+/// let visitor = MyVisitor::new();
+/// let mut walker = Walker::new(&graph, &visitor, &mut accumulator);
+/// walker.visit();
+/// // accumulator now contains the traversal results
 /// ```
 pub struct Walker<'graph, 'visitor, A>
 where
     A: Clone,
 {
-    /// Mutable reference to the visitor handling node callbacks
+    /// Reference to the visitor handling node callbacks
     visitor: &'visitor dyn Visitor<A>,
     /// Stack of graph nodes to be processed (LIFO order)
     stack: Vec<Graph>,
-    /// String accumulator for collecting visitor results
+    /// Mutable reference to the accumulator for collecting visitor results
     accumulator: &'graph mut A,
 }
 
@@ -48,19 +52,21 @@ where
     /// Performs the graph traversal, visiting each node with the configured visitor.
     ///
     /// This method processes nodes from the stack in LIFO order, calling the
-    /// appropriate visitor method for each node type and accumulating the results.
-    /// Child nodes are pushed onto the stack for later processing.
+    /// appropriate visitor method for each node type and updating the accumulator
+    /// with the results. Child nodes are pushed onto the stack for later processing.
     ///
-    /// # Returns
+    /// # Side Effects
     ///
-    /// A `String` containing the accumulated results from all visitor method calls.
+    /// The accumulator is mutated in-place as each node is visited. The final
+    /// state of the accumulator contains the results of the entire traversal.
     ///
     /// # Node Processing Order
     ///
     /// The traversal follows these rules:
-    /// - Nodes are processed from the stack in LIFO order
+    /// - Nodes are processed from the stack in LIFO order (depth-first)
     /// - Child graphs are pushed to the stack for later processing
     /// - For composite nodes (edges, rules, etc.), children are processed in reverse order
+    ///   to ensure left-to-right traversal when popped from the stack
     pub fn visit(&mut self) {
         while let Some(el) = self.stack.pop() {
             *self.accumulator = match el {
@@ -81,26 +87,26 @@ where
                     binding_1,
                     binding_2,
                 }) => {
-                    let result = self.visitor.visit_edge_anon(
-                        self.accumulator,
-                        &GEdgeAnon {
-                            binding_1: binding_1.clone(),
-                            binding_2: binding_2.clone(),
-                        },
-                    );
-
+                    let binding_1_clone = binding_1.clone();
+                    let binding_2_clone = binding_2.clone();
                     self.stack.push(Graph::Nominate(Binding {
                         var: binding_2.var,
-                        vertex: binding_2.vertex,
-                        graph: binding_2.graph,
+                        vertex: binding_2.vertex.clone(),
+                        graph: binding_2.graph.clone(),
                     }));
                     self.stack.push(Graph::Nominate(Binding {
                         var: binding_1.var,
-                        vertex: binding_1.vertex,
-                        graph: binding_1.graph,
+                        vertex: binding_1.vertex.clone(),
+                        graph: binding_1.graph.clone(),
                     }));
 
-                    result
+                    self.visitor.visit_edge_anon(
+                        self.accumulator,
+                        &GEdgeAnon {
+                            binding_1: binding_1_clone,
+                            binding_2: binding_2_clone,
+                        },
+                    )
                 }
                 Graph::EdgeNamed(GEdgeNamed {
                     binding_1,
@@ -179,12 +185,13 @@ where
     /// Creates a new walker instance for traversing the given graph.
     ///
     /// The walker is initialized with the root graph node placed on the stack
-    /// and an empty string accumulator.
+    /// and a reference to the provided accumulator that will collect results.
     ///
     /// # Parameters
     ///
     /// * `graph` - Reference to the root graph node to traverse
-    /// * `visitor` - Mutable reference to the visitor for handling node callbacks
+    /// * `visitor` - Reference to the visitor for handling node callbacks
+    /// * `accumulator` - Mutable reference to the accumulator for collecting results
     ///
     /// # Returns
     ///
@@ -296,7 +303,7 @@ mod test {
 
         fn visit_rule_named(
             &self,
-            acc: &TestAccumulator,
+            _acc: &TestAccumulator,
             _name: &Name,
             _graph: &Graph,
             _graph2: &Graph,
@@ -306,7 +313,7 @@ mod test {
 
         fn visit_subgraph(
             &self,
-            acc: &TestAccumulator,
+            _acc: &TestAccumulator,
             _graph: &Graph,
             _graph2: &Graph,
             _identifier: &str,
@@ -316,7 +323,7 @@ mod test {
 
         fn visit_tensor(
             &self,
-            acc: &TestAccumulator,
+            _acc: &TestAccumulator,
             _graph: &Graph,
             _graph2: &Graph,
         ) -> TestAccumulator {
