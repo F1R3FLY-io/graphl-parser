@@ -175,13 +175,11 @@ mod test {
 
     use std::fmt::Display;
 
-    use crate::{
-        ast::{GEdgeAnon, GEdgeNamed, Graph, Name, Vertex},
-        bindings::psGraph,
-        parse_to_ast,
-        visitor::Visitor,
-        walker::{Accumulator, Walker},
-    };
+    use crate::ast::{GEdgeAnon, GEdgeNamed, Graph, Name, Vertex};
+    use crate::bindings::psGraph;
+    use crate::parse_to_ast;
+    use crate::visitor::Visitor;
+    use crate::walker::{Accumulator, Walker};
 
     type OpenClosePair = (String, String);
     struct MyVisitor {}
