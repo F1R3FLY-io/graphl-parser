@@ -7,7 +7,16 @@
 
 #![allow(dead_code)]
 use crate::ast::{
-    Binding, GContext, GEdgeAnon, GEdgeNamed, GRuleAnon, GRuleNamed, GTensor, GVar, GVertex, Graph,
+    Binding,
+    GContext,
+    GEdgeAnon,
+    GEdgeNamed,
+    GRuleAnon,
+    GRuleNamed,
+    GTensor,
+    GVar,
+    GVertex,
+    Graph,
     GraphBinding,
 };
 use crate::visitor::Visitor;
