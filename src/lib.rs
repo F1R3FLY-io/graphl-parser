@@ -9,12 +9,12 @@ use crate::guard::{Guard, Guarded};
 mod wasm;
 
 pub mod ast;
-pub mod bindings;
+mod bindings;
 mod guard;
 pub mod visitor;
 pub mod walker;
 
-// #[cfg_attr(target_arch = "wasm32", wasm_bindgen(js_name = parseToAst))]
+#[cfg_attr(target_arch = "wasm32", wasm_bindgen(js_name = parseToAst))]
 pub fn parse_to_ast(code: String) -> Result<ast::Graph, ast::Error> {
     let c_code = CString::new(code).map_err(|err| ast::Error::InvalidCString {
         position: err.nul_position(),

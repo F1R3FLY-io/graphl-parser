@@ -5,7 +5,7 @@
 //! iteratively and accumulates results from visitor callbacks.
 
 #![allow(dead_code)]
-use crate::ast::{GVertex, Graph};
+use crate::ast::{Binding, GVertex, Graph};
 use crate::visitor::Visitor;
 
 /// A graph walker that traverses AST nodes using the visitor pattern.
@@ -26,22 +26,22 @@ use crate::visitor::Visitor;
 /// let mut walker = Walker::new(&graph, &mut visitor);
 /// let result = walker.visit();
 /// ```
-pub struct Walker<'graph, 'visitor, T> {
-    /// Reference to the graph being traversed
-    graph: &'graph Graph,
+pub struct Walker<'graph, 'visitor, A>
+where
+    A: Clone,
+{
     /// Mutable reference to the visitor handling node callbacks
-    visitor: &'visitor dyn Visitor<T, &'graph dyn Accumulator<T>>,
+    visitor: &'visitor dyn Visitor<A>,
     /// Stack of graph nodes to be processed (LIFO order)
-    stack: Vec<&'graph Graph>,
+    stack: Vec<Graph>,
     /// String accumulator for collecting visitor results
-    accumulator: &'graph mut dyn Accumulator<T>,
+    accumulator: &'graph mut A,
 }
 
-pub trait Accumulator<T> {
-    fn handle_visit(&mut self, value: T);
-}
-
-impl<'graph, 'visitor, T> Walker<'graph, 'visitor, T> {
+impl<'graph, 'visitor, A> Walker<'graph, 'visitor, A>
+where
+    A: Clone,
+{
     /// Performs the graph traversal, visiting each node with the configured visitor.
     ///
     /// This method processes nodes from the stack in LIFO order, calling the
@@ -60,64 +60,56 @@ impl<'graph, 'visitor, T> Walker<'graph, 'visitor, T> {
     /// - For composite nodes (edges, rules, etc.), children are processed in reverse order
     pub fn visit(&mut self) {
         while let Some(el) = self.stack.pop() {
-            let result: A = match el {
+            *self.accumulator = match el {
                 Graph::Nil => self.visitor.visit_nil(self.accumulator),
                 Graph::Vertex(GVertex { graph, vertex }) => {
-                    self.stack.push(graph);
-                    self.visitor.visit_vertex(self.accumulator, vertex)
+                    self.stack.push(*graph);
+                    self.visitor.visit_vertex(self.accumulator, &vertex)
                 }
                 Graph::Var(gvar) => {
-                    self.stack.push(&gvar.graph);
+                    self.stack.push(*gvar.graph);
                     self.visitor.visit_var(self.accumulator, &gvar.var)
                 }
                 Graph::Nominate(binding) => {
-                    self.stack.push(&binding.graph);
+                    self.stack.push(*binding.graph);
                     self.visitor
                         .visit_nominate(self.accumulator, &binding.var, &binding.vertex)
                 }
                 Graph::EdgeAnon(gedge_anon) => {
-                    self.stack.push(&gedge_anon.binding_2.graph);
-                    self.stack.push(&gedge_anon.binding_1.graph);
-                    let nomination_1 = self.visitor.visit_nominate(
-                        self.accumulator,
-                        &gedge_anon.binding_1.var,
-                        &gedge_anon.binding_1.vertex,
-                    );
-                    let nomination_2 = self.visitor.visit_nominate(
-                        self.accumulator,
-                        &gedge_anon.binding_2.var,
-                        &gedge_anon.binding_2.vertex,
-                    );
-                    self.visitor.visit_edge_anon(
-                        self.accumulator,
-                        gedge_anon,
-                        nomination_1,
-                        nomination_2,
-                    )
+                    let gedged_clone = gedge_anon.clone();
+                    self.stack.push(Graph::Nominate(Binding {
+                        var: gedge_anon.binding_2.var,
+                        vertex: gedge_anon.binding_2.vertex,
+                        graph: gedge_anon.binding_2.graph,
+                    }));
+                    self.stack.push(Graph::Nominate(Binding {
+                        var: gedge_anon.binding_1.var,
+                        vertex: gedge_anon.binding_1.vertex,
+                        graph: gedge_anon.binding_1.graph,
+                    }));
+
+                    self.visitor
+                        .visit_edge_anon(self.accumulator, &gedged_clone)
                 }
                 Graph::EdgeNamed(gedge_named) => {
-                    self.stack.push(&gedge_named.binding_2.graph);
-                    self.stack.push(&gedge_named.binding_1.graph);
-                    let nomination_1 = self.visitor.visit_nominate(
-                        self.accumulator,
-                        &gedge_named.binding_1.var,
-                        &gedge_named.binding_1.vertex,
-                    );
-                    let nomination_2 = self.visitor.visit_nominate(
-                        self.accumulator,
-                        &gedge_named.binding_2.var,
-                        &gedge_named.binding_2.vertex,
-                    );
-                    self.visitor.visit_edge_named(
-                        self.accumulator,
-                        gedge_named,
-                        nomination_1,
-                        nomination_2,
-                    )
+                    let gedged_clone = gedge_named.clone();
+                    self.stack.push(Graph::Nominate(Binding {
+                        var: gedge_named.binding_2.var,
+                        vertex: gedge_named.binding_2.vertex,
+                        graph: gedge_named.binding_2.graph,
+                    }));
+                    self.stack.push(Graph::Nominate(Binding {
+                        var: gedge_named.binding_1.var,
+                        vertex: gedge_named.binding_1.vertex,
+                        graph: gedge_named.binding_1.graph,
+                    }));
+
+                    self.visitor
+                        .visit_edge_named(self.accumulator, &gedged_clone)
                 }
                 Graph::RuleAnon(grule_anon) => {
-                    self.stack.push(&grule_anon.graph_2);
-                    self.stack.push(&grule_anon.graph_1);
+                    self.stack.push(*grule_anon.graph_2.clone());
+                    self.stack.push(*grule_anon.graph_1.clone());
                     self.visitor.visit_rule_anon(
                         self.accumulator,
                         &grule_anon.graph_1,
@@ -125,8 +117,8 @@ impl<'graph, 'visitor, T> Walker<'graph, 'visitor, T> {
                     )
                 }
                 Graph::RuleNamed(grule_named) => {
-                    self.stack.push(&grule_named.graph_2);
-                    self.stack.push(&grule_named.graph_1);
+                    self.stack.push(*grule_named.graph_2.clone());
+                    self.stack.push(*grule_named.graph_1.clone());
                     self.visitor.visit_rule_named(
                         self.accumulator,
                         &grule_named.name,
@@ -135,8 +127,8 @@ impl<'graph, 'visitor, T> Walker<'graph, 'visitor, T> {
                     )
                 }
                 Graph::Subgraph(graph_binding) => {
-                    self.stack.push(&graph_binding.graph_2);
-                    self.stack.push(&graph_binding.graph_1);
+                    self.stack.push(*graph_binding.graph_2.clone());
+                    self.stack.push(*graph_binding.graph_1.clone());
                     self.visitor.visit_subgraph(
                         self.accumulator,
                         &graph_binding.graph_1,
@@ -145,26 +137,25 @@ impl<'graph, 'visitor, T> Walker<'graph, 'visitor, T> {
                     )
                 }
                 Graph::Tensor(gtensor) => {
-                    self.stack.push(&gtensor.graph_2);
-                    self.stack.push(&gtensor.graph_1);
+                    self.stack.push(*gtensor.graph_2.clone());
+                    self.stack.push(*gtensor.graph_1.clone());
                     self.visitor
                         .visit_tensor(self.accumulator, &gtensor.graph_1, &gtensor.graph_2)
                 }
                 Graph::Context(gcontext) => {
-                    self.stack.push(&gcontext.graph);
+                    self.stack.push(*gcontext.graph);
                     self.visitor
                         .visit_context(self.accumulator, &gcontext.name, &gcontext.string)
                 }
             };
-
-            self.accumulator.handle_visit(result);
         }
     }
 }
 
-impl<'graph, 'visitor> Walker<'graph, 'visitor, (String, String)>
+impl<'graph, 'visitor, A> Walker<'graph, 'visitor, A>
 where
     'visitor: 'graph,
+    A: Clone,
 {
     /// Creates a new walker instance for traversing the given graph.
     ///
@@ -181,13 +172,12 @@ where
     /// A new `Walker` instance ready to begin traversal.
     pub fn new(
         graph: &'graph Graph,
-        visitor: &'visitor impl Visitor<impl Accumulator<(String, String)>>,
-        accumulator: &'graph mut impl Accumulator<(String, String)>,
+        visitor: &'visitor impl Visitor<A>,
+        accumulator: &'graph mut A,
     ) -> Self {
         Self {
-            graph,
             visitor,
-            stack: vec![graph],
+            stack: vec![graph.clone()],
             accumulator,
         }
     }
@@ -202,130 +192,155 @@ mod test {
     use crate::bindings::psGraph;
     use crate::parse_to_ast;
     use crate::visitor::Visitor;
-    use crate::walker::{Accumulator, Walker};
+    use crate::walker::Walker;
 
     type OpenClosePair = (String, String);
-    struct MyVisitor {}
+    struct TestVisitor {}
 
-    impl Visitor<OpenClosePair> for MyVisitor {
-        fn visit_nil(&self) -> OpenClosePair {
-            ("<nil/>\n".into(), "".into())
+    #[derive(Debug, Clone, Default)]
+    struct TestAccumulator {
+        left: Vec<String>,
+        right: Vec<String>,
+    }
+
+    impl TestAccumulator {
+        fn with_left(&self, left: &str) -> Self {
+            let mut left_temp = self.left.clone();
+            left_temp.push(left.to_string());
+
+            Self {
+                left: left_temp,
+                ..self.clone()
+            }
         }
 
-        fn visit_vertex(&self, vertex: &Vertex) -> OpenClosePair {
-            (
-                format!(
-                    "<vertex {}>\n",
-                    match &vertex.name {
-                        Name::VVar { value } => value,
-                        _ => unreachable!(),
-                    }
-                ),
-                "</vertex>\n".into(),
-            )
+        fn with_right(&self, right: &str) -> Self {
+            let mut right_temp = self.right.clone();
+            right_temp.push(right.to_string());
+
+            Self {
+                right: right_temp,
+                ..self.clone()
+            }
+        }
+    }
+
+    impl Visitor<TestAccumulator> for TestVisitor {
+        fn visit_nil(&self, acc: &TestAccumulator) -> TestAccumulator {
+            acc.with_left("<nil/>\n").with_right("")
         }
 
-        fn visit_var(&self, var: &str) -> OpenClosePair {
-            (format!("<var {}>\n", var), "</var>\n".into())
+        fn visit_vertex(&self, acc: &TestAccumulator, vertex: &Vertex) -> TestAccumulator {
+            acc.with_left(&format!(
+                "<vertex {}>\n",
+                match &vertex.name {
+                    Name::VVar { value } => value,
+                    _ => unreachable!(),
+                }
+            ))
+            .with_right("</vertex>\n")
         }
 
-        fn visit_nominate(&self, name: &str, vertex: &Vertex) -> OpenClosePair {
-            (
-                format!(
-                    "<nominate {name} for vertex {}>\n",
-                    match &vertex.name {
-                        Name::VVar { value } => value,
-                        _ => unreachable!(),
-                    }
-                ),
-                "</nominate>\n".into(),
-            )
+        fn visit_var(&self, acc: &TestAccumulator, var: &str) -> TestAccumulator {
+            acc.with_left(&format!("<var {}>\n", var))
+                .with_right("</var>\n")
         }
 
-        fn visit_edge_named(
+        fn visit_nominate(
             &self,
-            _edge: &GEdgeNamed,
-            _nominate_a: OpenClosePair,
-            _nominate_b: OpenClosePair,
-        ) -> OpenClosePair {
+            acc: &TestAccumulator,
+            name: &str,
+            vertex: &Vertex,
+        ) -> TestAccumulator {
+            acc.with_left(&format!(
+                "<nominate {name} for vertex {vertex_name}>\n",
+                vertex_name = match &vertex.name {
+                    Name::VVar { value } => value,
+                    _ => unreachable!(),
+                }
+            ))
+            .with_right("</nominate>\n")
+        }
+
+        fn visit_edge_named(&self, _acc: &TestAccumulator, _edge: &GEdgeNamed) -> TestAccumulator {
             unimplemented!()
         }
 
-        fn visit_rule_anon(&self, _graph: &Graph, _graph2: &Graph) -> OpenClosePair {
+        fn visit_rule_anon(
+            &self,
+            _acc: &TestAccumulator,
+            _graph: &Graph,
+            _graph2: &Graph,
+        ) -> TestAccumulator {
             unimplemented!()
         }
 
-        fn visit_rule_named(&self, _name: &Name, _graph: &Graph, _graph2: &Graph) -> OpenClosePair {
+        fn visit_rule_named(
+            &self,
+            acc: &TestAccumulator,
+            _name: &Name,
+            _graph: &Graph,
+            _graph2: &Graph,
+        ) -> TestAccumulator {
             unimplemented!()
         }
 
         fn visit_subgraph(
             &self,
+            acc: &TestAccumulator,
             _graph: &Graph,
             _graph2: &Graph,
             _identifier: &str,
-        ) -> OpenClosePair {
+        ) -> TestAccumulator {
             unimplemented!()
         }
 
-        fn visit_tensor(&self, _graph: &Graph, _graph2: &Graph) -> OpenClosePair {
-            unimplemented!()
-        }
-
-        fn visit_context(&self, name: &Name, context: &str) -> OpenClosePair {
-            (
-                format!(
-                    "<context for {name} with {context}>\n",
-                    name = match name {
-                        Name::VVar { value } => value,
-                        _ => unreachable!(),
-                    }
-                ),
-                "</context>\n".to_string(),
-            )
-        }
-
-        fn visit_edge_anon(
+        fn visit_tensor(
             &self,
-            _edge: &GEdgeAnon,
-            (nom_1_open, nom_1_close): OpenClosePair,
-            (nom_2_open, nom_2_close): OpenClosePair,
-        ) -> OpenClosePair {
-            (
-                format!("<edge>\n{nom_1_open}{nom_2_open}"),
-                format!("{nom_1_close}{nom_2_close}</edge>\n"),
-            )
+            acc: &TestAccumulator,
+            _graph: &Graph,
+            _graph2: &Graph,
+        ) -> TestAccumulator {
+            unimplemented!()
+        }
+
+        fn visit_context(
+            &self,
+            acc: &TestAccumulator,
+            name: &Name,
+            context: &str,
+        ) -> TestAccumulator {
+            acc.with_left(&format!(
+                "<context for {name} with {context}>\n",
+                name = match name {
+                    Name::VVar { value } => value,
+                    _ => unreachable!(),
+                }
+            ))
+            .with_right("</context>\n")
+        }
+
+        fn visit_edge_anon(&self, acc: &TestAccumulator, _edge: &GEdgeAnon) -> TestAccumulator {
+            acc.with_left(&format!("<edge>\n"))
+                .with_right(&format!("</edge>\n"))
         }
     }
 
-    fn create_visitor() -> MyVisitor {
-        MyVisitor {}
-    }
-
-    #[derive(Default)]
-    pub struct TestAccumulator {
-        pub close: Vec<String>,
-        pub open: Vec<String>,
+    fn create_visitor() -> TestVisitor {
+        TestVisitor {}
     }
 
     impl Display for TestAccumulator {
         fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
             // Write opening tags
-            for open in &self.open {
+            for open in &self.left {
                 write!(f, "{}", open)?;
             }
             // Write closing tags in reverse order
-            for close in self.close.iter().rev() {
+            for close in self.right.iter().rev() {
                 write!(f, "{}", close)?;
             }
             Ok(())
-        }
-    }
-
-    impl Accumulator<(String, String)> for TestAccumulator {
-        fn handle_visit(&mut self, (open, close): (String, String)) {
-            self.open.push(open);
-            self.close.push(close);
         }
     }
 
@@ -377,14 +392,14 @@ mod test {
             &accumulator.to_string(),
             r#"<edge>
 <nominate a for vertex a>
-<nominate b for vertex b>
 <vertex a>
 <nil/>
+<nominate b for vertex b>
 <vertex b>
 <nil/>
 </vertex>
-</vertex>
 </nominate>
+</vertex>
 </nominate>
 </edge>
 "#
@@ -425,14 +440,14 @@ mod test {
             &accumulator.to_string(),
             r#"<edge>
 <nominate va for vertex a>
-<nominate vb for vertex b>
 <vertex a>
 <nil/>
+<nominate vb for vertex b>
 <vertex b>
 <nil/>
 </vertex>
-</vertex>
 </nominate>
+</vertex>
 </nominate>
 </edge>
 "#
@@ -476,32 +491,32 @@ mod test {
             &accumulator.to_string(),
             r#"<edge>
 <nominate n2 for vertex notification>
-<nominate e3 for vertex encryption>
 <edge>
 <nominate e2 for vertex encryption>
-<nominate n1 for vertex notification>
 <edge>
 <nominate e1 for vertex encryption>
-<nominate s for vertex store>
 <vertex encryption>
 <nil/>
+<nominate s for vertex store>
 <vertex store>
 <nil/>
+<nominate n1 for vertex notification>
 <vertex notification>
 <nil/>
+<nominate e3 for vertex encryption>
 <var e1>
 <nil/>
 </var>
-</vertex>
-</vertex>
+</nominate>
 </vertex>
 </nominate>
+</vertex>
+</nominate>
+</vertex>
 </nominate>
 </edge>
 </nominate>
-</nominate>
 </edge>
-</nominate>
 </nominate>
 </edge>
 "#
