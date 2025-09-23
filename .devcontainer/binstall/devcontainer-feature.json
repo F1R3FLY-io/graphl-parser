@@ -1,0 +1,6 @@
+{
+  "name": "binstall",
+  "id": "binstall",
+  "version": "2.9.6",
+  "description": "Cargo binstall tool"
+}
