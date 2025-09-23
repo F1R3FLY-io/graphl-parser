@@ -6,7 +6,15 @@
 //! with a generic accumulator type.
 
 use crate::ast::{
-    Binding, GContext, GRuleAnon, GRuleNamed, GTensor, GVar, GVertex, Graph, GraphBinding,
+    Binding,
+    GContext,
+    GRuleAnon,
+    GRuleNamed,
+    GTensor,
+    GVar,
+    GVertex,
+    Graph,
+    GraphBinding,
 };
 use crate::visitor::Visitor;
 
@@ -14,7 +22,7 @@ use crate::visitor::Visitor;
 ///
 /// This enum is used internally by the walker to maintain a stack of work items,
 /// allowing the traversal to handle both graph nodes and binding nodes uniformly.
-enum WalkingStep<'a> {
+pub enum WalkingStep<'a> {
     /// A graph node to be processed
     Graph(&'a Graph),
     /// A binding node to be processed
@@ -74,8 +82,10 @@ impl<'graph> Walker<'graph> {
     /// - For composite nodes (edges, rules, etc.), children are processed in reverse order
     ///   to ensure left-to-right traversal when popped from the stack
     /// - Each node type delegates to the appropriate visitor method
-    pub fn visit<A>(&self, visitor: impl Visitor<A>, mut accumulator: A) -> A {
+    pub fn visit<A>(&self, visitor: impl Visitor<A>, initial_accumulator: A) -> A {
         let mut stack = vec![WalkingStep::Graph(self.graph)];
+
+        let mut accumulator = initial_accumulator;
 
         while let Some(el) = stack.pop() {
             accumulator = match el {
