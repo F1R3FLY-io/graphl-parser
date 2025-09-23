@@ -37,9 +37,7 @@ pub fn ast_to_graphl(ast: ast::Graph) -> Result<String, ast::Error> {
         return Err(ast::Error::InvalidGraphL);
     }
 
-    scopeguard::defer!({
-        unsafe { bindings::bufReset() };
-    });
+    scopeguard::defer!(unsafe { bindings::bufReset() });
 
     unsafe { CStr::from_ptr(graphl) }
         .to_str()
