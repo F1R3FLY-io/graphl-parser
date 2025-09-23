@@ -4,17 +4,26 @@
 //! using the visitor pattern. The walker maintains a stack to process nodes
 //! iteratively and delegates result accumulation to visitor callbacks that work
 //! with a generic accumulator type.
+//!
+//! # Features
+//!
+//! * Stack-based traversal to avoid recursion and potential stack overflow
+//! * Generic accumulator support for flexible result collection
+//! * Visitor pattern implementation for extensible node processing
+//! * Support for all AST node types including vertices, edges, rules, and contexts
+//!
+//! # Architecture
+//!
+//! The module consists of two main components:
+//! - [`Walker`] - The main traversal engine that manages the iteration process
+//! - [`WalkingStep`] - Internal representation of work items during traversal
+//!
+//! The walker processes nodes in depth-first order, pushing child nodes onto a stack
+//! for later processing. This ensures that deeply nested graphs can be traversed
+//! without hitting recursion limits.
 
 use crate::ast::{
-    Binding,
-    GContext,
-    GRuleAnon,
-    GRuleNamed,
-    GTensor,
-    GVar,
-    GVertex,
-    Graph,
-    GraphBinding,
+    Binding, GContext, GRuleAnon, GRuleNamed, GTensor, GVar, GVertex, Graph, GraphBinding,
 };
 use crate::visitor::Visitor;
 
@@ -22,6 +31,13 @@ use crate::visitor::Visitor;
 ///
 /// This enum is used internally by the walker to maintain a stack of work items,
 /// allowing the traversal to handle both graph nodes and binding nodes uniformly.
+/// The enum provides a unified interface for processing different node types
+/// while maintaining type safety and avoiding dynamic dispatch overhead.
+///
+/// # Variants
+///
+/// * `Graph` - Contains a reference to a graph node that needs to be processed
+/// * `Binding` - Contains a reference to a binding node (variable nominations)
 pub enum WalkingStep<'a> {
     /// A graph node to be processed
     Graph(&'a Graph),
@@ -36,11 +52,25 @@ pub enum WalkingStep<'a> {
 /// recursion and potential stack overflow issues with deeply nested graphs.
 ///
 /// The walker is generic over the accumulator type, allowing different
-/// visitors to collect results in whatever format they need.
+/// visitors to collect results in whatever format they need. This design
+/// enables flexible processing patterns such as code generation, analysis,
+/// transformation, or validation.
 ///
 /// # Type Parameters
 ///
 /// * `'graph` - Lifetime of the graph being traversed
+///
+/// # Thread Safety
+///
+/// Walker is not thread-safe as it maintains mutable state during traversal.
+/// However, multiple walkers can safely operate on the same graph concurrently
+/// as long as the graph itself is not being modified.
+///
+/// # Performance
+///
+/// The stack-based approach provides consistent performance characteristics
+/// regardless of graph nesting depth, making it suitable for processing
+/// large or deeply nested graph structures.
 ///
 /// # Examples
 ///
@@ -65,10 +95,18 @@ impl<'graph> Walker<'graph> {
     /// appropriate visitor method for each node type and updating the accumulator
     /// with the results. Child nodes are pushed onto the stack for later processing.
     ///
+    /// The traversal is guaranteed to visit every reachable node exactly once,
+    /// following a deterministic depth-first order. The visitor methods are called
+    /// with the current accumulator state and must return an updated accumulator.
+    ///
+    /// # Type Parameters
+    ///
+    /// * `A` - The accumulator type that will be threaded through the traversal
+    ///
     /// # Parameters
     ///
     /// * `visitor` - The visitor implementation that handles each node type
-    /// * `accumulator` - The initial accumulator value that will be threaded through the traversal
+    /// * `initial_accumulator` - The initial accumulator value that will be threaded through the traversal
     ///
     /// # Returns
     ///
@@ -82,6 +120,22 @@ impl<'graph> Walker<'graph> {
     /// - For composite nodes (edges, rules, etc.), children are processed in reverse order
     ///   to ensure left-to-right traversal when popped from the stack
     /// - Each node type delegates to the appropriate visitor method
+    /// - Binding nodes are treated uniformly with graph nodes for consistent processing
+    ///
+    /// # Visitor Method Mapping
+    ///
+    /// Each graph node type maps to a specific visitor method:
+    /// - `Graph::Nil` → `visit_nil`
+    /// - `Graph::Vertex` → `visit_vertex`
+    /// - `Graph::Var` → `visit_var`
+    /// - `Graph::Nominate` → `visit_nominate`
+    /// - `Graph::EdgeAnon` → `visit_edge_anon`
+    /// - `Graph::EdgeNamed` → `visit_edge_named`
+    /// - `Graph::RuleAnon` → `visit_rule_anon`
+    /// - `Graph::RuleNamed` → `visit_rule_named`
+    /// - `Graph::Subgraph` → `visit_subgraph`
+    /// - `Graph::Tensor` → `visit_tensor`
+    /// - `Graph::Context` → `visit_context`
     pub fn visit<A>(&self, visitor: impl Visitor<A>, initial_accumulator: A) -> A {
         let mut stack = vec![WalkingStep::Graph(self.graph)];
 
@@ -163,7 +217,8 @@ impl<'a> Walker<'a> {
     /// Creates a new walker instance for traversing the given graph.
     ///
     /// The walker stores a reference to the root graph node and is ready
-    /// to begin traversal when the `visit` method is called.
+    /// to begin traversal when the `visit` method is called. This constructor
+    /// is lightweight and performs no validation on the input graph.
     ///
     /// # Parameters
     ///
@@ -171,7 +226,12 @@ impl<'a> Walker<'a> {
     ///
     /// # Returns
     ///
-    /// A new `Walker` instance ready to begin traversal.
+    /// A new `Walker` instance ready to begin traversal
+    ///
+    /// # Lifetime
+    ///
+    /// The returned walker is bound to the lifetime of the input graph,
+    /// ensuring memory safety during traversal operations.
     ///
     /// # Examples
     ///
@@ -179,6 +239,11 @@ impl<'a> Walker<'a> {
     /// let walker = Walker::new(&my_graph);
     /// let result = walker.visit(my_visitor, initial_accumulator);
     /// ```
+    ///
+    /// # Performance
+    ///
+    /// This constructor has O(1) time complexity as it only stores a reference
+    /// to the graph without performing any preprocessing or validation.
     pub fn new(graph: &'a Graph) -> Self {
         Self { graph }
     }
@@ -199,12 +264,31 @@ mod test {
     ///
     /// This visitor is used in tests to verify that the walker correctly traverses
     /// the graph structure by producing a predictable string representation.
+    /// The XML format makes it easy to verify nesting and ordering of node visits.
+    ///
+    /// # Output Format
+    ///
+    /// The visitor generates opening and closing XML tags for each node type,
+    /// creating a hierarchical representation that mirrors the graph structure.
+    /// Self-closing tags are used for leaf nodes like `nil`.
     struct TestVisitor {}
 
     /// Test accumulator that collects opening and closing XML-like tags.
     ///
     /// The accumulator maintains separate vectors for opening tags (processed in order)
     /// and closing tags (processed in reverse order) to create properly nested output.
+    /// This design allows the walker to build the output incrementally while maintaining
+    /// correct XML structure.
+    ///
+    /// # Fields
+    ///
+    /// * `left` - Opening tags collected during traversal
+    /// * `right` - Closing tags collected during traversal (displayed in reverse)
+    ///
+    /// # Display Behavior
+    ///
+    /// When displayed, the accumulator outputs all opening tags followed by
+    /// all closing tags in reverse order, creating properly nested XML.
     #[derive(Debug, Clone, Default)]
     struct TestAccumulator {
         left: Vec<String>,
@@ -213,6 +297,10 @@ mod test {
 
     impl TestAccumulator {
         /// Creates a new accumulator with an additional opening tag.
+        ///
+        /// This method is used by visitor methods to add opening XML tags
+        /// to the accumulator during traversal. The method preserves immutability
+        /// by returning a new accumulator instance.
         ///
         /// # Parameters
         ///
@@ -232,6 +320,10 @@ mod test {
         }
 
         /// Creates a new accumulator with an additional closing tag.
+        ///
+        /// This method is used by visitor methods to add closing XML tags
+        /// to the accumulator during traversal. The method preserves immutability
+        /// by returning a new accumulator instance.
         ///
         /// # Parameters
         ///
@@ -352,6 +444,9 @@ mod test {
     }
 
     /// Creates a new test visitor instance.
+    ///
+    /// This factory function provides a consistent way to create visitor
+    /// instances for testing purposes.
     fn create_visitor() -> TestVisitor {
         TestVisitor {}
     }
@@ -371,6 +466,9 @@ mod test {
     }
 
     /// Creates a new test accumulator instance.
+    ///
+    /// This factory function provides a consistent way to create accumulator
+    /// instances for testing purposes.
     fn create_accumulator() -> TestAccumulator {
         TestAccumulator::default()
     }
@@ -378,7 +476,8 @@ mod test {
     /// Tests walker behavior with a nil graph node.
     ///
     /// Verifies that the walker correctly calls the visit_nil callback
-    /// and returns the expected string result.
+    /// and returns the expected string result. This test validates the
+    /// most basic traversal case.
     #[test]
     fn test_gnil_visitor() {
         let graph: Graph = unsafe { psGraph(c"{0}".as_ptr()) }.try_into().unwrap();
@@ -393,6 +492,7 @@ mod test {
     ///
     /// Verifies that the walker correctly processes a let binding that nominates
     /// a variable for a vertex, followed by the vertex usage and nil termination.
+    /// This test validates variable binding and reference handling.
     #[test]
     fn test_nomination_visitor() {
         let graph = parse_to_ast("let a = <a> in <a> | 0".into()).unwrap();
@@ -411,6 +511,7 @@ mod test {
     ///
     /// Verifies that the walker correctly processes an edge structure with
     /// two let bindings, each containing a vertex and nil continuation.
+    /// This test validates composite node traversal and child ordering.
     #[test]
     fn test_edge_visitor() {
         let graph: Graph =
@@ -441,6 +542,7 @@ mod test {
     ///
     /// Verifies that the walker processes both the vertex and its continuation (nil),
     /// calling the appropriate visitor methods in the correct order.
+    /// This test validates basic vertex node processing.
     #[test]
     fn test_vertex_visitor() {
         let graph = parse_to_ast("<a> | 0".into()).unwrap();
@@ -456,6 +558,7 @@ mod test {
     ///
     /// Verifies that the walker correctly processes the edge structure,
     /// visiting both bindings and their associated vertices and continuations.
+    /// This test validates anonymous edge processing and nested structures.
     #[test]
     fn test_annonim_edge_visitor() {
         let graph =
@@ -488,6 +591,7 @@ mod test {
     /// This test uses a linear graph with three edges and various node types
     /// including vertices, variables, and nested bindings. It verifies that
     /// the walker processes all nodes in the correct depth-first order.
+    /// This comprehensive test validates complex traversal scenarios.
     #[test]
     fn test_linear_graph_with_3_edges() {
         let graph: Graph = parse_to_ast(
@@ -553,7 +657,8 @@ mod test {
     /// Tests walker behavior with a context node.
     ///
     /// Verifies that the walker correctly processes a context node that provides
-    /// additional information for a named vertex.
+    /// additional information for a named vertex. This test validates context
+    /// node processing and metadata handling.
     #[test]
     fn test_vertext_context() {
         let graph = parse_to_ast("context \"foo=bar\" for a in <a> | {0}".into()).unwrap();
