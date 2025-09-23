@@ -1,6 +1,6 @@
 {
   "name": "@f1r3fly-io/graphl-parser",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Parser for GraphL",
   "repository": {
     "type": "git",
