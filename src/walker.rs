@@ -23,7 +23,15 @@
 //! without hitting recursion limits.
 
 use crate::ast::{
-    Binding, GContext, GRuleAnon, GRuleNamed, GTensor, GVar, GVertex, Graph, GraphBinding,
+    Binding,
+    GContext,
+    GRuleAnon,
+    GRuleNamed,
+    GTensor,
+    GVar,
+    GVertex,
+    Graph,
+    GraphBinding,
 };
 use crate::visitor::Visitor;
 
