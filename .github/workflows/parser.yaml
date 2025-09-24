@@ -29,7 +29,10 @@ jobs:
         id: cache-cargo-tools
         uses: actions/cache@v4
         with:
-          path: ~/.cargo/bin
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
           key: cargo-bin-build-${{ runner.os }}-${{ steps.setup-rust.outputs.cargo-version }}
 
       - name: Install cargo tools
@@ -81,7 +84,10 @@ jobs:
         id: cache-cargo-tools
         uses: actions/cache@v4
         with:
-          path: ~/.cargo/bin
+          path: |
+            ~/.cargo/bin
+            ~/.cargo/registry
+            ~/.cargo/git
           key: cargo-bin-wasm-${{ runner.os }}-${{ steps.setup-rust.outputs.cargo-version }}
 
       - name: Install cargo tools
