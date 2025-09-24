@@ -7,15 +7,20 @@ use tsify::Tsify;
 use crate::bindings;
 use crate::guard::{Guard, Guarded, ResourceConsumer};
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize, thiserror::Error)]
 #[serde(tag = "type")]
 #[cfg_attr(target_arch = "wasm32", derive(Tsify))]
 #[cfg_attr(target_arch = "wasm32", tsify(into_wasm_abi, from_wasm_abi))]
 pub enum Error {
+    #[error("invalid c string at position: {position}")]
     InvalidCString { position: usize },
+    #[error("invalid utf-8 string")]
     InvalidUtf8String,
+    #[error("got nullpointer at: {context}")]
     NullPointer { context: String },
+    #[error("invalid enum variant at: {context}")]
     InvalidVariant { context: String },
+    #[error("invalid graphl")]
     InvalidGraphL,
 }
 
