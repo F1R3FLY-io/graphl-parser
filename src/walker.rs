@@ -259,7 +259,6 @@ impl<'a> Walker<'a> {
 
 #[cfg(test)]
 mod test {
-
     use std::fmt::Display;
 
     use crate::ast::{GEdgeAnon, GEdgeNamed, Graph, Name, Vertex};

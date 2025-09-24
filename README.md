@@ -1,3 +1,3 @@
-# graph-to-rholang-parser
+# graphl-parser
 
 Graph to RhoLang parser

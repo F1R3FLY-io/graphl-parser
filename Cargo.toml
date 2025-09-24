@@ -2,11 +2,11 @@
 authors = ["Denys Bushuliak <denys.b@devbrother.com>"]
 build   = "build.rs"
 edition = "2024"
-name    = "graph-to-rholang-parser"
+name    = "graphl-parser"
 version = "0.0.1"
 
 [lib]
-crate-type = ["cdylib"]
+crate-type = ["cdylib", "rlib"]
 
 [dependencies]
 scopeguard = { version = "1.2" }

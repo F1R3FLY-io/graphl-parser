@@ -7,7 +7,7 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: ["src/graph_to_rholang_parser.d.ts"],
+          src: ["src/graphl_parser.d.ts"],
           dest: "",
           rename: "graphl-parser.d.ts",
         },
@@ -16,7 +16,7 @@ export default defineConfig({
   ],
   build: {
     lib: {
-      entry: path.resolve(__dirname, "src/graph_to_rholang_parser.js"),
+      entry: path.resolve(__dirname, "src/graphl_parser.js"),
       fileName: (format) => `graphl-parser.${format}.js`,
       formats: ["es", "cjs", "umd"],
       name: "GraphlParser",

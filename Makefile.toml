@@ -41,7 +41,7 @@ alias = "build-wasm"
 
 [tasks.pack-wasm]
 args = [
-    "target/wasm32-unknown-unknown/wasm/graph_to_rholang_parser.wasm",
+    "target/wasm32-unknown-unknown/wasm/graphl_parser.wasm",
     "--out-dir",
     "js-package/src",
     "--typescript",
