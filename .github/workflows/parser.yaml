@@ -99,14 +99,14 @@ jobs:
 
       - name: Validate wasm
         run: |
-          if wasm-tools print js-package/src/graph_to_rholang_parser_bg.wasm | grep -q "signature_mismatch"; then
+          if wasm-tools print js-package/src/graphl_parser_bg.wasm | grep -q "signature_mismatch"; then
             echo "Error: signature_mismatch detected in wasm module!"
-            wasm-tools print js-package/src/graph_to_rholang_parser_bg.wasm | grep "signature_mismatch"
+            wasm-tools print js-package/src/graphl_parser_bg.wasm | grep "signature_mismatch"
             exit 1
           fi
-          if wasm-tools print js-package/src/graph_to_rholang_parser_bg.wasm | grep -q "import \"env\""; then
+          if wasm-tools print js-package/src/graphl_parser_bg.wasm | grep -q "import \"env\""; then
             echo "Error: unresolved symbols detected in wasm module!"
-            wasm-tools print js-package/src/graph_to_rholang_parser_bg.wasm | grep "import \"env\""
+            wasm-tools print js-package/src/graphl_parser_bg.wasm | grep "import \"env\""
             exit 1
           fi
 
