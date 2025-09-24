@@ -25,29 +25,13 @@ size_t buf_size;
 /* You may wish to change the renderC functions */
 void renderC(Char c)
 {
-  if (c == '{')
-  {
-    onEmptyLine();
+  if (c == '(' || c == '[' || c == '{')
     bufAppendC(c);
-    _n_ = _n_ + INDENT_WIDTH;
-    bufAppendC('\n');
-    indent();
-  }
-  else if (c == '(' || c == '[')
-    bufAppendC(c);
-  else if (c == ')' || c == ']')
+  else if (c == ')' || c == ']' || c == '}')
   {
     removeTrailingWhitespace();
     bufAppendC(c);
     bufAppendC(' ');
-  }
-  else if (c == '}')
-  {
-    _n_ = _n_ - INDENT_WIDTH;
-    onEmptyLine();
-    bufAppendC(c);
-    bufAppendC('\n');
-    indent();
   }
   else if (c == ',')
   {
