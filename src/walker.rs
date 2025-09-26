@@ -22,9 +22,13 @@
 //! for later processing. This ensures that deeply nested graphs can be traversed
 //! without hitting recursion limits.
 
+use std::convert::Infallible;
+
 use crate::ast::{
     Binding,
     GContext,
+    GEdgeAnon,
+    GEdgeNamed,
     GRuleAnon,
     GRuleNamed,
     GTensor,
@@ -46,7 +50,7 @@ use crate::visitor::Visitor;
 ///
 /// * `Graph` - Contains a reference to a graph node that needs to be processed
 /// * `Binding` - Contains a reference to a binding node (variable nominations)
-pub enum WalkingStep<'a> {
+enum WalkingStep<'a> {
     /// A graph node to be processed
     Graph(&'a Graph),
     /// A binding node to be processed
@@ -97,6 +101,40 @@ pub struct Walker<'graph> {
 }
 
 impl<'graph> Walker<'graph> {
+    /// Creates a new walker instance for traversing the given graph.
+    ///
+    /// The walker stores a reference to the root graph node and is ready
+    /// to begin traversal when the `visit` method is called. This constructor
+    /// is lightweight and performs no validation on the input graph.
+    ///
+    /// # Parameters
+    ///
+    /// * `graph` - Reference to the root graph node to traverse
+    ///
+    /// # Returns
+    ///
+    /// A new `Walker` instance ready to begin traversal
+    ///
+    /// # Lifetime
+    ///
+    /// The returned walker is bound to the lifetime of the input graph,
+    /// ensuring memory safety during traversal operations.
+    ///
+    /// # Examples
+    ///
+    /// ```rust,ignore
+    /// let walker = Walker::new(&my_graph);
+    /// let result = walker.visit(initial_accumulator, my_visitor);
+    /// ```
+    ///
+    /// # Performance
+    ///
+    /// This constructor has O(1) time complexity as it only stores a reference
+    /// to the graph without performing any preprocessing or validation.
+    pub fn new(graph: &'graph Graph) -> Self {
+        Self { graph }
+    }
+
     /// Performs the graph traversal, visiting each node with the provided visitor.
     ///
     /// This method processes nodes from the stack in LIFO order, calling the
@@ -114,7 +152,7 @@ impl<'graph> Walker<'graph> {
     /// # Parameters
     ///
     /// * `visitor` - The visitor implementation that handles each node type
-    /// * `initial_accumulator` - The initial accumulator value that will be threaded through the traversal
+    /// * `accumulator` - The initial accumulator value that will be threaded through the traversal
     ///
     /// # Returns
     ///
@@ -144,124 +182,138 @@ impl<'graph> Walker<'graph> {
     /// - `Graph::Subgraph` → `visit_subgraph`
     /// - `Graph::Tensor` → `visit_tensor`
     /// - `Graph::Context` → `visit_context`
-    pub fn visit<A>(&self, visitor: impl Visitor<A>, initial_accumulator: A) -> A {
-        let mut stack = vec![WalkingStep::Graph(self.graph)];
+    pub fn visit<A>(&self, accumulator: A, visitor: impl Visitor<'graph, A, Infallible>) -> A {
+        self.try_visit(accumulator, visitor)
+            .unwrap_or_else(|e| match e {})
+    }
 
-        let mut accumulator = initial_accumulator;
+    pub fn try_visit<A, E>(
+        &self,
+        mut accumulator: A,
+        visitor: impl Visitor<'graph, A, E>,
+    ) -> Result<A, E> {
+        let mut stack = vec![WalkingStep::Graph(self.graph)];
 
         while let Some(el) = stack.pop() {
             accumulator = match el {
-                WalkingStep::Graph(Graph::Nil) => visitor.visit_nil(accumulator),
-                WalkingStep::Graph(Graph::Vertex(GVertex { graph, vertex })) => {
+                WalkingStep::Graph(Graph::Nil) => visitor.visit_nil(accumulator)?,
+                WalkingStep::Graph(Graph::Vertex(vertex @ GVertex { graph, vertex: _ })) => {
                     stack.push(WalkingStep::Graph(graph));
-                    visitor.visit_vertex(accumulator, vertex)
+                    visitor.visit_vertex(accumulator, vertex)?
                 }
-                WalkingStep::Graph(Graph::Var(GVar { graph, var })) => {
+                WalkingStep::Graph(Graph::Var(var @ GVar { graph, var: _ })) => {
                     stack.push(WalkingStep::Graph(graph));
-                    visitor.visit_var(accumulator, var)
+                    visitor.visit_var(accumulator, var)?
                 }
-                WalkingStep::Graph(Graph::Nominate(Binding { graph, var, vertex })) => {
+                WalkingStep::Graph(Graph::Nominate(
+                    binding @ Binding {
+                        graph,
+                        var: _,
+                        vertex: _,
+                    },
+                )) => {
                     stack.push(WalkingStep::Graph(graph));
-                    visitor.visit_nominate(accumulator, var, vertex)
+                    visitor.visit_nominate(accumulator, binding)?
                 }
-                WalkingStep::Graph(Graph::EdgeAnon(edge)) => {
-                    stack.push(WalkingStep::Binding(&edge.binding_2));
-                    stack.push(WalkingStep::Binding(&edge.binding_1));
-                    visitor.visit_edge_anon(accumulator, edge)
+                WalkingStep::Graph(Graph::EdgeAnon(
+                    edge @ GEdgeAnon {
+                        binding_1,
+                        binding_2,
+                    },
+                )) => {
+                    stack.push(WalkingStep::Binding(binding_2));
+                    stack.push(WalkingStep::Binding(binding_1));
+                    visitor.visit_edge_anon(accumulator, edge)?
                 }
-                WalkingStep::Graph(Graph::EdgeNamed(gedge)) => {
-                    stack.push(WalkingStep::Binding(&gedge.binding_2));
-                    stack.push(WalkingStep::Binding(&gedge.binding_1));
-                    visitor.visit_edge_named(accumulator, gedge)
+                WalkingStep::Graph(Graph::EdgeNamed(
+                    edge @ GEdgeNamed {
+                        name: _,
+                        binding_1,
+                        binding_2,
+                    },
+                )) => {
+                    stack.push(WalkingStep::Binding(binding_2));
+                    stack.push(WalkingStep::Binding(binding_1));
+                    visitor.visit_edge_named(accumulator, edge)?
                 }
-                WalkingStep::Graph(Graph::RuleAnon(GRuleAnon { graph_1, graph_2 })) => {
+                WalkingStep::Graph(Graph::RuleAnon(rule @ GRuleAnon { graph_1, graph_2 })) => {
                     stack.push(WalkingStep::Graph(graph_2));
                     stack.push(WalkingStep::Graph(graph_1));
-                    visitor.visit_rule_anon(accumulator, graph_1, graph_2)
+                    visitor.visit_rule_anon(accumulator, rule)?
                 }
-                WalkingStep::Graph(Graph::RuleNamed(GRuleNamed {
-                    name,
-                    graph_1,
-                    graph_2,
-                })) => {
+                WalkingStep::Graph(Graph::RuleNamed(
+                    rule @ GRuleNamed {
+                        name: _,
+                        graph_1,
+                        graph_2,
+                    },
+                )) => {
                     stack.push(WalkingStep::Graph(graph_2));
                     stack.push(WalkingStep::Graph(graph_1));
-                    visitor.visit_rule_named(accumulator, name, graph_1, graph_2)
+                    visitor.visit_rule_named(accumulator, rule)?
                 }
-                WalkingStep::Graph(Graph::Subgraph(GraphBinding {
-                    graph_1,
-                    graph_2,
-                    var,
-                })) => {
+                WalkingStep::Graph(Graph::Subgraph(
+                    subgraph @ GraphBinding {
+                        graph_1,
+                        graph_2,
+                        var: _,
+                    },
+                )) => {
                     stack.push(WalkingStep::Graph(graph_2));
                     stack.push(WalkingStep::Graph(graph_1));
-                    visitor.visit_subgraph(accumulator, graph_1, graph_2, var)
+                    visitor.visit_subgraph(accumulator, subgraph)?
                 }
-                WalkingStep::Graph(Graph::Tensor(GTensor { graph_1, graph_2 })) => {
+                WalkingStep::Graph(Graph::Tensor(tensor @ GTensor { graph_1, graph_2 })) => {
                     stack.push(WalkingStep::Graph(graph_2));
                     stack.push(WalkingStep::Graph(graph_1));
-                    visitor.visit_tensor(accumulator, graph_1, graph_2)
+                    visitor.visit_tensor(accumulator, tensor)?
                 }
-                WalkingStep::Graph(Graph::Context(GContext {
-                    graph,
-                    name,
-                    string,
-                })) => {
+                WalkingStep::Graph(Graph::Context(
+                    context @ GContext {
+                        graph,
+                        name: _,
+                        string: _,
+                    },
+                )) => {
                     stack.push(WalkingStep::Graph(graph));
-                    visitor.visit_context(accumulator, name, string)
+                    visitor.visit_context(accumulator, context)?
                 }
-                WalkingStep::Binding(Binding { graph, var, vertex }) => {
+                WalkingStep::Binding(
+                    binding @ Binding {
+                        graph,
+                        var: _,
+                        vertex: _,
+                    },
+                ) => {
                     stack.push(WalkingStep::Graph(graph));
-                    visitor.visit_nominate(accumulator, var, vertex)
+                    visitor.visit_nominate(accumulator, binding)?
                 }
             };
         }
 
-        accumulator
-    }
-}
-
-impl<'a> Walker<'a> {
-    /// Creates a new walker instance for traversing the given graph.
-    ///
-    /// The walker stores a reference to the root graph node and is ready
-    /// to begin traversal when the `visit` method is called. This constructor
-    /// is lightweight and performs no validation on the input graph.
-    ///
-    /// # Parameters
-    ///
-    /// * `graph` - Reference to the root graph node to traverse
-    ///
-    /// # Returns
-    ///
-    /// A new `Walker` instance ready to begin traversal
-    ///
-    /// # Lifetime
-    ///
-    /// The returned walker is bound to the lifetime of the input graph,
-    /// ensuring memory safety during traversal operations.
-    ///
-    /// # Examples
-    ///
-    /// ```rust,ignore
-    /// let walker = Walker::new(&my_graph);
-    /// let result = walker.visit(my_visitor, initial_accumulator);
-    /// ```
-    ///
-    /// # Performance
-    ///
-    /// This constructor has O(1) time complexity as it only stores a reference
-    /// to the graph without performing any preprocessing or validation.
-    pub fn new(graph: &'a Graph) -> Self {
-        Self { graph }
+        Ok(accumulator)
     }
 }
 
 #[cfg(test)]
 mod test {
+    use std::convert::Infallible;
     use std::fmt::Display;
 
-    use crate::ast::{GEdgeAnon, GEdgeNamed, Graph, Name, Vertex};
+    use crate::ast::{
+        Binding,
+        GContext,
+        GEdgeAnon,
+        GEdgeNamed,
+        GRuleAnon,
+        GRuleNamed,
+        GTensor,
+        GVar,
+        GVertex,
+        Graph,
+        GraphBinding,
+        Name,
+    };
     use crate::bindings::psGraph;
     use crate::parse_to_ast;
     use crate::visitor::Visitor;
@@ -350,103 +402,117 @@ mod test {
         }
     }
 
-    impl Visitor<TestAccumulator> for TestVisitor {
-        fn visit_nil(&self, acc: TestAccumulator) -> TestAccumulator {
-            acc.with_left("<nil/>\n").with_right("")
+    impl<'a> Visitor<'a, TestAccumulator, Infallible> for TestVisitor {
+        fn visit_nil(&self, acc: TestAccumulator) -> Result<TestAccumulator, Infallible> {
+            Ok(acc.with_left("<nil/>\n").with_right(""))
         }
 
-        fn visit_vertex(&self, acc: TestAccumulator, vertex: &Vertex) -> TestAccumulator {
-            acc.with_left(&format!(
-                "<vertex {}>\n",
-                match &vertex.name {
-                    Name::VVar { value } => value,
-                    _ => unreachable!(),
-                }
-            ))
-            .with_right("</vertex>\n")
+        fn visit_vertex(
+            &self,
+            acc: TestAccumulator,
+            vertex: &GVertex,
+        ) -> Result<TestAccumulator, Infallible> {
+            Ok(acc
+                .with_left(&format!(
+                    "<vertex {}>\n",
+                    match &vertex.vertex.name {
+                        Name::VVar { value } => value,
+                        _ => unreachable!(),
+                    }
+                ))
+                .with_right("</vertex>\n"))
         }
 
-        fn visit_var(&self, acc: TestAccumulator, var: &str) -> TestAccumulator {
-            acc.with_left(&format!("<var {}>\n", var))
-                .with_right("</var>\n")
+        fn visit_var(
+            &self,
+            acc: TestAccumulator,
+            var: &GVar,
+        ) -> Result<TestAccumulator, Infallible> {
+            Ok(acc
+                .with_left(&format!("<var {}>\n", var.var))
+                .with_right("</var>\n"))
         }
 
         fn visit_nominate(
             &self,
             acc: TestAccumulator,
-            name: &str,
-            vertex: &Vertex,
-        ) -> TestAccumulator {
-            acc.with_left(&format!(
-                "<nominate {name} for vertex {vertex_name}>\n",
-                vertex_name = match &vertex.name {
-                    Name::VVar { value } => value,
-                    _ => unreachable!(),
-                }
-            ))
-            .with_right("</nominate>\n")
+            binding: &Binding,
+        ) -> Result<TestAccumulator, Infallible> {
+            Ok(acc
+                .with_left(&format!(
+                    "<nominate {name} for vertex {vertex_name}>\n",
+                    name = binding.var,
+                    vertex_name = match &binding.vertex.name {
+                        Name::VVar { value } => value,
+                        _ => unreachable!(),
+                    }
+                ))
+                .with_right("</nominate>\n"))
         }
 
-        fn visit_edge_named(&self, _acc: TestAccumulator, _edge: &GEdgeNamed) -> TestAccumulator {
+        fn visit_edge_named(
+            &self,
+            _acc: TestAccumulator,
+            _edge: &GEdgeNamed,
+        ) -> Result<TestAccumulator, Infallible> {
             unimplemented!()
         }
 
         fn visit_rule_anon(
             &self,
             _acc: TestAccumulator,
-            _graph: &Graph,
-            _graph2: &Graph,
-        ) -> TestAccumulator {
+            _rule: &GRuleAnon,
+        ) -> Result<TestAccumulator, Infallible> {
             unimplemented!()
         }
 
         fn visit_rule_named(
             &self,
             _acc: TestAccumulator,
-            _name: &Name,
-            _graph: &Graph,
-            _graph2: &Graph,
-        ) -> TestAccumulator {
+            _rule: &GRuleNamed,
+        ) -> Result<TestAccumulator, Infallible> {
             unimplemented!()
         }
 
         fn visit_subgraph(
             &self,
             _acc: TestAccumulator,
-            _graph: &Graph,
-            _graph2: &Graph,
-            _identifier: &str,
-        ) -> TestAccumulator {
+            _subgraph: &GraphBinding,
+        ) -> Result<TestAccumulator, Infallible> {
             unimplemented!()
         }
 
         fn visit_tensor(
             &self,
             _acc: TestAccumulator,
-            _graph: &Graph,
-            _graph2: &Graph,
-        ) -> TestAccumulator {
+            _tensor: &GTensor,
+        ) -> Result<TestAccumulator, Infallible> {
             unimplemented!()
         }
 
         fn visit_context(
             &self,
             acc: TestAccumulator,
-            name: &Name,
-            context: &str,
-        ) -> TestAccumulator {
-            acc.with_left(&format!(
-                "<context for {name} with {context}>\n",
-                name = match name {
-                    Name::VVar { value } => value,
-                    _ => unreachable!(),
-                }
-            ))
-            .with_right("</context>\n")
+            context: &GContext,
+        ) -> Result<TestAccumulator, Infallible> {
+            Ok(acc
+                .with_left(&format!(
+                    "<context for {name} with {context}>\n",
+                    name = match &context.name {
+                        Name::VVar { value } => value,
+                        _ => unreachable!(),
+                    },
+                    context = &context.string,
+                ))
+                .with_right("</context>\n"))
         }
 
-        fn visit_edge_anon(&self, acc: TestAccumulator, _edge: &GEdgeAnon) -> TestAccumulator {
-            acc.with_left("<edge>\n").with_right("</edge>\n")
+        fn visit_edge_anon(
+            &self,
+            acc: TestAccumulator,
+            _edge: &GEdgeAnon,
+        ) -> Result<TestAccumulator, Infallible> {
+            Ok(acc.with_left("<edge>\n").with_right("</edge>\n"))
         }
     }
 
@@ -490,7 +556,7 @@ mod test {
         let graph: Graph = unsafe { psGraph(c"{0}".as_ptr()) }.try_into().unwrap();
         let visitor = create_visitor();
         let walker = Walker::new(&graph);
-        let accumulator = walker.visit(visitor, create_accumulator());
+        let accumulator = walker.visit(create_accumulator(), visitor);
 
         assert_eq!(&accumulator.to_string(), "<nil/>\n");
     }
@@ -506,7 +572,7 @@ mod test {
         let visitor = create_visitor();
 
         let walker = Walker::new(&graph);
-        let accumulator = walker.visit(visitor, create_accumulator());
+        let accumulator = walker.visit(create_accumulator(), visitor);
 
         assert_eq!(
             &accumulator.to_string(),
@@ -525,7 +591,7 @@ mod test {
             parse_to_ast("(let a = <a> in <a> | 0, let b = <b> in <b> | 0)".into()).unwrap();
         let visitor = create_visitor();
         let walker = Walker::new(&graph);
-        let accumulator = walker.visit(visitor, create_accumulator());
+        let accumulator = walker.visit(create_accumulator(), visitor);
 
         assert_eq!(
             &accumulator.to_string(),
@@ -556,7 +622,7 @@ mod test {
         let visitor = create_visitor();
 
         let walker = Walker::new(&graph);
-        let accumulator = walker.visit(visitor, create_accumulator());
+        let accumulator = walker.visit(create_accumulator(), visitor);
 
         assert_eq!(&accumulator.to_string(), "<vertex a>\n<nil/>\n</vertex>\n");
     }
@@ -573,7 +639,7 @@ mod test {
         let visitor = create_visitor();
 
         let walker = Walker::new(&graph);
-        let accumulator = walker.visit(visitor, create_accumulator());
+        let accumulator = walker.visit(create_accumulator(), visitor);
 
         assert_eq!(
             &accumulator.to_string(),
@@ -623,7 +689,7 @@ mod test {
         .unwrap();
         let visitor = create_visitor();
         let walker = Walker::new(&graph);
-        let accumulator = walker.visit(visitor, create_accumulator());
+        let accumulator = walker.visit(create_accumulator(), visitor);
 
         assert_eq!(
             &accumulator.to_string(),
@@ -672,7 +738,7 @@ mod test {
         let visitor = create_visitor();
 
         let walker = Walker::new(&graph);
-        let accumulator = walker.visit(visitor, create_accumulator());
+        let accumulator = walker.visit(create_accumulator(), visitor);
 
         assert_eq!(
             &accumulator.to_string(),

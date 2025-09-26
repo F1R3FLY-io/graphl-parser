@@ -11,8 +11,11 @@ mod wasm;
 pub mod ast;
 mod bindings;
 mod guard;
-pub mod visitor;
-pub mod walker;
+mod visitor;
+mod walker;
+
+pub use visitor::Visitor;
+pub use walker::Walker;
 
 #[cfg_attr(target_arch = "wasm32", wasm_bindgen(js_name = parseToAst))]
 pub fn parse_to_ast(code: String) -> Result<ast::Graph, ast::Error> {
