@@ -145,7 +145,7 @@ jobs:
           path: js-package/src
 
       - name: Set up Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           cache: npm
           cache-dependency-path: js-package/package.json
@@ -165,7 +165,7 @@ jobs:
           NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Update package.json
-        uses: stefanzweifel/git-auto-commit-action@v6
+        uses: stefanzweifel/git-auto-commit-action@v7
         with:
           commit_message: Apply package.json changes for js bindings
 
