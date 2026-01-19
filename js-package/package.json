@@ -28,9 +28,9 @@
     "build": "vite build"
   },
   "devDependencies": {
-    "@types/node": "^25.0.6",
+    "@types/node": "^25.0.9",
     "typescript": "^5.9.3",
     "vite": "^7.3.1",
-    "vite-plugin-static-copy": "^3.1.4"
+    "vite-plugin-static-copy": "^3.1.5"
   }
 }
